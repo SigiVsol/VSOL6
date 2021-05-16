@@ -1,0 +1,68 @@
+package be.vsol.http;
+
+import be.vsol.tools.Log;
+import be.vsol.tools.Job;
+import be.vsol.tools.Sema;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.Semaphore;
+
+public class HttpServer implements Runnable {
+
+    private final String name;
+    private final int port;
+    private final RequestHandler requestHandler;
+    private final Semaphore semaphore = new Semaphore(16);
+
+    public HttpServer(String name, int port, RequestHandler requestHandler) {
+        this.name = name;
+        this.port = port;
+        this.requestHandler = requestHandler;
+
+        new Thread(this).start();
+    }
+
+    @Override public void run() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            Log.out("Server " + name + " started. Listening on port " + port + ".");
+            while (!serverSocket.isClosed()) {
+                try {
+                    Socket socket = serverSocket.accept();
+                    Sema.acquire(semaphore); {
+                        new Job(() -> {
+                            try {
+                                HttpRequest httpRequest = new HttpRequest(socket.getInputStream());
+                                if (requestHandler != null) {
+                                    HttpResponse httpResponse = requestHandler.respond(httpRequest);
+                                    if (httpResponse != null) {
+                                        httpResponse.getHeaders().put("Server", name);
+                                        httpResponse.getHeaders().put("Date", DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneOffset.UTC).format(Instant.now()));
+                                        httpResponse.getHeaders().put("Access-Control-Allow-Origin", "*");
+
+                                        httpResponse.send(socket.getOutputStream());
+                                    }
+                                }
+                            } catch (IOException e) {
+                                Log.trace(e);
+                            } finally {
+                                try { socket.close(); } catch (IOException e) { Log.trace(e); }
+                            }
+                        });
+                    } Sema.release(semaphore);
+                } catch (SocketException e) {
+                    Log.trace(e);
+                }
+            }
+        } catch (IOException e) {
+            Log.trace(e);
+        }
+    }
+
+}

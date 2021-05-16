@@ -1,0 +1,2 @@
+--api.port		8100
+--web.port		8101
