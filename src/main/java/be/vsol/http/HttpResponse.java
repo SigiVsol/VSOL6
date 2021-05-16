@@ -1,6 +1,6 @@
 package be.vsol.http;
 
-import be.vsol.tools.type.Int;
+import be.vsol.util.Int;
 
 import java.io.InputStream;
 

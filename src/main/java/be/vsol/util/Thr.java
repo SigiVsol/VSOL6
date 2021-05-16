@@ -1,4 +1,4 @@
-package be.vsol.tools;
+package be.vsol.util;
 
 public class Thr {
     public static void sleep(long ms) {

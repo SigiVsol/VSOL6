@@ -1,23 +1,28 @@
 package be.vsol.img;
 
-import be.vsol.tools.Log;
+import org.imgscalr.Scalr;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 
 public class Png extends Img {
+
+    // Constructors
 
     public Png(byte[] bytes) {
         super(bytes);
     }
 
     public Png(File file) {
-
+        super(file);
     }
 
+    public Png(BufferedImage bufferedImage) {
+        super(bufferedImage, "png");
+    }
 
+    public Png(BufferedImage bufferedImage, String formatName, Scalr.Method scalingMethod, Scalr.Mode scalingMode, int width, int height) {
+        super(bufferedImage, formatName, scalingMethod, scalingMode, width, height);
+    }
 
 }

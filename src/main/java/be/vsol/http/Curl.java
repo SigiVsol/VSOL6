@@ -1,6 +1,6 @@
 package be.vsol.http;
 
-import be.vsol.tools.Log;
+import be.vsol.util.Log;
 
 import java.io.IOException;
 import java.net.Socket;

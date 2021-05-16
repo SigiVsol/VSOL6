@@ -1,7 +1,4 @@
-package be.vsol.tools;
-
-import be.vsol.tools.type.Dbl;
-import be.vsol.tools.type.Lng;
+package be.vsol.util;
 
 public class Bytes {
     /** returns a formatted string in B, kB, MB or GB (according to what's needed for the size) */

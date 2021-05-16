@@ -1,7 +1,7 @@
-package be.vsol.tools;
+package be.vsol.util;
 
-import be.vsol.annotations.StrMapField;
-import be.vsol.tools.type.*;
+import be.vsol.interfaces.StrMapField;
+import be.vsol.util.type.*;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

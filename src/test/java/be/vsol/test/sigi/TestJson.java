@@ -1,7 +1,7 @@
 package be.vsol.test.sigi;
 
-import be.vsol.annotations.JsonField;
-import be.vsol.tools.Json;
+import be.vsol.interfaces.JsonField;
+import be.vsol.util.Json;
 import org.json.JSONObject;
 
 public class TestJson {

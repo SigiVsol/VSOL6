@@ -1,9 +1,8 @@
 package be.vsol.fx;
 
-import be.vsol.annotations.JsonField;
-import be.vsol.annotations.StrMapField;
+import be.vsol.interfaces.JsonField;
+import be.vsol.interfaces.StrMapField;
 import be.vsol.tools.Config;
-import be.vsol.tools.Json;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 

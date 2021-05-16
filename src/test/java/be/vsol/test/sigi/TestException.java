@@ -1,6 +1,6 @@
 package be.vsol.test.sigi;
 
-import be.vsol.tools.Log;
+import be.vsol.util.Log;
 
 public class TestException {
     public static void main(String[] args) {

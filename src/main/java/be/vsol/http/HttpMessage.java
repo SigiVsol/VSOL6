@@ -1,8 +1,7 @@
 package be.vsol.http;
 
-import be.vsol.tools.Bytes;
-import be.vsol.tools.Log;
-import be.vsol.tools.type.Int;
+import be.vsol.util.Log;
+import be.vsol.util.Int;
 import org.json.JSONObject;
 
 import java.io.*;

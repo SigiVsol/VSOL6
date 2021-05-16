@@ -1,4 +1,4 @@
-package be.vsol.tools;
+package be.vsol.util;
 
 public class Str {
     public static String cutoff(String string, String head, String tail) {
@@ -17,6 +17,24 @@ public class Str {
 
     public static String cutoffTail(String string, String tail) {
         return cutoff(string, "", tail);
+    }
+
+    public static String addon(String string, String head, String tail) {
+        if (!string.startsWith(head)) {
+            string = string + head;
+        }
+        if (!string.endsWith(tail)) {
+            string = string + tail;
+        }
+        return string;
+    }
+
+    public static String addonHead(String string, String head) {
+        return addon(string, head, "");
+    }
+
+    public static String addonTail(String string, String tail) {
+        return addon(string, "", tail);
     }
 
 }

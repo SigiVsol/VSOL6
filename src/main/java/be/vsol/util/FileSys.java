@@ -1,4 +1,4 @@
-package be.vsol.tools;
+package be.vsol.util;
 
 import org.apache.commons.io.FileUtils;
 
@@ -18,11 +18,11 @@ public class FileSys {
 
     // Read
 
-    public byte[] readBytes(File file) {
+    public static byte[] readBytes(File file) {
         return readBytes(file, new byte[0]);
     }
 
-    public byte[] readBytes(File file, byte[] defaultValue) {
+    public static byte[] readBytes(File file, byte[] defaultValue) {
         try {
             return FileUtils.readFileToByteArray(file);
         } catch (IOException | NullPointerException e) {

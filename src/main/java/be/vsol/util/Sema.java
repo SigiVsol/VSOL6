@@ -1,4 +1,4 @@
-package be.vsol.tools;
+package be.vsol.util;
 
 import java.util.concurrent.Semaphore;
 

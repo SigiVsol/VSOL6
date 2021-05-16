@@ -1,4 +1,6 @@
-package be.vsol.tools;
+package be.vsol.util;
+
+import be.vsol.tools.Job;
 
 import java.io.File;
 import java.time.LocalDate;

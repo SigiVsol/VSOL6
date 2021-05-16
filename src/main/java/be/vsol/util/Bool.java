@@ -1,4 +1,4 @@
-package be.vsol.tools.type;
+package be.vsol.util;
 
 public class Bool {
 

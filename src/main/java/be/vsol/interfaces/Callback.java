@@ -1,4 +1,4 @@
-package be.vsol.tools;
+package be.vsol.interfaces;
 
 public interface Callback {
     void invoke();

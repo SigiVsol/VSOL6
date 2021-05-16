@@ -1,6 +1,6 @@
 package be.vsol.tools;
 
-import be.vsol.tools.type.Int;
+import be.vsol.util.Int;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package be.vsol.annotations;
+package be.vsol.interfaces;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

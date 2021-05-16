@@ -1,8 +1,8 @@
 package be.vsol.http;
 
-import be.vsol.tools.Log;
+import be.vsol.util.Log;
 import be.vsol.tools.Job;
-import be.vsol.tools.Sema;
+import be.vsol.util.Sema;
 
 import java.io.IOException;
 import java.net.ServerSocket;

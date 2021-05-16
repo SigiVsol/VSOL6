@@ -1,4 +1,4 @@
-package be.vsol.tools.type;
+package be.vsol.util;
 
 import java.text.NumberFormat;
 

@@ -1,7 +1,7 @@
 package be.vsol.vsol4;
 
-import be.vsol.annotations.JsonField;
-import be.vsol.annotations.StrMapField;
+import be.vsol.interfaces.JsonField;
+import be.vsol.interfaces.StrMapField;
 import be.vsol.tools.Config;
 
 import java.io.File;

@@ -1,9 +1,6 @@
 package be.vsol.test.sigi;
 
 import be.vsol.http.*;
-import be.vsol.tools.Thr;
-
-import java.util.HashMap;
 
 public class TestServer {
 
