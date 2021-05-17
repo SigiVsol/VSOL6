@@ -1,5 +1,6 @@
 package be.vsol.http;
 
+import be.vsol.tools.Service;
 import be.vsol.util.Log;
 import be.vsol.tools.Job;
 import be.vsol.util.Sema;
@@ -13,7 +14,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
 
-public class HttpServer implements Runnable {
+public class HttpServer implements Runnable, Service {
 
     private final String name;
     private final int port;
@@ -25,7 +26,15 @@ public class HttpServer implements Runnable {
         this.port = port;
         this.requestHandler = requestHandler;
 
+
+    }
+
+    @Override public void start() {
         new Thread(this).start();
+    }
+
+    @Override public void stop() {
+
     }
 
     @Override public void run() {
@@ -39,7 +48,7 @@ public class HttpServer implements Runnable {
                         new Job(() -> {
                             try {
                                 HttpRequest httpRequest = new HttpRequest(socket.getInputStream());
-                                if (requestHandler != null) {
+                                if (httpRequest.isValid() && requestHandler != null) {
                                     HttpResponse httpResponse = requestHandler.respond(httpRequest);
                                     if (httpResponse != null) {
                                         httpResponse.getHeaders().put("Server", name);

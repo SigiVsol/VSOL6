@@ -1,6 +1,6 @@
 package be.vsol.util;
 
-import be.vsol.interfaces.JsonField;
+import be.vsol.annotations.JsonField;
 import org.json.JSONException;
 import org.json.JSONObject;
 

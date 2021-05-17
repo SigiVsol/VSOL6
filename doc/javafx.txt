@@ -1,0 +1,2 @@
+- Every FXML file must have a StackPane with fx:id root as root component.
+- Don't forget to set the controller class in Scene Builder.

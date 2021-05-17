@@ -21,7 +21,7 @@ public class Str {
 
     public static String addon(String string, String head, String tail) {
         if (!string.startsWith(head)) {
-            string = string + head;
+            string = head + string;
         }
         if (!string.endsWith(tail)) {
             string = string + tail;

@@ -9,47 +9,35 @@ import java.io.IOException;
 
 public class TestCurl {
     public static void main(String[] args) throws IOException {
+        testVsol4();
+//        testOrthanc();
+    }
 
-        HttpResponse<JSONObject> httpResponse = Curl.get("localhost", 8080, 1000, new HttpRequest<>("v0/organizations?User=firstuser"));
+    private static void testVsol4() {
+        HttpRequest httpRequest = new HttpRequest("v0/organizations?User=firstuser");
+
+        HttpResponse httpResponse = Curl.get("localhost", 8080, 1000, httpRequest);
+
+        if (httpResponse != null && httpResponse.getStatusCode() == 200) {
+            System.out.println(httpResponse.getStatusCode());
+            System.out.println(httpResponse.getReasonPhrase());
+            System.out.println(httpResponse.getHeaders());
+            System.out.println(httpResponse.getBody(new JSONObject()).toString(1));
+        }
+    }
+
+    private static void testOrthanc() {
+        HttpRequest httpRequest = new HttpRequest("instances");
+
+        HttpResponse httpResponse = Curl.get("localhost", 8800, 2500, httpRequest);
 
         if (httpResponse != null) {
-            System.out.println(httpResponse.getBody().toString(1));
+            System.out.println(httpResponse.getStatusCode());
+            System.out.println(httpResponse.getReasonPhrase());
+            System.out.println(httpResponse.getHeaders());
+            System.out.println(httpResponse.getBody(""));
+//            System.out.println(httpResponse.getBody(new JSONObject()).toString(1));
         }
-
-
-
-
-
-//        HttpRequest<Void> httpRequest = new HttpRequest<>("/v0/organizations", StrMap.getByPairs("User", "firstuser"));
-////        HttpRequest<Void> httpRequest = new HttpRequest<>("/instances", StrMap.getByPairs("User", "firstuser"));
-////        System.out.println(httpRequest);
-//
-//        HttpResponse<JSONObject> httpResponse = Curl.get("localhost", 8080, 5000, httpRequest);
-//
-////        System.out.println(httpResponse);
-//
-//        assert httpResponse != null;
-//        System.out.println( httpResponse.getBody().toString(1));
-
-
-
-
-//
-//
-//
-//        HashMap<String, String> parameters = new HashMap<>(); {
-//            parameters.put("User", "firstuser");
-//        }
-////
-//        HttpRequest<Object> httpRequest = new HttpRequest<>(HttpRequest.Method.GET, "v0/organizations", parameters, new HashMap<>());
-//        System.out.println("REQ: " + httpRequest);
-//
-//        Socket socket = new Socket("localhost", 8080);
-//        socket.setSoTimeout(5000);
-//        httpRequest.send(socket.getOutputStream());
-//
-//        HttpResponse<JSONObject> httpResponse = new HttpResponse<>(socket.getInputStream());
-//        System.out.println("RES: " + httpResponse);
 
     }
 }

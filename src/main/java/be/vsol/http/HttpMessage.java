@@ -1,79 +1,70 @@
 package be.vsol.http;
 
+import be.vsol.dicom.Dicom;
+import be.vsol.img.Jpg;
+import be.vsol.img.Png;
+import be.vsol.tools.ByteArray;
+import be.vsol.tools.ContentType;
 import be.vsol.util.Log;
 import be.vsol.util.Int;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-public abstract class HttpMessage<E> {
+public abstract class HttpMessage {
 
-    public enum ContentType { TEXT, JSON, BYTES }
     public static final String defaultHttpVersion = "HTTP/1.1";
 
-    protected String httpVersion = defaultHttpVersion;
-    protected Map<String, String> headers = new HashMap<>();
+    protected String httpVersion;
+    protected Map<String, String> headers;
     protected byte[] body;
+    protected boolean valid = false;
 
     // Constructors
 
     protected HttpMessage() {
-        this((E) null);
+        httpVersion = defaultHttpVersion;
+        headers = new HashMap<>();
     }
 
-    protected HttpMessage(E body) {
-        this.headers = new HashMap<>();
+    protected HttpMessage(Object body) {
+        this();
 
         if (body != null) {
-            if (body instanceof byte[]) {
-                this.body = (byte[]) body;
-                headers.put("Content-Type", getString(ContentType.BYTES));
-            } else if (body instanceof String) {
-                this.body = ((String) body).getBytes();
-                headers.put("Content-Type", getString(ContentType.TEXT));
-            } else if (body instanceof JSONObject) {
-                this.body = body.toString().getBytes();
-                headers.put("Content-Type", getString(ContentType.JSON));
-            }
+            this.body = ByteArray.get(body);
 
-            if (this.body != null) {
-                headers.put("Content-Length", "" + this.body.length);
-            }
+            headers.put("Content-Type", ContentType.get(body));
+            headers.put("Content-Length", "" + this.body.length);
         }
     }
 
     protected HttpMessage(InputStream inputStream) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        this();
 
-            String line = bufferedReader.readLine();
-            parseFirstLine(line);
+        HttpInputStream httpInputStream = new HttpInputStream(inputStream);
 
-            while (!(line = bufferedReader.readLine()).isEmpty()) {
-                String[] subs = line.split(": ", 2);
-                headers.put(subs[0], subs[1]);
-            }
+        String line = httpInputStream.readLine();
+        parseFirstLine(line);
 
-            String buffer = "";
-            if (headers.getOrDefault("Transfer-Encoding", "").equals("chunked")) {
-                while (true) {
-                    String remaining = bufferedReader.readLine();
-                    if (remaining.equals("0")) break;
-                    buffer += bufferedReader.readLine();
-                }
-            } else {
-                int contentLength = Int.parse(headers.get("Content-Length"), 0);
-                if (contentLength > 0) {
-                    while ((line = bufferedReader.readLine()) != null) {
-                        buffer += line;
-                    }
-                }
-            }
-            body = buffer.getBytes();
-        } catch (IOException e) {
-            Log.trace(e);
+        while (!(line = httpInputStream.readLine()).isEmpty()) {
+            String[] subs = line.split(": ", 2);
+            headers.put(subs[0].toLowerCase().trim(), subs[1]);
+        }
+
+        String transferEncoding = headers.getOrDefault("transfer-encoding", null);
+        String contentEncoding = headers.getOrDefault("content-encoding", null);
+
+        if (transferEncoding == null) {
+            int contentLength = Int.parse(headers.get("content-length"), 0);
+
+            body = httpInputStream.readBytes(contentLength, contentEncoding);
+        } else if (transferEncoding.equals("chunked")) {
+            body = httpInputStream.readChunked(contentEncoding);
         }
     }
 
@@ -109,36 +100,40 @@ public abstract class HttpMessage<E> {
         return getFirstLine();
     }
 
-    // Static Methods
-
-    public static String getString(ContentType contentType) {
-        return switch (contentType) {
-            case TEXT -> "text/plain";
-            case JSON -> "application/json";
-            case BYTES -> "application/octet-stream";
-        };
-    }
-
-    public static ContentType getContentType(String string) {
-        if (string.startsWith("text/plain")) return ContentType.TEXT;
-        else if (string.startsWith("application/json")) return ContentType.JSON;
-        else if (string.startsWith("application/octet-stream")) return ContentType.BYTES;
-        else return ContentType.BYTES; // TODO
-    }
-
     // Getters
 
-    public ContentType getContentType() { return getContentType(headers.get("Content-Type")); }
+
+    public boolean isValid() { return valid; }
+
+    public String getHttpVersion() { return httpVersion; }
 
     public Map<String, String> getHeaders() { return headers; }
 
-    @SuppressWarnings("unchecked")
-    public E getBody() {
-        return switch (getContentType(headers.get("Content-Type"))) {
-            case BYTES -> (E) body;
-            case TEXT -> (E) new String(body);
-            case JSON -> (E) new JSONObject(new String(body));
-        };
+    public byte[] getBody() { return body; }
+
+    public String getBody(String defaultValue) {
+        if (body == null) return defaultValue;
+        else return new String(body);
+    }
+
+    public JSONObject getBody(JSONObject defaultValue) {
+        if (body == null) return defaultValue;
+        else return new JSONObject(new String(body));
+    }
+
+    public Png getBody(Png defaultValue) {
+        if (body == null) return defaultValue;
+        else return new Png(body);
+    }
+
+    public Jpg getBody(Jpg defaultValue) {
+        if (body == null) return defaultValue;
+        else return new Jpg(body);
+    }
+
+    public Dicom getDicom(Dicom defaultValue) {
+        if (body == null) return defaultValue;
+        else return new Dicom(body);
     }
 
 }

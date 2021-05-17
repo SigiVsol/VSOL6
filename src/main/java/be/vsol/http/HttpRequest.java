@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpRequest<E> extends HttpMessage<E> {
+public class HttpRequest extends HttpMessage {
 
     public enum Method { GET, POST, PUT, DELETE }
 
@@ -18,7 +18,7 @@ public class HttpRequest<E> extends HttpMessage<E> {
         this(Method.GET, path, null);
     }
 
-    public HttpRequest(Method method, String path, E body) {
+    public HttpRequest(Method method, String path, Object body) {
         super(body);
 
         this.method = method;
@@ -38,14 +38,18 @@ public class HttpRequest<E> extends HttpMessage<E> {
             paramString += (paramString.isEmpty() ? "" : "&") + key + "=" + parameters.get(key);
         }
 
-        return method + " " + path + (paramString.isEmpty() ? "" : "?" + paramString + " " + httpVersion);
+        return method + " " + path + (paramString.isEmpty() ? "" : "?" + paramString) + " " + httpVersion;
     }
 
     @Override public void parseFirstLine(String line) {
         String[] subs = line.split(" ", 3);
-        method = HttpRequest.Method.valueOf(subs[0]);
-        parsePath(subs[1]);
-        httpVersion = subs[2];
+        if (subs.length == 3) {
+            method = HttpRequest.Method.valueOf(subs[0]);
+            parsePath(subs[1]);
+            httpVersion = subs[2];
+
+            valid = httpVersion.startsWith("HTTP");
+        }
     }
 
     private void parsePath(String path) {

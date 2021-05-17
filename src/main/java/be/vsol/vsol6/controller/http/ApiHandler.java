@@ -7,7 +7,7 @@ import be.vsol.http.RequestHandler;
 
 public class ApiHandler implements RequestHandler {
 
-    @Override public HttpResponse<?> respond(HttpRequest<?> request) {
+    @Override public HttpResponse respond(HttpRequest request) {
         return null;
     }
 

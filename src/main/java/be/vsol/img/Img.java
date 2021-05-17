@@ -1,5 +1,6 @@
 package be.vsol.img;
 
+import be.vsol.tools.ByteArray;
 import be.vsol.util.FileSys;
 import be.vsol.util.Log;
 import org.imgscalr.Scalr;
@@ -12,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class Img {
+public abstract class Img implements ByteArray {
 
     protected byte[] bytes;
 
@@ -51,7 +52,7 @@ public abstract class Img {
 
     // Getters
 
-    public byte[] getBytes() { return bytes; }
+    @Override public byte[] getBytes() { return bytes; }
 
     public BufferedImage getBufferedImage() {
         if (bytes == null) return null;

@@ -1,5 +1,6 @@
 package be.vsol.img;
 
+import be.vsol.tools.ContentType;
 import org.imgscalr.Scalr;
 
 import javax.imageio.IIOImage;
@@ -13,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class Jpg extends Img {
+public class Jpg extends Img implements ContentType {
 
     // Constructors
 
@@ -52,6 +53,12 @@ public class Jpg extends Img {
         }
 
         this.bytes = out.toByteArray();
+    }
+
+    // Getters
+
+    @Override public String getContentType() {
+        return "image/jpeg";
     }
 
 }

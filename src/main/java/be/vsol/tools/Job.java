@@ -1,6 +1,5 @@
 package be.vsol.tools;
 
-import be.vsol.interfaces.Callback;
 import be.vsol.util.Thr;
 
 public class Job {

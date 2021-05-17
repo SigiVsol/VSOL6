@@ -1,6 +1,7 @@
 package be.vsol.test.sigi;
 
 import be.vsol.http.*;
+import org.json.JSONObject;
 
 public class TestServer {
 
@@ -9,18 +10,16 @@ public class TestServer {
     }
 
     private static class Handler implements RequestHandler {
-        @Override public HttpResponse<?> respond(HttpRequest<?> request) {
+        @Override public HttpResponse respond(HttpRequest request) {
 
+            System.out.println("REQUEST:");
 
-            for (String key : request.getHeaders().keySet()) {
-                System.out.println(key + ": " + request.getHeaders().get(key));
-            }
+            System.out.println(request.getPath());
+            System.out.println(request.getParameters());
+            System.out.println(request.getHeaders());
+            System.out.println(request.getBody(new JSONObject()));
 
-
-//            System.out.println("Handling...");
-//            System.out.println(request);
-
-            return new HttpResponse<>("Test 1 successful.");
+            return new HttpResponse("OK");
         }
     }
 

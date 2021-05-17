@@ -4,7 +4,7 @@ import be.vsol.util.Int;
 
 import java.io.InputStream;
 
-public class HttpResponse<E> extends HttpMessage<E> {
+public class HttpResponse extends HttpMessage {
 
     public enum Status { OK, NOT_FOUND, INTERNAL_SERVER_ERROR }
 
@@ -13,11 +13,11 @@ public class HttpResponse<E> extends HttpMessage<E> {
 
     // Constructors
 
-    public HttpResponse(E body) {
+    public HttpResponse(Object body) {
         this(Status.OK, body);
     }
 
-    public HttpResponse(Status status, E body) {
+    public HttpResponse(Status status, Object body) {
         super(body);
 
         statusCode = getStatusCode(status);
@@ -36,9 +36,13 @@ public class HttpResponse<E> extends HttpMessage<E> {
 
     @Override public void parseFirstLine(String topLine) {
         String[] subs = topLine.split(" ", 3);
-        httpVersion = subs[0];
-        statusCode = Int.parse(subs[1], 500);
-        reasonPhrase = subs[2];
+        if (subs.length == 3) {
+            httpVersion = subs[0];
+            statusCode = Int.parse(subs[1], 500);
+            reasonPhrase = subs[2];
+
+            valid = httpVersion.startsWith("HTTP");
+        }
     }
 
     private int getStatusCode(Status status) {
@@ -60,5 +64,7 @@ public class HttpResponse<E> extends HttpMessage<E> {
     // Getters
 
     public int getStatusCode() { return statusCode; }
+
+    public String getReasonPhrase() { return reasonPhrase; }
 
 }
