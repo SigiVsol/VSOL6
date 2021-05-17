@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class Vsol6 extends Application {
 
-    private static final Sig sig = new Sig("VSOL6", 0, 0, 4, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
+    private static final Sig sig = new Sig("VSOL6", 0, 0, 5, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
     private static File home;
     private static boolean cloud;

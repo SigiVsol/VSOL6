@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.App">
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.App">
    <children>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <right>
-            <VBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" spacing="5.0" styleClass="navbar" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="imgLogo" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>

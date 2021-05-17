@@ -8,33 +8,33 @@ import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class App extends FxController {
+public class App extends FxController<StackPane> {
 
     @FXML private HBox hbxLayout;
     @FXML private ImageView imgLogo;
     @FXML private Label lblVersion;
-    @FXML private StackPane content;
+    @FXML private BorderPane borderPane;
 
     @Override public void init() {
         lblVersion.setText(Vsol6.getSig().getVersion());
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
 
-        if (fxConfig.isLeftHanded()) {
-            hbxLayout.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        }
+//        if (fxConfig.isLeftHanded()) {
+//            hbxLayout.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+//        }
     }
 
     public void show() {
         show(Vsol6.getGui().getLogin());
     }
 
-    public <E extends FxController> void show(E e) {
+    public void show(FxController<?> controller) {
         Platform.runLater(() -> {
-            content.getChildren().clear();
-            content.getChildren().add(e.getRoot());
+            borderPane.setCenter(controller.getRoot());
         });
     }
 

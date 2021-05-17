@@ -58,7 +58,7 @@ public class Gui implements Service {
         fxConfig.save();
     }
 
-    private <E extends FxController> E init(String resource) {
+    private <E extends FxController<?>> E init(String resource) {
         resource = Str.addon(resource, "fxml/", ".fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader();

@@ -6,8 +6,9 @@ import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
-public class Login extends FxController {
+public class Login extends FxController<VBox> {
 
     @FXML private Label lblTitle;
     @FXML private ImageView imgLogo;

@@ -3,19 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.Splash">
+
+<VBox fx:id="root" alignment="CENTER" spacing="5.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.Splash">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-         <children>
-            <ProgressBar prefWidth="200.0" />
-            <Label fx:id="lblLoading" text="Loading..." />
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </VBox>
+      <ProgressBar prefWidth="200.0" />
+      <Label fx:id="lblLoading" text="Loading..." />
    </children>
-</StackPane>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>
