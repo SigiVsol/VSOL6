@@ -8,34 +8,30 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public abstract class FxController<E extends Node> {
+public abstract class FxController<N extends Node> {
 
-    @FXML private E root;
-    protected FxConfig fxConfig;
+    private N root;
 
     // Methods
 
-    public void showInStage(Stage stage) {
-        Platform.runLater(() -> {
+    public void setRoot(N root) {
+        this.root = root;
+    }
+
+    public void showInStage(Stage stage, boolean runLater) {
+        if (runLater) {
+            Platform.runLater(() -> stage.setScene(new Scene((Parent) root)));
+        } else {
             stage.setScene(new Scene((Parent) root));
-            show();
-        });
+        }
     }
 
     public void init() {
         // ready (but not necessary) to override
     }
 
-    public void show() {
-        // ready (but not necessary) to override
-    }
-
     // Getters
 
-    public E getRoot() { return root; }
-
-    // Setters
-
-    public void setFxConfig(FxConfig fxConfig) { this.fxConfig = fxConfig; }
+    public N getRoot() { return root; }
 
 }

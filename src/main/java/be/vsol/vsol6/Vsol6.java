@@ -90,14 +90,24 @@ public class Vsol6 extends Application {
         }
     }
 
+    public static File getHome(String sub) {
+        return new File(home, sub);
+    }
+
     // Static Getters
 
     public static boolean isCloud() { return cloud; }
+
     public static Sig getSig() { return sig; }
+
     public static File getHome() { return home; }
+
     public static boolean isInitialized() { return initialized; }
+
     public static Gui getGui() { return gui; }
+
     public static Vsol4 getVsol4() { return (Vsol4) services.get("vsol4"); }
+
     public static Orthanc getOrthanc() { return (Orthanc) services.get("orthanc"); }
 
 }

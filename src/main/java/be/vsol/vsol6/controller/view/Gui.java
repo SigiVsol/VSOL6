@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.view;
 
+import be.vsol.fx.EmptyController;
 import be.vsol.fx.FxConfig;
 import be.vsol.fx.FxController;
 import be.vsol.tools.Job;
@@ -9,7 +10,17 @@ import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.controller.fx.App;
 import be.vsol.vsol6.controller.fx.Splash;
 import be.vsol.vsol6.controller.fx.app.Login;
+import be.vsol.vsol6.controller.fx.app.Explorer;
+import be.vsol.vsol6.controller.fx.app.Settings;
+import com.teamdev.jxbrowser.browser.Browser;
+import com.teamdev.jxbrowser.engine.Engine;
+import com.teamdev.jxbrowser.engine.EngineOptions;
+import com.teamdev.jxbrowser.engine.RenderingMode;
+import com.teamdev.jxbrowser.view.javafx.BrowserView;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,6 +34,8 @@ public class Gui implements Service {
 
     private App app;
     private Login login;
+    private Explorer explorer;
+    private Settings settings;
 
     // Constructor
 
@@ -37,35 +50,38 @@ public class Gui implements Service {
         primaryStage.getIcons().add(Icon.getImage(true, "logo", 64));
         primaryStage.setTitle(Vsol6.getSig().getAppTitle());
 
+        Splash splash = loadFxml("Splash");
+        if (splash == null) return;
+        splash.showInStage(primaryStage, false);
         fxConfig.show(primaryStage);
 
-        // show the splash screen until the initial screen is ready to be shown
-        Splash splash = init("Splash");
-        if (splash != null) splash.showInStage(primaryStage);
-
         new Job(() -> {
-            app = init("App");
-            login = init("app/Login");
+            app = loadFxml("App");
+            login = loadFxml("app/Login");
+            settings = loadFxml("app/Settings");
 
-            while (!Vsol6.isInitialized()) { Thr.sleep(100); } // wait for Vsol6 to initialize before showing the app screen
+//            explorer = loadFxml("app/Explorer");
+            explorer = new Explorer();
 
-            assert app != null;
-            app.showInStage(primaryStage);
+//            app.show(explorer);
+
+            app.showInStage(primaryStage, true);
         });
+
     }
 
     @Override public void stop() {
         fxConfig.save();
     }
 
-    private <E extends FxController<?>> E init(String resource) {
+    private <N extends Node, C extends FxController<N>> C loadFxml(String resource) {
         resource = Str.addon(resource, "fxml/", ".fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
-            fxmlLoader.load(Resource.getInputStream(resource));
-            E controller = fxmlLoader.getController();
-            controller.setFxConfig(fxConfig);
+            N root = fxmlLoader.load(Resource.getInputStream(resource));
+            C controller = fxmlLoader.getController();
+            controller.setRoot(root);
             controller.init();
             return controller;
         } catch (IOException e) {
@@ -81,5 +97,9 @@ public class Gui implements Service {
     public App getApp() { return app; }
 
     public Login getLogin() { return login; }
+
+    public Explorer getExplorer() { return explorer; }
+
+    public Settings getSettings() { return settings; }
 
 }

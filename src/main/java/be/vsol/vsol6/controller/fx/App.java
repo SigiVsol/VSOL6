@@ -21,10 +21,6 @@ public class App extends FxController<StackPane> {
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
     }
 
-    public void show() {
-        show(Vsol6.getGui().getLogin());
-    }
-
     public void show(FxController<?> controller) {
         Platform.runLater(() -> borderPane.setCenter(controller.getRoot()));
     }
@@ -34,11 +30,11 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML private void home() {
-
+        show(Vsol6.getGui().getExplorer());
     }
 
     @FXML private void logout() {
-
+        show(Vsol6.getGui().getLogin());
     }
 
     @FXML private void organizations() {
@@ -46,7 +42,7 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML private void settings() {
-
+        show(Vsol6.getGui().getSettings());
     }
 
 }

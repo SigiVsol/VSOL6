@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="VSOL6" target="16" />
+      <module name="VSOL6" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>

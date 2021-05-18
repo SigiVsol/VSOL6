@@ -11,13 +11,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox fx:id="root" alignment="TOP_CENTER" prefHeight="474.0" prefWidth="438.0" spacing="5.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.Login">
+<VBox alignment="TOP_CENTER" prefHeight="474.0" prefWidth="438.0" spacing="5.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.Login">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
    <children>
-      <Label fx:id="lblTitle" styleClass="extraLargeText" text="Aanmelden">
+      <Label fx:id="lblTitle" styleClass="extraLargeText" text="Login">
          <graphic>
             <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>

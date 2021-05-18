@@ -5,8 +5,7 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox fx:id="root" alignment="CENTER" spacing="5.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.Splash">
+<VBox alignment="CENTER" spacing="5.0" styleClass="background" stylesheets="@/fxcss/app.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.Splash">
    <children>
       <ProgressBar prefWidth="200.0" />
       <Label fx:id="lblLoading" text="Loading..." />

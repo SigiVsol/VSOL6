@@ -1,51 +1,47 @@
 ﻿key;comments;en;nl;fr;de
-;Deze kolom wordt sowieso genegeerd door de parser.;Indien deze kolom leeg is, wordt de key gebruikt (met spaties ipv underscores);Indien deze of een volgende kolom leeg is, wordt de default taal-kolom gebruikt (instelbaar);;
-login;;;Aanmelden;Connexion;
+user;;user|+s;gebruiker|+s;utilisateur|+s;
+login;;login;Aanmelden;Connexion;
 remember_me;;keep me logged in on this computer;aangemeld blijven op dit toestel;;
-clients;;;eigenaars;;
-client;;;eigenaar;;
-patients;;;patiënten;;
-patient;;;patiënt;;
-studies;;;;examens;
-study;;;studie;examen;
-add_client;;;eigenaar toevoegen;;
-add_patient;;;patiënt toevoegen;;
-add_study;;;studie toevoegen;;
-extra_information;;;extra informatie;;
-filter;;;zoeken;;
+client;;client|+s;eigenaar|+s;;
+patient;;patient|+s;patiënt|+en;;
+study;;study|studies;studie|+s;examen|+s;
+add_client;;add client|+s;eigenaar toevoegen|eigenaars toevoegen;;
+add_patient;;add patient|+s;patiënt toevoegen|patiënten toevoegen;;
+add_study;;add study|add studies;studie toevoegen|studies toevoegen;;
+extra_information;;extra information;extra informatie;;
+filter;;filter;zoeken;;
 bad_credentials;;invalid username/password combination;ongeldige gebruikersnaam/paswoord-combinatie;;
-last_name;;;familienaam;;
-first_name;;;voornaam;;
-username;;;gebruikersnaam;;
-password;;;paswoord;;
-name;;;naam;;
-company;;;bedrijf;;
-via;;;;;
-language;;;taal;;
-phone;;;telefoon;;
+last_name;;last name;familienaam;;
+first_name;;first name;voornaam;;
+username;;username|+s;gebruikersnaam|gebruikersnamen;;
+password;;password|+s;paswoord|+en;;
+name;;name|+s;naam|namen;;
+company;;company;bedrijf|bedrijven;;
+via;;via;via;;
+language;;language|+s;taal|talen;;
+phone;;phone;telefoon;;
 email;;;e-mail;;
-address;;;adres;;
+address;;address;adres;;
 street_and_number;;street and n°;straat / nr;;
 postal;;postal;postcode;;
-city;;;stad;;
-country;;;land;;
-contact;;;;;
-name_mandatory;;name *;naam *;;
-birthdate;;;geboren;;
-date;;;datum;;
+city;;city|cities;stad|steden;;
+country;;country|countries;land|+en;;
+contact;;contact|+s;contact|+en;;
+birthdate;;birthdate;geboren;;
+date;;date|+s;datum|+s;;
 chip_number;;chip n°;chip-nr;;
-ueln_number;;;ueln-nr;;
-gender;;;geslacht;;
+ueln_number;;UELN number;UELN-nr;;
+gender;;gender;geslacht;;
 castrated;;;gecastreerd;;
-species;;;soort;;
-breed;;;ras;;
+species;;species;soort|+en;;
+breed;;;ras|+sen;;
 sire;;;vader;;
 damsire;;;moedersvader;;
-color;;;kleur;;
+color;;color|+s;kleur|+en;;
 chip;;;;;
 origin;;;afstamming;;
-reference;;;referentie;;
-uELN;;;;;
+reference;;reference|+s;referentie|+s;;
+ueln;;UELN;UELN;;
 ok;;;;;
 yes;;;ja;oui;ja
 no;;;nee;non;nein
@@ -53,7 +49,6 @@ cancel;;;annuleren;;
 zoom_out;;;uitzoomen;dézoomer;rauszoomen
 fit_in_viewport;;;passend maken;ajuster dans la fenêtre;in das Ansichtsfenster passen
 Zoom_in;;;Inzoomen;Agrandir;Hineinzoomen
-;;;;;
 Rotate_left;;;Links draaien;Tourner à gauche;Nach links drehen
 Rotate_right;;;Rechts draaien;Tourner à droite;Nach rechts drehen
 Mirror;;;Spiegelen;Mettre en miroir;Spiegeln
@@ -99,14 +94,14 @@ Radius;;;Straal;Rayon;
 Diameter;;;;Diamètre;Durchmesser
 Circumference;;;Omtrek;Circonférence;Umfang
 Surface;;;Oppervlakte;Surface;Oberfläche
-Units;als in metrisch/imperiale eenheden;;Eenheden;Unités;Einheiten
-Coordinates;;;Coördinaten;Coordonnés;Koordinaten
+Units;als in metrisch/imperiale eenheden;unit|+s;eenheid|eenheden;Unité|+s;Einheit|+en
+Coordinates;;coordinate|+s;Coördinaat|Coördinaten;Coordonné|+s;Koordinate|+n
 Draw_a_second_line;;;Teken een tweede lijn;Tracez une deuxième ligne;Zeichne eine zweite Linie
 parallel_to_the_first;;;parallel met de eerste;parallèle à la première;parallel zum ersten
 perpendicular_to_the_first;;;evenwijdig met de eerste;perpendiculaire à la première;senkrecht zur ersten
 Inner_angle;;;Binnenhoek;Angle intérieur;Innenwinkel
 Outer_angle;;;Buitenhoek;Angle extérieur;Außenwinkel
-Distance;;;Afstand;;Abstand
+Distance;;distance|+s;afstand|+en;distance|+s;Abstand|+e
 calib-1;;Trace a line over the calibration object;Traceer het kalibratie-object in de afbeelding;Tracez une ligne sur l'objet de calibrage;Verfolgen Sie eine Linie über dem Kalibrierungsobjekt
 calib-2;;Indicate the actual length of the object;Selecteer de effectieve maat ervan;Indiquez la longueur réelle de l'objet;Wählen Sie die tatsächliche Länge des Objekts
 Custom;;;Aangepast;Ajusté;Angepasst
@@ -149,7 +144,7 @@ Flagged_asterisk_series;;Flagged* series;Gemarkeerde* series;Séries marquées*;
 Non-flagged_series;;;Niet-gemarkeerde series;Séries non marquées;Nicht markierte serien
 Both;;;Beide;Les deux;Beide
 Selected_series;;;Geselecteerde series;Séries sélectionnées;Ausgewälte Serie(n)
-All;;;Alles;Tout;Alle
+All;;;alles;tout;alle
 home;;;;;
 logout;;;;;
 change_organization;;;Wijzig organisatie;;
