@@ -5,16 +5,13 @@ import be.vsol.util.Icon;
 import be.vsol.vsol6.Vsol6;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 public class App extends FxController<StackPane> {
 
-    @FXML private HBox hbxLayout;
     @FXML private ImageView imgLogo;
     @FXML private Label lblVersion;
     @FXML private BorderPane borderPane;
@@ -22,10 +19,6 @@ public class App extends FxController<StackPane> {
     @Override public void init() {
         lblVersion.setText(Vsol6.getSig().getVersion());
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
-
-//        if (fxConfig.isLeftHanded()) {
-//            hbxLayout.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-//        }
     }
 
     public void show() {
@@ -33,21 +26,7 @@ public class App extends FxController<StackPane> {
     }
 
     public void show(FxController<?> controller) {
-        Platform.runLater(() -> {
-            borderPane.setCenter(controller.getRoot());
-        });
-    }
-
-    public void showLogin() {
-
-    }
-
-    public void showExplorer() {
-
-    }
-
-    public void showViewer() {
-
+        Platform.runLater(() -> borderPane.setCenter(controller.getRoot()));
     }
 
     @FXML private void back() {
@@ -69,7 +48,5 @@ public class App extends FxController<StackPane> {
     @FXML private void settings() {
 
     }
-
-
 
 }
