@@ -17,17 +17,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
+import sun.misc.Unsafe;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Explorer extends FxController<BrowserView> {
 
-    private final BrowserView browserView;
+    private final Browser browser;
 
     public Explorer() {
+        this(null);
+    }
+
+    public Explorer(String url) {
         System.setProperty("jxbrowser.license.key", "1BNDIEOFAYZEE9HQYY5M5ESGI6GCWTNOGK6CZWMWN94GQFFG96AB10J8YJC2KNKP5ZONEW"); // license
+        disableWarning();
 
         Engine engine = Engine.newInstance(EngineOptions.newBuilder(RenderingMode.HARDWARE_ACCELERATED)
                 .userAgent(Vsol6.getSig().toString())
@@ -36,20 +43,26 @@ public class Explorer extends FxController<BrowserView> {
                 .enableProprietaryFeature(ProprietaryFeature.H_264) // this is a licensed feature
                 .build());
 
-        Browser browser = engine.newBrowser();
+        browser = engine.newBrowser();
+        setRoot(BrowserView.newInstance(browser));
 
-        browser.navigation().loadUrl("https://html5test.com");
-
-        browserView = BrowserView.newInstance(browser);
-
-        setRoot(browserView);
+        if (url != null) loadUrl(url);
     }
 
-
-    @Override public void init() {
-//        webView.getEngine().load("https://www.google.com");
+    public void loadUrl(String url) {
+        browser.navigation().loadUrl(url);
     }
 
+    private void disableWarning() {
+        try {
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            Unsafe u = (Unsafe) theUnsafe.get(null);
 
+            Class<?> cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
+            Field logger = cls.getDeclaredField("logger");
+            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
+        } catch (Exception ignored) { }
+    }
 
 }

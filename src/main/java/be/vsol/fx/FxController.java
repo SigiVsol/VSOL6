@@ -1,12 +1,6 @@
 package be.vsol.fx;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 public abstract class FxController<N extends Node> {
 
@@ -16,14 +10,6 @@ public abstract class FxController<N extends Node> {
 
     public void setRoot(N root) {
         this.root = root;
-    }
-
-    public void showInStage(Stage stage, boolean runLater) {
-        if (runLater) {
-            Platform.runLater(() -> stage.setScene(new Scene((Parent) root)));
-        } else {
-            stage.setScene(new Scene((Parent) root));
-        }
     }
 
     public void init() {

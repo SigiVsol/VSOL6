@@ -16,8 +16,9 @@ import java.util.concurrent.Semaphore;
 
 public class HttpServer implements Runnable, Service {
 
+    private boolean running = false;
     private final String name;
-    private final int port;
+    private int port;
     private final RequestHandler requestHandler;
     private final Semaphore semaphore = new Semaphore(16);
 
@@ -25,8 +26,6 @@ public class HttpServer implements Runnable, Service {
         this.name = name;
         this.port = port;
         this.requestHandler = requestHandler;
-
-
     }
 
     @Override public void start() {
@@ -34,7 +33,7 @@ public class HttpServer implements Runnable, Service {
     }
 
     @Override public void stop() {
-
+        running = false;
     }
 
     @Override public void run() {
@@ -42,6 +41,7 @@ public class HttpServer implements Runnable, Service {
             ServerSocket serverSocket = new ServerSocket(port);
             Log.out("Server " + name + " started. Listening on port " + port + ".");
             while (!serverSocket.isClosed()) {
+                running = true;
                 try {
                     Socket socket = serverSocket.accept();
                     Sema.acquire(semaphore); {
@@ -68,10 +68,22 @@ public class HttpServer implements Runnable, Service {
                 } catch (SocketException e) {
                     Log.trace(e);
                 }
+                running = false;
             }
         } catch (IOException e) {
             Log.trace(e);
         }
     }
+
+    // Getters
+
+    @Override public boolean isRunning() {
+        return running;
+    }
+
+
+    // Setters
+
+    public void setPort(int port) { this.port = port; }
 
 }

@@ -1,36 +1,37 @@
 package be.vsol.vsol6;
 
-import be.vsol.http.HttpServer;
-import be.vsol.orthanc.Orthanc;
 import be.vsol.tools.Job;
 import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
-import be.vsol.util.Int;
+import be.vsol.util.Lang;
 import be.vsol.util.Log;
-import be.vsol.vsol4.Vsol4;
-import be.vsol.vsol6.controller.http.ApiHandler;
-import be.vsol.vsol6.controller.http.WebHandler;
-import be.vsol.vsol6.controller.view.Gui;
+import be.vsol.vsol6.model.LocalSystem;
+import be.vsol.vsol6.model.setting.*;
+import be.vsol.vsol6.services.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Vector;
 
 public class Vsol6 extends Application {
 
     private static final Sig sig = new Sig("VSOL6", 0, 0, 5, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
+    private static LocalSystem system;
     private static File home;
-    private static boolean cloud;
-    private static boolean initialized = false;
 
-    private static Gui gui;
-    private static final HashMap<String, Service> services = new HashMap<>();
+    private static SettingsManager settingsManager;
+    private static GuiManager guiManager;
+
+    private static final Vector<Service> services = new Vector<>(); // will contain the following:
+    private static DatabaseManager databaseManager;
+    private static WebServer webServer;
+    private static ApiServer apiServer;
+    private static Vsol4Service vsol4Service;
+    private static OrthancService orthancService;
 
     // Static Method
 
@@ -40,74 +41,65 @@ public class Vsol6 extends Application {
 
     // Methods
 
-    @Override public void start(Stage primaryStage) {
-        Map<String, String> namedParams = getParameters().getNamed();
-        List<String> unnamedParams = getParameters().getUnnamed();
+    @Override public void start(Stage primaryStage) { try {
+        settingsManager = new SettingsManager(getParameters(), gui.class, db.class, web.class, api.class, vsol4.class, orthanc.class, vsol6.class);
+        settingsManager.start(); // start this one first, so it can be used by the other services
 
-        try {
-            home = new File(namedParams.getOrDefault("home", "C:/" + sig.getAppTitle()));
-            Log.init(new File(home, "logs"), sig.getAppTitle());
-            Log.out("Starting " + sig + ".");
+        home = new File(vsol6.home);
+        Log.init(new File(home, "logs"), sig.getAppTitle());
+        Log.out("Starting " + sig + ".");
 
-            cloud = unnamedParams.contains("cloud");
+        system = new LocalSystem();
 
-            if (!cloud) {
-                gui = new Gui(home, primaryStage, namedParams);
-                gui.start();
-            }
-
-            new Job(() -> {
-                services.put("webServer", new HttpServer(sig.getAppTitle() + " Web Server", Int.parse(namedParams.get("web.port"), 8100), new WebHandler()));
-                services.put("apiServer", new HttpServer(sig.getAppTitle() + " API Server", Int.parse(namedParams.get("api.port"), 8101), new ApiHandler()));
-                services.put("vsol4", new Vsol4(home, namedParams));
-                services.put("orthanc", new Orthanc(home, namedParams));
-
-                for (Service service : services.values()) {
-                    service.start();
-                }
-
-                initialized = true;
-            });
-        } catch (Exception e) {
-            Log.trace(e);
-            System.exit(1);
+        if (!vsol6.cloud) {
+            services.add(guiManager = new GuiManager(primaryStage));
+            guiManager.showSplash(Lang.get("Loading."));
         }
-    }
 
-    @Override public void stop() {
-        try {
-            Log.out("Exiting.\n");
+        new Job(() -> {
+            services.add(databaseManager = new DatabaseManager());
+            services.add(webServer = new WebServer());
+            services.add(apiServer = new ApiServer());
+            services.add(vsol4Service = new Vsol4Service());
+            services.add(orthancService = new OrthancService());
 
-            for (Service service : services.values()) {
-                service.stop();
-            }
+            for (Service service : services) { service.start(); }
 
-            gui.stop();
+            if (guiManager != null) { guiManager.showApp(); }
+        });
+    } catch (Exception e) { Log.trace(e); System.exit(1); } }
 
-            System.exit(0);
-        } catch (Exception e) {
-            Log.trace(e);
-        }
-    }
+    @Override public void stop() { try {
+        for (Service service : services) { service.stop(); }
 
-    public static File getHome(String sub) {
-        return new File(home, sub);
-    }
+        settingsManager.stop();
+
+        Log.out("Exiting.\n");
+        System.exit(0);
+    } catch (Exception e) { Log.trace(e); } }
 
     // Static Getters
-
-    public static boolean isCloud() { return cloud; }
 
     public static Sig getSig() { return sig; }
 
     public static File getHome() { return home; }
 
-    public static boolean isInitialized() { return initialized; }
+    public static LocalSystem getSystem() { return system; }
 
-    public static Gui getGui() { return gui; }
+    public static File getHome(String sub) { return new File(home, sub); }
 
-    public static Vsol4 getVsol4() { return (Vsol4) services.get("vsol4"); }
+    public static SettingsManager getSettingsManager() { return settingsManager; }
 
-    public static Orthanc getOrthanc() { return (Orthanc) services.get("orthanc"); }
+    public static GuiManager getGui() { return guiManager; }
+
+    public static DatabaseManager getDatabaseManager() { return databaseManager; }
+
+    public static WebServer getWebServer() { return webServer; }
+
+    public static ApiServer getApi() { return apiServer; }
+
+    public static Vsol4Service getVsol4Manager() { return vsol4Service; }
+
+    public static OrthancService getOrthancManager() { return orthancService; }
 
 }
