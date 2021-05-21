@@ -65,7 +65,7 @@ public class GuiManager implements Service {
     @Override public void stop() {
         running = false;
 
-        session.save(new GuiConfig(primaryStage));
+        session.save(new GuiConfig(primaryStage, session.getGuiConfig()));
 
 //        session.getGuiConfig().save(session.getSystem());
 
@@ -74,31 +74,31 @@ public class GuiManager implements Service {
 //        System.out.println(primaryStage.getWidth() + " x " + primaryStage.getHeight());
     }
 
-//    private void addListeners() {
-//        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-////                width = newValue.intValue();
-//            }
-//        });
-//        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-////                height = newValue.intValue();
-//            }
-//        });
-//        primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-////                x = newValue.intValue();
-//            }
-//        });
-//        primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-////                y = newValue.intValue();
-//            }
-//        });
-//        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> {
-////            maximized = newValue;
-//        });
-//    }
+    private void addListeners() {
+        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
+//                width = newValue.intValue();
+            }
+        });
+        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
+//                height = newValue.intValue();
+            }
+        });
+        primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
+//                x = newValue.intValue();
+            }
+        });
+        primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
+//                y = newValue.intValue();
+            }
+        });
+        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> {
+//            maximized = newValue;
+        });
+    }
 
     public void showSplash() {
         setTitleAndLogo(splashStage);
