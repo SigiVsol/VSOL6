@@ -2,7 +2,6 @@ package be.vsol.vsol6.controller.fx;
 
 import be.vsol.fx.FxController;
 import be.vsol.util.Lang;
-import be.vsol.vsol6.model.setting.vsol6;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

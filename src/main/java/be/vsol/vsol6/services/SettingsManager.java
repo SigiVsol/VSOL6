@@ -5,17 +5,14 @@ import be.vsol.tools.Service;
 import be.vsol.util.Int;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
-import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
-import be.vsol.tools.Setting;
+import be.vsol.vsol6.model.setting.Setting;
 import javafx.application.Application;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SettingsManager implements Service {
 

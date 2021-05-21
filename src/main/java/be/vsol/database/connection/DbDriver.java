@@ -27,7 +27,7 @@ public abstract class DbDriver {
     }
 
     public RS query(Connection connection, String sql) {
-//        Log.info("SQL> " + sql);
+        Log.out("SQL> " + sql);
         RS rs = null;
         try {
             Statement statement = connection.createStatement();

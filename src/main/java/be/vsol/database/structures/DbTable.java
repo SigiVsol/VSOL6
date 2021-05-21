@@ -19,14 +19,6 @@ public class DbTable<E extends DbRecord> {
         db.getDriver().matchStructure(db.getConnection(), this);
     }
 
-    @SafeVarargs public final void populate(E... es) {
-        if (getAll(true).isEmpty()) {
-            for (E e : es) {
-                save(e);
-            }
-        }
-    }
-
     public void save(E e) {
         if (e.getId() == null) {
             db.getDriver().insertRecord(db.getConnection(), this, e);
