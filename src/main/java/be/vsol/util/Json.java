@@ -95,6 +95,6 @@ public class Json {
     public static double getOrDefault(JSONObject jsonObject, String key, double defaultValue) { try { return jsonObject.getDouble(key); } catch (JSONException e) { return defaultValue; } }
     public static float getOrDefault(JSONObject jsonObject, String key, float defaultValue) { try { return jsonObject.getFloat(key); } catch (JSONException e) { return defaultValue; } }
 
-
+    public static JSONObject getOrDefault(JSONObject jsonObject, String key, JSONObject defaultValue) { try { return jsonObject.getJSONObject(key); } catch (JSONException e) { return defaultValue; } }
 
 }

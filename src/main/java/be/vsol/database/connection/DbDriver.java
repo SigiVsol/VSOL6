@@ -27,7 +27,7 @@ public abstract class DbDriver {
     }
 
     public RS query(Connection connection, String sql) {
-        Log.out("SQL> " + sql);
+//        Log.out("SQL> " + sql);
         RS rs = null;
         try {
             Statement statement = connection.createStatement();
@@ -74,13 +74,12 @@ public abstract class DbDriver {
     public abstract <E extends DbRecord> void matchStructure(Connection connection, DbTable<E> dbTable);
 
     public <E extends DbRecord> void insertRecord(Connection connection, DbTable<E> dbTable, E record) {
-        String id = Uid.getRandom();
-        Instant createdTime = Instant.now();
+        if (record.getId() == null) {
+            record.setId(Uid.getRandom());
+        }
+        record.setCreatedTime(Instant.now());
 
-        update(connection, "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + id + "', '" + getString(Instant.now()) + "')");
-
-        record.setId(id);
-        record.setCreatedTime(createdTime);
+        update(connection, "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')");
     }
 
     public <E extends DbRecord> void updateRecord(Connection connection, DbTable<E> dbTable, E record) {
@@ -292,11 +291,11 @@ public abstract class DbDriver {
         return result;
     }
 
-    private String getString(Instant instant) {
+    public static String getString(Instant instant) {
         return instant.toString().substring(0, 23).replace("T", " ");
     }
 
-    private Instant getInstant(String string) {
+    public static Instant getInstant(String string) {
         if (string == null) return null;
         else return Instant.parse(string.replace(" ", "T") + "Z");
     }

@@ -28,12 +28,17 @@ public class Database {
         return driver.query(connection, query);
     }
 
+    public void update(String query) {
+        driver.update(connection, query);
+    }
+
     public void addTable(DbTable<?> dbTable) {
         tables.put(dbTable.getName(), dbTable);
     }
 
-    public DbTable<?> getTable(String name) {
-        return tables.get(name);
+    @SuppressWarnings("unchecked")
+    public <E extends DbRecord> DbTable<E> getTable(String name) {
+        return (DbTable<E>) tables.get(name);
     }
 
     // Getters

@@ -27,7 +27,7 @@ public class Uid {
                 while ((line = bufferedReader.readLine()) != null) {
                     stringBuilder.append(line).append("\n");
                 }
-                result = stringBuilder.substring(stringBuilder.indexOf("\n"), stringBuilder.length()).trim();
+                result = stringBuilder.substring(stringBuilder.indexOf("\n"), stringBuilder.length()).trim().toLowerCase();
             }
         } catch (IOException e) {
             Log.trace(e);

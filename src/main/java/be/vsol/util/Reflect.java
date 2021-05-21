@@ -15,7 +15,7 @@ public class Reflect {
             Vector<Field> current = new Vector<>();
 
             for (Field field : currentClass.getDeclaredFields()) {
-                if (field.getAnnotation(annotationClass) != null) {
+                if (annotationClass == null || field.getAnnotation(annotationClass) != null) {
                     current.add(field);
                 }
             }

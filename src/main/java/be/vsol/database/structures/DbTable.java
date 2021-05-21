@@ -1,5 +1,7 @@
 package be.vsol.database.structures;
 
+import be.vsol.util.Uid;
+
 import java.util.Vector;
 import java.util.function.Supplier;
 
@@ -21,6 +23,8 @@ public class DbTable<E extends DbRecord> {
 
     public void save(E e) {
         if (e.getId() == null) {
+            db.getDriver().insertRecord(db.getConnection(), this, e);
+        } else if (!db.getDriver().exists(db.getConnection(), "SELECT * FROM " + getName() + " WHERE id = '" + e.getId() + "'")) {
             db.getDriver().insertRecord(db.getConnection(), this, e);
         }
 
@@ -65,6 +69,10 @@ public class DbTable<E extends DbRecord> {
         Vector<E> all = getAll(inclDeleted, where);
         if (all.isEmpty()) return defaultValue;
         else return all.firstElement();
+    }
+
+    public E get(String where, E defaultValue) {
+        return get(false, where, defaultValue);
     }
 
     public E get(String id) {

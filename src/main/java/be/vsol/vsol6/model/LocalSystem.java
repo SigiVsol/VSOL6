@@ -1,17 +1,24 @@
 package be.vsol.vsol6.model;
 
+import be.vsol.database.annotations.Db;
+import be.vsol.database.structures.DbRecord;
 import be.vsol.util.Uid;
 
-public class LocalSystem {
+public class LocalSystem extends DbRecord {
 
-    private String uid, name;
+    @Db private String name;
+
 
     public LocalSystem() {
-        String check = Uid.getMachineUuid();
+        id = Uid.getMachineUuid();
     }
 
     @Override public String toString() {
         return "System";
     }
+
+    // Getters
+
+    public String getName() { return name; }
 
 }

@@ -1,22 +1,23 @@
 package be.vsol.vsol6.controller.fx;
 
 import be.vsol.fx.FxController;
-import be.vsol.util.Lang;
-import javafx.application.Platform;
+import be.vsol.util.Icon;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class Splash extends FxController<VBox> {
 
-    @FXML private Label lblLoading;
+//    @FXML private Label lblLoading;
+    @FXML private ImageView imgLogo;
 
     @Override public void init() {
-        lblLoading.setText(Lang.get("Loading."));
+        imgLogo.setImage(Icon.getImage(true, "logo", 128));
+//        lblLoading.setText(Lang.get("Loading."));
     }
 
-    public void setText(String text) {
-        Platform.runLater(() -> lblLoading.setText(text));
+    @FXML private void cancel() {
+        System.exit(0);
     }
 
 }

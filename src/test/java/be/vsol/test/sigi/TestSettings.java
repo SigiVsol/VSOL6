@@ -1,16 +1,46 @@
 package be.vsol.test.sigi;
 
 import be.vsol.vsol6.services.SettingsManager;
-import be.vsol.vsol6.model.setting.orthanc;
-import be.vsol.vsol6.model.setting.vsol4;
+import be.vsol.vsol6.session.Session;
+import javafx.application.Application;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TestSettings {
 
     public static void main(String[] args) {
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("vsol4.host", "test-vsol4-host-command-line");
+        Application.Parameters parameters = new Application.Parameters() {
+            @Override public List<String> getRaw() {
+                return null;
+            }
+
+            @Override public List<String> getUnnamed() {
+                return null;
+            }
+
+            @Override public Map<String, String> getNamed() {
+                HashMap<String, String> result = new HashMap<>();
+                result.put("vsol4.host", "test-vsol4-host-command-line");
+                return result;
+            }
+        };
+
+//        Session session = new Session(null, null, null);
+//
+//        session.getVsol4Config()
+//
+//
+//
+//
+//        SettingsManager settingsManager = new SettingsManager(parameters);
+//        settingsManager.start();
+//
+//        settingsManager.getVsol4(system, user, organization).getHost();
+
+
+
 
 //        SettingsManager settingsManager = new SettingsManager(params, vsol4.class, orthanc.class);
 //
