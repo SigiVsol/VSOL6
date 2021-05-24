@@ -81,6 +81,7 @@ public class HttpServer implements Runnable, Service {
         return running;
     }
 
+    public RequestHandler getRequestHandler() { return requestHandler; }
 
     // Setters
 

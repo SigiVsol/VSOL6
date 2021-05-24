@@ -1,9 +1,12 @@
 package be.vsol.tools;
 
+import be.vsol.http.HttpRequest;
+import be.vsol.http.HttpResponse;
 import be.vsol.util.Key;
 import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
+import be.vsol.vsol6.Vsol6;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,34 +21,41 @@ public class Html implements ContentType, ByteArray {
         this.bytes = bytes;
     }
 
-    public Html(String resource) {
-        this.bytes = Resource.getBytes(resource);
-    }
-
     public Html(String resource, String language) {
         InputStream inputStream = Resource.getInputStream(resource);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        if (inputStream == null) {
+            bytes = new byte[0];
+        } else {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        StringBuilder result = new StringBuilder();
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-//                for (String key : Key.get(line, '@')) { // @{...} : resources
-//                    line = line.replace(Key.make(key, '@'), getStringResource(key, language));
-//                }
-                for (String key : Key.get(line, '%')) { // %{...} ; translations
-                    line = line.replace(Key.make(key, '%'), Lang.get(key, language));
+            StringBuilder result = new StringBuilder();
+            try {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.trim().startsWith("<!--") && line.trim().endsWith("-->")) continue;
+                    for (String key : Key.get(line, '@')) { // @{...} : relay a new request to the webserver
+                        HttpRequest httpRequest = new HttpRequest(key);
+                        httpRequest.getHeaders().put("accept-language", language);
+                        HttpResponse httpResponse = Vsol6.getHttpServer().getRequestHandler().respond(httpRequest);
+                        line = line.replace(Key.make(key, '@'), httpResponse.getBody(""));
+                    }
+                    for (String key : Key.get(line, '%')) { // %{...} ; translations
+                        line = line.replace(Key.make(key, '%'), Lang.get(key, language));
+                    }
+
+                    result.append(line).append("\n");
                 }
-
-                result.append(line).append("\n");
+                reader.close();
+            } catch (IOException e) {
+                Log.trace(e);
             }
-            reader.close();
-        } catch (IOException e) {
-            Log.trace(e);
+
+            bytes = result.toString().getBytes();
         }
+    }
 
-
-        bytes = result.toString().getBytes();
+    @Override public String toString() {
+        return new String(bytes);
     }
 
     @Override public byte[] getBytes() {

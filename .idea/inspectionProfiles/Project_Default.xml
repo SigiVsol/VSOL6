@@ -6,6 +6,9 @@
         <language minSize="75" name="Java" />
       </Languages>
     </inspection_tool>
+    <inspection_tool class="HtmlRequiredAltAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlUnknownTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="JSFileReferences" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StringConcatenationInLoops" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

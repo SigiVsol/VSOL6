@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VSOL6</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="ico/logo?colored&size=32">
+</head>
+
+<body style="background-color: #73937e">
+    <h1>VSOL6</h1>
+    <p>%{Remember_me!}</p>
+
+    @{app/explorer.html}
+
+    <script type="text/javascript" src="lib/jquery"></script>
+
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="model/user.js"></script>
+    <script type="text/javascript" src="model/organization.js"></script>
+    <script type="text/javascript" src="model/client.js"></script>
+    <script type="text/javascript" src="model/patient.js"></script>
+    <script type="text/javascript" src="model/study.js"></script>
+
+    <script>
+        let app = new App();
+        $(() => { app.start(); }); // on document ready
+        $(window).on("resize", () => app.fill());
+    </script>
+</body>
+</html>

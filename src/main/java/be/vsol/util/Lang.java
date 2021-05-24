@@ -3,15 +3,32 @@ package be.vsol.util;
 import be.vsol.tools.CaseReport;
 import be.vsol.tools.Csv;
 
+import java.util.Arrays;
+
 public class Lang {
 
     private enum Punctuation { None, Period, QuestionMark, ExclamationPoint }
 
     private static Csv csv;
 
-    public static String get(String key, String lang) { return get(key, lang, 1); }
+    public static String get(String key, String lang) {
+        String[] subs = key.split("\\|", 3);
+
+        if (subs.length == 1) {
+            return get(key, lang, 1);
+        } else if (subs.length == 2) {
+            return get(subs[0], lang, Int.parse(subs[1], 1));
+        } else {
+            String[] substitutions = subs[2].split("\\|", -1);
+            return get(subs[0], lang, Int.parse(subs[1], 1), substitutions);
+        }
+    }
+
+    public static String get(String key, String lang, String... substitutions) { return get(key, lang, 1, substitutions); }
 
     public static String get(String key, String lang, int count, String... substitutions) {
+        if (key.isEmpty()) return "";
+
         if (csv == null) {
             csv = new Csv("lang/translations.csv", ';', true);
         }

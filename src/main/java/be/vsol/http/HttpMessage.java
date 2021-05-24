@@ -3,9 +3,7 @@ package be.vsol.http;
 import be.vsol.dicom.Dicom;
 import be.vsol.img.Jpg;
 import be.vsol.img.Png;
-import be.vsol.tools.ByteArray;
-import be.vsol.tools.ContentType;
-import be.vsol.tools.Html;
+import be.vsol.tools.*;
 import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Int;
@@ -122,34 +120,20 @@ public abstract class HttpMessage {
         return "en";
     }
 
-    public String getBody(String defaultValue) {
-        if (body == null) return defaultValue;
-        else return new String(body);
-    }
+    public String getBody(String defaultValue) { return body == null ? defaultValue : new String(body); }
 
-    public JSONObject getBody(JSONObject defaultValue) {
-        if (body == null) return defaultValue;
-        else return new JSONObject(new String(body));
-    }
+    public JSONObject getBody(JSONObject defaultValue) { return body == null ? defaultValue : new JSONObject(new String(body)); }
 
-    public Png getBody(Png defaultValue) {
-        if (body == null) return defaultValue;
-        else return new Png(body);
-    }
+    public Png getBody(Png defaultValue) { return body == null ? defaultValue : new Png(body); }
 
-    public Jpg getBody(Jpg defaultValue) {
-        if (body == null) return defaultValue;
-        else return new Jpg(body);
-    }
+    public Jpg getBody(Jpg defaultValue) { return body == null ? defaultValue : new Jpg(body); }
 
-    public Dicom getBody(Dicom defaultValue) {
-        if (body == null) return defaultValue;
-        else return new Dicom(body);
-    }
+    public Dicom getBody(Dicom defaultValue) { return body == null ? defaultValue : new Dicom(body); }
 
-    public Html getBody(Html defaultValue) {
-        if (body == null) return defaultValue;
-        else return new Html(body);
-    }
+    public Html getBody(Html defaultValue) { return body == null ? defaultValue : new Html(body); }
+
+    public JavaScript getBody(JavaScript defaultValue) { return body == null ? defaultValue : new JavaScript(body); }
+
+    public Css getBody(Css defaultValue) { return body == null ? defaultValue : new Css(body); }
 
 }
