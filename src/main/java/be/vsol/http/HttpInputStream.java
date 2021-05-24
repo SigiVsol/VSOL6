@@ -23,7 +23,7 @@ public class HttpInputStream extends BufferedInputStream {
                 int b = read();
 
                 if (b == -1) { // End of stream
-                    Log.err("HttpInputStream: Unexpected End of Stream");
+//                    Log.err("HttpInputStream: Unexpected End of Stream");
                     break;
                 } else if (b == 10) { // LF
                     break;

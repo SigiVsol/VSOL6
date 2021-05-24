@@ -88,7 +88,7 @@ public class GuiManager implements Service {
 
             primaryStage.setScene(new Scene(app.getRoot()));
 
-//            explorer.loadUrl("https://www.google.com");
+            explorer.loadUrl("http://localhost:8100");
             app.show(explorer);
 
             primaryStage.show();

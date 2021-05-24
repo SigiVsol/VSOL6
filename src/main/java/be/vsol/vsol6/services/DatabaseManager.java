@@ -26,7 +26,11 @@ public class DatabaseManager implements Service {
     public DatabaseManager(Map<String, String> params) {
         DbDriver driver;
         if (Vsol6.isCloud()) {
-            driver = new MySQL(params.getOrDefault("host", "localhost"), Int.parse(params.get("port"), 3306), params.getOrDefault("user", "root"), params.getOrDefault("password", "LesMiserables1860"));
+            driver = new MySQL(
+                    params.getOrDefault("db.host", "localhost"),
+                    Int.parse(params.get("db.port"), 3306),
+                    params.getOrDefault("db.user", "root"),
+                    params.getOrDefault("db.password", ""));
         } else {
             driver = new SQLite(Vsol6.getHome("data"));
         }

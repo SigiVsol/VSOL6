@@ -6,6 +6,7 @@ import be.vsol.img.Png;
 import be.vsol.tools.ByteArray;
 import be.vsol.tools.ContentType;
 import be.vsol.tools.Html;
+import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Int;
 import org.apache.commons.io.IOUtils;
@@ -103,7 +104,6 @@ public abstract class HttpMessage {
 
     // Getters
 
-
     public boolean isValid() { return valid; }
 
     public String getHttpVersion() { return httpVersion; }
@@ -111,6 +111,16 @@ public abstract class HttpMessage {
     public Map<String, String> getHeaders() { return headers; }
 
     public byte[] getBody() { return body; }
+
+    public String getLanguage() {
+        String[] acceptLanguages = headers.getOrDefault("accept-language", "").split(",", -1);
+        for (String acceptLanguage : acceptLanguages) {
+            if (acceptLanguage.matches("([nl]|[en]|[fr]|[de]).*")) {
+                return acceptLanguage.substring(0, 2);
+            }
+        }
+        return "en";
+    }
 
     public String getBody(String defaultValue) {
         if (body == null) return defaultValue;

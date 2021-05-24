@@ -21,6 +21,10 @@ public class Resource {
         }
     }
 
+    public static String getString(String resource) {
+        return new String(getBytes(resource));
+    }
+
     public static InputStream getInputStream(String resource) {
         File file = new File("src/main/resources/", resource);
         if (file.exists()) {
