@@ -1,4 +1,4 @@
-package be.vsol.vsol6.model.setting;
+package be.vsol.vsol6.model.config;
 
 import be.vsol.database.annotations.Db;
 
@@ -10,7 +10,7 @@ public class OrthancConfig extends Config {
     // Constructors
 
     public OrthancConfig() {
-        super("orthancConfigs");
+        super("orthanc");
     }
 
     // Getters

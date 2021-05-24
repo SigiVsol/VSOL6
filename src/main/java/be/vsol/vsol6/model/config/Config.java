@@ -1,4 +1,4 @@
-package be.vsol.vsol6.model.setting;
+package be.vsol.vsol6.model.config;
 
 import be.vsol.database.annotations.Db;
 import be.vsol.database.structures.DbRecord;
@@ -9,11 +9,11 @@ import java.lang.reflect.Field;
 
 public abstract class Config extends DbRecord {
 
-    private final String tablename;
+    private final String category;
     @Db private String systemId, userId, organizationId;
 
-    public Config(String tablename) {
-        this.tablename = tablename;
+    public Config(String category) {
+        this.category = category;
     }
 
     // Methods
@@ -34,7 +34,9 @@ public abstract class Config extends DbRecord {
 
     public String getOrganizationId() { return organizationId; }
 
-    public String getTablename() { return tablename; }
+    public String getCategory() { return category; }
+
+    public String getDbTableName() { return category + "_configs"; }
 
     // Setters
 

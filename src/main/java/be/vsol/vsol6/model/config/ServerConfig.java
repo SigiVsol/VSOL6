@@ -1,15 +1,15 @@
-package be.vsol.vsol6.model.setting;
+package be.vsol.vsol6.model.config;
 
 import be.vsol.database.annotations.Db;
 
-public class WebConfig extends Config {
+public class ServerConfig extends Config {
 
     @Db private int port;
 
     // Constructors
 
-    public WebConfig() {
-        super("webConfigs");
+    public ServerConfig() {
+        super("server");
     }
 
     // Getters

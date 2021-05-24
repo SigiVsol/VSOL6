@@ -1,9 +1,11 @@
 package be.vsol.vsol6;
 
+import be.vsol.http.HttpServer;
 import be.vsol.tools.Job;
 import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
 import be.vsol.util.Log;
+import be.vsol.vsol6.controller.http.ServerHandler;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.services.*;
 import be.vsol.vsol6.session.Session;
@@ -29,8 +31,7 @@ public class Vsol6 extends Application {
     private static final Vector<Service> services = new Vector<>(); // will contain the following:
     private static GuiManager guiManager;
     private static DatabaseManager databaseManager;
-    private static WebServer webServer;
-    private static ApiServer apiServer;
+    private static HttpServer httpServer;
     private static Vsol4Service vsol4Service;
     private static OrthancService orthancService;
 
@@ -53,13 +54,13 @@ public class Vsol6 extends Application {
         systemSession = new Session(system, null, null);
 
         if (!cloud) {
-            services.add(guiManager = new GuiManager(primaryStage)); // this shows splash screen
+            services.add(guiManager = new GuiManager(primaryStage));
+            guiManager.showSplash();
         }
 
         new Job(() -> {
             services.add(databaseManager = new DatabaseManager(getParameters().getNamed()));
-            services.add(webServer = new WebServer());
-            services.add(apiServer = new ApiServer());
+            services.add(httpServer = new HttpServer(sig.toString(), systemSession.getServerConfig().getPort(), new ServerHandler()));
             services.add(vsol4Service = new Vsol4Service());
             services.add(orthancService = new OrthancService());
 
@@ -94,9 +95,7 @@ public class Vsol6 extends Application {
 
     public static DatabaseManager getDatabaseManager() { return databaseManager; }
 
-    public static WebServer getWebServer() { return webServer; }
-
-    public static ApiServer getApi() { return apiServer; }
+    public static HttpServer getHttpServer() { return httpServer; }
 
     public static Vsol4Service getVsol4Manager() { return vsol4Service; }
 

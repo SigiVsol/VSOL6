@@ -7,7 +7,7 @@ import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
-import be.vsol.vsol6.model.setting.*;
+import be.vsol.vsol6.model.config.*;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -31,7 +31,7 @@ public class Session {
 
         try {
             // read values from resource file
-            JSONObject jsonObject = new JSONObject(new String(Resource.getBytes("config/" + result.getClass().getSimpleName() + ".json")));
+            JSONObject jsonObject = new JSONObject(new String(Resource.getBytes("config/" + result.getCategory() + ".json")));
 
             for (Field field : Reflect.getFields(result, Db.class)) {
                 field.setAccessible(true);
@@ -50,7 +50,7 @@ public class Session {
             }
 
             // override from database
-            DbTable<E> dbTable = Vsol6.getDatabaseManager().getDbSystem().getTable(result.getTablename());
+            DbTable<E> dbTable = Vsol6.getDatabaseManager().getDbSystem().getTable(result.getDbTableName());
             if (dbTable != null) {
                 E current = dbTable.get("systemId = '" + system.getId() + "'", null);
                 if (current != null) {
@@ -59,10 +59,11 @@ public class Session {
             }
 
             // override with command line options
-            for (Field field : result.getClass().getFields()) {
+            Map<String, String> params = Vsol6.getParams().getNamed();
+
+            for (Field field : Reflect.getFields(result, Db.class)) {
                 field.setAccessible(true);
-                String key = result.getClass().getSimpleName() + "." + field.getName();
-                Map<String, String> params = Vsol6.getParams().getNamed();
+                String key = result.getCategory() + "." + field.getName();
 
                 if (params.containsKey(key)) {
                     switch (field.getType().getSimpleName()) {
@@ -74,6 +75,7 @@ public class Session {
                         case "String" -> field.set(result, params.get(key));
                     }
                 } else if (Vsol6.getParams().getUnnamed().contains(key)) {
+                    System.out.println(key);
                     switch (field.getType().getSimpleName()) {
                         case "boolean", "Boolean" -> field.set(result, true);
                     }
@@ -111,9 +113,7 @@ public class Session {
 
     public OrthancConfig getOrthancConfig() { return getConfig(OrthancConfig::new); }
 
-    public WebConfig getWebConfig() { return getConfig(WebConfig::new); }
-
-    public ApiConfig getApiConfig() { return getConfig(ApiConfig::new); }
+    public ServerConfig getServerConfig() { return getConfig(ServerConfig::new); }
 
     public GuiConfig getGuiConfig() { return getConfig(GuiConfig::new); }
 

@@ -1,7 +1,5 @@
 package be.vsol.test.sigi;
 
-import be.vsol.vsol6.services.SettingsManager;
-import be.vsol.vsol6.session.Session;
 import javafx.application.Application;
 
 import java.util.HashMap;

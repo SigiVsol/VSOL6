@@ -12,13 +12,11 @@ import be.vsol.vsol6.controller.fx.Splash;
 import be.vsol.vsol6.controller.fx.app.Explorer;
 import be.vsol.vsol6.controller.fx.app.Login;
 import be.vsol.vsol6.controller.fx.app.Settings;
-import be.vsol.vsol6.model.LocalSystem;
-import be.vsol.vsol6.model.setting.GuiConfig;
+import be.vsol.vsol6.model.config.GuiConfig;
 import be.vsol.vsol6.session.Session;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,7 +43,6 @@ public class GuiManager implements Service {
         this.splashStage = new Stage(StageStyle.UNDECORATED);
 
         splash = loadFxml("Splash");
-        showSplash();
 
         // TODO: restore login for user, organization
         session = new Session(Vsol6.getSystem(), null, null);
@@ -66,42 +63,11 @@ public class GuiManager implements Service {
         running = false;
 
         session.save(new GuiConfig(primaryStage, session.getGuiConfig()));
-
-//        session.getGuiConfig().save(session.getSystem());
-
-//        Vsol6.getSettingsManager().save(gui.class, "width", primaryStage.getWidth(), Vsol6.getSystem());
-
-//        System.out.println(primaryStage.getWidth() + " x " + primaryStage.getHeight());
-    }
-
-    private void addListeners() {
-        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-//                width = newValue.intValue();
-            }
-        });
-        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-//                height = newValue.intValue();
-            }
-        });
-        primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-//                x = newValue.intValue();
-            }
-        });
-        primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized() && !primaryStage.isIconified()) {
-//                y = newValue.intValue();
-            }
-        });
-        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> {
-//            maximized = newValue;
-        });
     }
 
     public void showSplash() {
         setTitleAndLogo(splashStage);
+
         splashStage.setScene(new Scene(splash.getRoot()));
         splashStage.show();
     }
@@ -121,6 +87,10 @@ public class GuiManager implements Service {
             if (guiConfig.isUndecorated()) primaryStage.initStyle(StageStyle.UNDECORATED);
 
             primaryStage.setScene(new Scene(app.getRoot()));
+
+//            explorer.loadUrl("https://www.google.com");
+            app.show(explorer);
+
             primaryStage.show();
         });
     }
@@ -128,13 +98,6 @@ public class GuiManager implements Service {
     private void setTitleAndLogo(Stage stage) {
         stage.setTitle(Vsol6.getSig().getAppTitle());
         stage.getIcons().add(Icon.getImage(true, "logo", 64));
-    }
-
-    private <C extends FxController<?>> void show(C controller) {
-        Platform.runLater(() -> {
-            primaryStage.setScene(new Scene((Parent) controller.getRoot()));
-            primaryStage.show();
-        });
     }
 
     private <N extends Node, C extends FxController<N>> C loadFxml(String resource) {

@@ -1,4 +1,4 @@
-package be.vsol.vsol6.model.setting;
+package be.vsol.vsol6.model.config;
 
 import be.vsol.database.annotations.Db;
 import javafx.stage.Stage;
@@ -10,7 +10,7 @@ public class GuiConfig extends Config {
     @Db private boolean leftHanded;
 
     public GuiConfig() {
-        super("guiConfigs");
+        super("gui");
     }
 
     public GuiConfig(Stage stage, GuiConfig other) {

@@ -5,6 +5,7 @@ import be.vsol.img.Jpg;
 import be.vsol.img.Png;
 import be.vsol.tools.ByteArray;
 import be.vsol.tools.ContentType;
+import be.vsol.tools.Html;
 import be.vsol.util.Log;
 import be.vsol.util.Int;
 import org.apache.commons.io.IOUtils;
@@ -131,9 +132,14 @@ public abstract class HttpMessage {
         else return new Jpg(body);
     }
 
-    public Dicom getDicom(Dicom defaultValue) {
+    public Dicom getBody(Dicom defaultValue) {
         if (body == null) return defaultValue;
         else return new Dicom(body);
+    }
+
+    public Html getBody(Html defaultValue) {
+        if (body == null) return defaultValue;
+        else return new Html(body);
     }
 
 }
