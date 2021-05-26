@@ -1,0 +1,163 @@
+:root {
+    --background: #282828;
+    --vsol: #029ddf;
+    --ok: #089d36;
+    --ok-highlighted: rgba(8, 157, 54, 0.5);
+    --cancel: #755453;
+    --cancel-highlighted: rgba(117, 84, 83, 0.5);
+    --edit: #acab5d;
+    --edit-highlighted: rgba(172, 171, 93, 0.2);
+
+    --text-field: #a7a7a7;
+
+    --clients: #335c81;
+    --patients: #406869;
+    --entries: #73937e;
+
+    --clients-highlighted: rgba(51, 92, 129, 0.5);
+    --patients-highlighted: rgba(64, 104, 105, 0.5);
+    --entries-highlighted: rgba(115, 147, 126, 0.5);
+
+
+    --table-odd-rows: #323232;
+    --table-even-rows: #393939;
+
+    --navbar-width: 75px;
+}
+
+::placeholder {
+    color: #d4d4d4;
+}
+
+html, body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Verdana, serif;
+    color: white;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* LAYERS */
+
+div.base-layer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+}
+
+div.popup-layer {
+    background-color: rgba(0,0,0,0.7);
+
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+
+    z-index: 100;
+    overflow-y: auto;
+    text-align: center;
+
+    display: none;
+}
+
+/* ZONES */
+
+div.navbar-zone {
+    background-color: var(--background);
+    width: calc(var(--navbar-width));
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: auto;
+    text-align: center;
+}
+
+div.navbar-zone.left-handed {
+    right: auto; left: 0;
+}
+
+div.content-zone {
+    background-color: var(--background);
+    position: absolute;
+    top: 0; right: calc(var(--navbar-width) + 1px); bottom: 0; left: 0;
+}
+
+div.content-zone.left-handed {
+    right: 0; left: calc(var(--navbar-width) + 1px);
+}
+
+/* COMPONENTS */
+
+img {
+    -webkit-user-drag: none;
+}
+
+@media only screen and (max-width : 800px) {
+    div.navbar-zone {
+        display: none;
+    }
+
+    div.content-zone {
+        right: 0;
+        left: 0;
+    }
+}
+
+/* GENERAL STYLING */
+
+.clients-border {
+    border-color: var(--clients);
+}
+
+.patients-border {
+    border-color: var(--patients);
+}
+
+.entries-border {
+    border-color: var(--entries);
+}
+
+.clients-background {
+    background-color: var(--clients);
+}
+
+.patients-background {
+    background-color: var(--patients);
+}
+
+.entries-background {
+    background-color: var(--entries);
+}
+
+.hand {
+    cursor: pointer;
+}
+
+.right-aligned {
+    text-align: right;
+}
+
+.center-aligned {
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

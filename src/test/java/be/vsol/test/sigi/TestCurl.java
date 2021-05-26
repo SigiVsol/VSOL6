@@ -22,7 +22,7 @@ public class TestCurl {
             System.out.println(httpResponse.getStatusCode());
             System.out.println(httpResponse.getReasonPhrase());
             System.out.println(httpResponse.getHeaders());
-            System.out.println(httpResponse.getBody(new JSONObject()).toString(1));
+            System.out.println(httpResponse.getBodyAsJSONObject().toString(1));
         }
     }
 
@@ -35,7 +35,7 @@ public class TestCurl {
             System.out.println(httpResponse.getStatusCode());
             System.out.println(httpResponse.getReasonPhrase());
             System.out.println(httpResponse.getHeaders());
-            System.out.println(httpResponse.getBody(""));
+            System.out.println(httpResponse.getBodyAsString());
 //            System.out.println(httpResponse.getBody(new JSONObject()).toString(1));
         }
 

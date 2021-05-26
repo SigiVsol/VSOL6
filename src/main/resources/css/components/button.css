@@ -1,0 +1,107 @@
+button {
+    border: none;
+    border-radius: 5px;
+    min-width: 45px;
+    min-height: 45px;
+    color: white;
+    cursor: pointer;
+    background-color: black;
+    font-size: large;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+button:hover {
+    background-color: var(--vsol);
+    transition: .2s;
+}
+button:disabled {
+    cursor: default;
+    opacity: 0.2;
+}
+button:disabled:hover {
+    background-color: black;
+}
+
+button.ok {
+    background-color: var(--ok);
+}
+button.ok:hover {
+    background-color: var(--ok-highlighted);
+}
+button.ok:hover:disabled {
+    background-color: var(--ok);
+}
+
+button.cancel {
+    background-color: var(--cancel);
+}
+button.cancel:hover {
+    background-color: var(--cancel-highlighted);
+}
+button.cancel:hover:disabled {
+    background-color: var(--cancel);
+}
+
+button.edit {
+    background-color: var(--edit);
+}
+button.edit:hover {
+    background-color: var(--edit-highlighted);
+}
+button.edit:hover:disabled {
+    background-color: var(--edit);
+}
+
+button.confirm {
+    background-color: var(--ok);
+    background-image: url("../icon/check/16");
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 100px;
+}
+button.confirm:hover {
+    background-color: var(--ok-highlighted);
+}
+button.confirm.save {
+    background-image: url("../icon/save/16");
+}
+
+button.close {
+    background-color: var(--cancel);
+    background-image: url("../icon/cancel/16");
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 100px;
+}
+button.close:hover {
+    background-color: var(--cancel-highlighted);
+}
+
+button.clients {
+    background-color: var(--clients);
+}
+button.clients:hover {
+    background-color: var(--clients-highlighted);
+}
+
+button.patients {
+    background-color: var(--patients);
+}
+button.patients:hover {
+    background-color: var(--patients-highlighted);
+}
+
+button.entries {
+    background-color: var(--entries);
+}
+button.entries:hover {
+    background-color: var(--entries-highlighted);
+}
+
+button.gray {
+    background-color: gray;
+}
+button.gray:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+}

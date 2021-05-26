@@ -1,0 +1,22 @@
+div.navbar-version {
+    font-size: x-small;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+button.navbar {
+    width: 60px;
+    min-height: 50px;
+    margin-bottom: 5px;
+}
+
+div.navbar-button-bar {
+    margin-top: 10px;
+}
+
+span.navbar-button-text {
+    display: block;
+    font-size: x-small;
+    overflow: hidden;
+    text-overflow: fade;
+}

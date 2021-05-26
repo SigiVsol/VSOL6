@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="popup/patient-fiche.css">
+<script type="text/javascript" src="popup/patient-fiche.js"></script>
+
+<div class="patient-fiche">
+    <div class="content">
+
+        <div class="segment">
+            <div>
+                <div class="title first">%{name}</div>
+                <label><input id="txtPatientName" type="text" placeholder="%{name} *"></label>
+                <div class="title">%{chip_number} & %{ueln_number}</div>
+                <label><input id="txtPatientChip" type="text" placeholder="%{chip_number}"></label>
+                <label><input id="txtPatientUeln" type="text" placeholder="%{ueln_number}"></label>
+                <div class="title">%{color}</div>
+                <label><input id="txtPatientColor" type="text" placeholder="%{color}"></label>
+
+                <div class="title">%{gender}</div>
+                <div class="title neutered">%{castrated}?</div>
+                <div>
+                    <button class="sex male" onclick="PatientFiche.setSex('M')" disabled>&male;</button>
+                    <button class="sex female" onclick="PatientFiche.setSex('F')">&female;</button>
+                    <button class="sex unknown" onclick="PatientFiche.setSex('X')">?</button>
+                </div>
+                <div class="switch-container">
+                    <label class="switch">
+                        <input id="chkPatientNeutered" type="checkbox">
+                        <span class="switch"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="segment second">
+            <div>
+                <div class="title first">%{birthdate}</div>
+                <label><input id="txtPatientBirthdate" type="date" placeholder="%{birthdate}"></label>
+                <div class="title">%{sire} x %{damsire}</div>
+                <label><input id="txtPatientSire" type="text" placeholder="%{sire}"></label>
+                <label><input id="txtPatientDamsire" type="text" placeholder="%{damsire}"></label>
+                <div class="title">%{species} & %{breed}</div>
+                <label><input id="txtPatientSpecies" type="text" placeholder="%{species}"></label>
+                <label><input id="txtPatientBreed" type="text" placeholder="%{breed}"></label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="button-bar">
+        <button class="confirm save" onclick="PatientFiche.save()"></button>
+        <button class="close" onclick="PatientFiche.close()"></button>
+    </div>
+</div>

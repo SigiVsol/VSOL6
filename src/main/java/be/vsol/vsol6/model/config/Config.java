@@ -1,49 +1,40 @@
 package be.vsol.vsol6.model.config;
 
-import be.vsol.database.annotations.Db;
-import be.vsol.database.structures.DbRecord;
-import be.vsol.util.Log;
-import be.vsol.util.Reflect;
+import be.vsol.tools.json;
 
-import java.lang.reflect.Field;
+public class Config {
 
-public abstract class Config extends DbRecord {
+    @json public gui gui = new gui();
+    @json public server server = new server();
+    @json public vsol4 vsol4 = new vsol4();
+    @json public orthanc orthanc = new orthanc();
+    @json public db db = new db();
 
-    private final String category;
-    @Db private String systemId, userId, organizationId;
-
-    public Config(String category) {
-        this.category = category;
+    public static class gui {
+        @json public int width, height, x, y;
+        @json public boolean visible, maximized, undecorated, leftHanded;
     }
 
-    // Methods
+    public static class server {
+        @json public String name;
+        @json public int port;
+    }
 
-    public <E extends Config> void copy(E other) { try {
-        for (Field field : Reflect.getFields(this, Db.class)) {
-            if (field.getAnnotation(Db.class).auto()) continue;
-            field.setAccessible(true);
-            field.set(this, field.get(other));
-        }
-    } catch (IllegalAccessException e) { Log.trace(e); } }
+    public static class vsol4 {
+        @json public String host;
+        @json public int port;
+        @json public String user, password;
+    }
 
-    // Getters
+    public static class orthanc {
+        @json public String host;
+        @json public int port;
+    }
 
-    public String getSystemId() { return systemId; }
-
-    public String getUserId() { return userId; }
-
-    public String getOrganizationId() { return organizationId; }
-
-    public String getCategory() { return category; }
-
-    public String getDbTableName() { return category + "_configs"; }
-
-    // Setters
-
-    public void setSystemId(String systemId) { this.systemId = systemId; }
-
-    public void setUserId(String userId) { this.userId = userId; }
-
-    public void setOrganizationId(String organizationId) { this.organizationId = organizationId; }
+    public static class db {
+        @json public String type;
+        @json public String host, user, password;
+        @json public int port;
+    }
 
 }

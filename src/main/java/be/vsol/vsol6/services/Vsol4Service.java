@@ -4,18 +4,13 @@ import be.vsol.tools.Service;
 
 public class Vsol4Service implements Service {
 
-    private boolean running = false;
+    private String superToken = null;
 
     @Override public void start() {
-        running = true;
+
     }
 
-    @Override public void stop() {
-        running = false;
-    }
+    @Override public void stop() { }
 
-    // Getters
-
-    @Override public boolean isRunning() { return running; }
 
 }

@@ -2,7 +2,7 @@
 usage_example;;example of [0] and [1] usage;voorbeeldgebruik van [0] en [1];;
 loading;;loading;aan het laden;;
 user;;user|+s;gebruiker|+s;utilisateur|+s;
-login;;login;Aanmelden;Connexion;
+login;;login;aanmelden;connexion;
 remember_me;;keep me logged in on this computer;aangemeld blijven op dit toestel;;
 client;;client|+s;eigenaar|+s;;
 patient;;patient|+s;patiënt|+en;;
@@ -32,7 +32,7 @@ contact;;contact|+s;contact|+en;;
 birthdate;;birthdate;geboren;;
 date;;date|+s;datum|+s;;
 chip_number;;chip n°;chip-nr;;
-ueln_number;;UELN number;UELN-nr;;
+ueln_number;;ueln number;ueln-nr;;
 gender;;gender;geslacht;;
 castrated;;;gecastreerd;;
 species;;species;soort|+en;;
@@ -43,145 +43,141 @@ color;;color|+s;kleur|+en;;
 chip;;;;;
 origin;;;afstamming;;
 reference;;reference|+s;referentie|+s;;
-ueln;;UELN;UELN;;
+ueln;;ueln;ueln;;
 ok;;;;;
 yes;;;ja;oui;ja
 no;;;nee;non;nein
 cancel;;;annuleren;;
 zoom_out;;;uitzoomen;dézoomer;rauszoomen
 fit_in_viewport;;;passend maken;ajuster dans la fenêtre;in das Ansichtsfenster passen
-Zoom_in;;;Inzoomen;Agrandir;Hineinzoomen
-Rotate_left;;;Links draaien;Tourner à gauche;Nach links drehen
-Rotate_right;;;Rechts draaien;Tourner à droite;Nach rechts drehen
-Mirror;;;Spiegelen;Mettre en miroir;Spiegeln
-Magnifying_glass;;;Vergrootglas;Loupe;Lupe
-Negative_image;;;Negatief beeld;Image négative;Negatives Bild
-Coronal_and_saggital_images;;;Coronale en saggitale beelden;Images coronales et sagittales;Koronale und sagittale Bilder
-Close_submenu;;;Submenu sluiten;Fermer le sous-menu;Untermenü schließen
-Go_back;;;Ga terug;Retourner;Geh zurück
-Select_all;;;Alles selecteren;Tout sélectionner;Alles wählen
-Delete_selected_measurements;;;Geselecteerde metingen verwijderen;Supprimer les mesures sélectionnées;Ausgewählte Messungen löschen
-Measuring_settings;;;Instellingen voor metingen;Paramètres de mesure;Messeinstellungen
-Lines;;;Lijnen;Lignes;Linien
-Circles;;;Cirkels;Cercles;Kreise
-Dots;;;Punten;Points;Punkte
-Angles;;;Hoeken;;Winkel
-Cobb_angles;;;Cobb-hoeken;Angles Cobb;Cobb winkel
-Parallel_lines;;;Paralelle lijnen;Lignes parallèles;Parallele Linien
-Perpendicular_lines;;;Evenwijdige lijnen;Lignes perpendiculaire;Senkrechte Linien
-Calibration;;;Kalibratie;Calibrage;Kalibrierung
-Vertebral_Heart_Score;;;Vertebrale Hartscore;Score cardiaque vertébral;Wirbelherz Score
-Cardiothoracic_Ratio;;;Cardio-Thorax Ratio;Rapport cardiothoracique;Kardiothorakales Verhältnis
-Tibial_Plateau_Angle;;;Tibiaal Plateau Hoek;Angle du plateau tibial;Winkel des Tibiaplateaus
-Tibial_Tuberosity_Advancement;;;Tibiale Tuberociteitsvoortgang;Avancement de la tubérosité tibiale;Förderung der Tibiatuberosität
-Distractive_Index;;;Distractieve Index;Indice de distraction;Ablenkungsindex
-Vezzoni;;;;;
-Norberg_Olsson_Angles;;;Norberg Olsson Hoeken;Angles Norberg Olsson;Norberg Olsson Winkel
-VHS;;;;;
-CTR;;;;;
-TPA;;;;;
-TTA;;;;;
-DI;;;;;
-VEZ;;;;;
-NOA;;;;;
-Metric;;;Metrisch;métriques;Metrische
-Imperial;;;Imperiaal;impériales;Imperiale
-Settings;;;Instellingen;Réglages;Einstellungen
-Draw_a_line;;;Teken een lijn;Tracez une ligne;Zeichne eine Linie
-No_annotation;;;Geen annotatie;Aucune annotation;Keine Anmerkung
-Length;;;Lengte;Longueur;Länge
-Draw_a_circle;;Draw a circle, from edge to center;Teken een cirkel, van een  rand tot het middelpunt;Tracez un cercle, d'un bord au centre;Zeichnen Sie einen Kreis von der Kante zur Mitte
-Draw_dots;;;Teken punten;Dessiner des points;Zeichne Punkte
-Radius;;;Straal;Rayon;
-Diameter;;;;Diamètre;Durchmesser
-Circumference;;;Omtrek;Circonférence;Umfang
-Surface;;;Oppervlakte;Surface;Oberfläche
-Units;als in metrisch/imperiale eenheden;unit|+s;eenheid|eenheden;Unité|+s;Einheit|+en
-Coordinates;;coordinate|+s;Coördinaat|Coördinaten;Coordonné|+s;Koordinate|+n
-Draw_a_second_line;;;Teken een tweede lijn;Tracez une deuxième ligne;Zeichne eine zweite Linie
+zoom_in;;;inzoomen;agrandir;Hineinzoomen
+rotate_left;;;links draaien;tourner à gauche;Nach links drehen
+rotate_right;;;rechts draaien;tourner à droite;Nach rechts drehen
+mirror;;;spiegelen;mettre en miroir;Spiegeln
+magnifying_glass;;;vergrootglas;loupe;Lupe
+negative_image;;;negatief beeld;image négative;Negatives Bild
+coronal_and_saggital_images;;;coronale en saggitale beelden;images coronales et sagittales;Koronale und sagittale Bilder
+close_submenu;;;submenu sluiten;fermer le sous-menu;Untermenü schließen
+go_back;;;ga terug;retourner;Geh zurück
+select_all;;;alles selecteren;tout sélectionner;Alles wählen
+delete_selected_measurements;;;geselecteerde metingen verwijderen;supprimer les mesures sélectionnées;Ausgewählte Messungen löschen
+measuring_settings;;;instellingen voor metingen;paramètres de mesure;Messeinstellungen
+lines;;;lijnen;lignes;Linien
+circles;;;cirkels;cercles;Kreise
+dots;;;punten;points;Punkte
+angles;;;hoeken;;Winkel
+cobb_angles;;;Cobb-hoeken;angles Cobb;Cobb winkel
+parallel_lines;;;paralelle lijnen;lignes parallèles;Parallele Linien
+perpendicular_lines;;;evenwijdige lijnen;lignes perpendiculaire;Senkrechte Linien
+calibration;;;kalibratie;calibrage;Kalibrierung
+vertebral_heart_score;;;vertebrale hartscore;score cardiaque vertébral;Wirbelherz Score
+cardiothoracic_ratio;;;cardio-thorax ratio;rapport cardiothoracique;Kardiothorakales Verhältnis
+tibial_plateau_angle;;;tibiaal plateau hoek;angle du plateau tibial;Winkel des Tibiaplateaus
+tibial_tuberosity_advancement;;;tibiale tuberociteitsvoortgang;avancement de la tubérosité tibiale;Förderung der Tibiatuberosität
+distractive_index;;;distractieve index;indice de distraction;Ablenkungsindex
+vezzoni;;;;;
+norberg_olsson_angles;;;Norberg Olsson hoeken;angles Norberg Olsson;Norberg Olsson Winkel
+vhs;;;;;
+ctr;;;;;
+tpa;;;;;
+tta;;;;;
+di;;;;;
+vez;;;;;
+noa;;;;;
+metric;;;metrisch;métriques;Metrische
+imperial;;;imperiaal;impériales;Imperiale
+settings;;;instellingen;réglages;Einstellungen
+draw_a_line;;;teken een lijn;tracez une ligne;Zeichne eine Linie
+no_annotation;;;geen annotatie;aucune annotation;Keine Anmerkung
+length;;;lengte;longueur;Länge
+draw_a_circle;;draw a circle, from edge to center;teken een cirkel, van een  rand tot het middelpunt;tracez un cercle, d'un bord au centre;Zeichnen Sie einen Kreis von der Kante zur Mitte
+draw_dots;;;teken punten;dessiner des points;Zeichne Punkte
+radius;;;straal;rayon;
+diameter;;;;diamètre;Durchmesser
+circumference;;;omtrek;circonférence;Umfang
+surface;;;oppervlakte;surface;Oberfläche
+units;als in metrisch/imperiale eenheden;unit|+s;eenheid|eenheden;unité|+s;Einheit|+en
+coordinates;;coordinate|+s;coördinaat|coördinaten;coordonné|+s;Koordinate|+n
+draw_a_second_line;;;teken een tweede lijn;tracez une deuxième ligne;Zeichne eine zweite Linie
 parallel_to_the_first;;;parallel met de eerste;parallèle à la première;parallel zum ersten
 perpendicular_to_the_first;;;evenwijdig met de eerste;perpendiculaire à la première;senkrecht zur ersten
-Inner_angle;;;Binnenhoek;Angle intérieur;Innenwinkel
-Outer_angle;;;Buitenhoek;Angle extérieur;Außenwinkel
-Distance;;distance|+s;afstand|+en;distance|+s;Abstand|+e
-calib-1;;Trace a line over the calibration object;Traceer het kalibratie-object in de afbeelding;Tracez une ligne sur l'objet de calibrage;Verfolgen Sie eine Linie über dem Kalibrierungsobjekt
-calib-2;;Indicate the actual length of the object;Selecteer de effectieve maat ervan;Indiquez la longueur réelle de l'objet;Wählen Sie die tatsächliche Länge des Objekts
-Custom;;;Aangepast;Ajusté;Angepasst
-Reset;;;;Réinitialiser;Zurücksetzen
-vhs-1;;Draw a line along the longest axis of the cardiac silhouette;Teken een lijn van de onderzijde van de carina tot de apex;Tracez une ligne du bas de la carène trachéale à l'apex;Zeichnen Sie eine Linie entlang der längsten Achse der Herzsilhouette
-vhs-2;;Draw a perpendicular line along the shortest axis of the cardiac silhouette;Teken een loodrechte lijn ter hoogte van het breedste deel van het hart;Tracez une ligne perpendiculaire à la partie la plus large du cœur;Zeichnen Sie eine senkrechte Linie entlang der kürzesten Achse der Herzsilhouette
-vhs-3;;Draw a line counting 5 vertebrae, starting at the cranial edge of T4;Teken een lijn vanaf de craniale zijde van T4 en dit 5 wervellichamen lang;Tracez une ligne sur le côté du crâne de T4 et des 5 corps vertébraux suivants;Zeichnen Sie eine Linie mit 5 Wirbeln, beginnend am Schädelrand von T4
-ctr-1;;Draw a line between the thoracic walls at height T8;Teken een lijn tussen de thorax muren ter hoogte van T8;Tracez une ligne entre les parois thoraciques sur T8;Zeichnen Sie eine Linie zwischen den Brustwänden in Höhe T8
-ctr-2;;Draw a perpendicular line that divides the heart;Teken een lijn loodrecht hierop die het hart verdeelt;Tracez une ligne perpendiculaire à celle-ci qui divise le cœur;Zeichnen Sie eine senkrechte Linie, die das Herz teilt
-ctr-3;;Draw a line to the outer left edge of the heart;Teken een lijn tot de linkerzijde van het hart;Tracer une ligne jusqu'au côté gauche du cœur;Zeichnen Sie eine Linie zum äußeren linken Rand des Herzens
-ctr-4;;Draw a line to the outer right edge of the heart;Teken een lijn tot de rechterzijde van het hart;Tracer une ligne jusqu'au côté droite du cœur;Zeichnen Sie eine Linie zum äußeren rechten Rand des Herzens
-tpa-1;;Draw a circle over the talus;Teken een cirkel over de talus;Tracez un cercle sur le talus;Zeichne einen Kreis über den Talus
-tpa-2;;Draw a line from this circle to the center of the intercondylar eminences;Teken een lijn van deze cirkel tot het midden van de intercondylaire eminentie;Tracez une ligne de ce cercle au centre de l'éminence intercondylienne;Zeichnen Sie eine Linie von diesem Kreis zum Zentrum der interkondylären Eminenzen
-tpa-3;;Draw a line through the cranial and the caudal aspects of the medial tibial plateau;Teken een lijn door de craniale en caudale aspecten van het mediaal tibiaal plateau;Tracez une ligne à travers les aspects crânien et caudal du plateau tibial médial;Zeichnen Sie eine Linie durch die kranialen und kaudalen Aspekte des medialen Tibiaplateaus
-tta-1;;Draw functional axis tibia;Teken een lijn over de functionele tibiale as;Tracez le tibia de l'axe fonctionnel;Draw functional axis tibia
-tta-2;;Draw tibial plateau;Teken een lijn over het tibiaal plateau;Tracez le plateau tibial;Draw tibial plateau
-tta-3;;Draw patellar insertion point;Teken het patella inbrengpunt;Markez le point d'insertion rotulien;Draw patellar insertion point
-di-1;;Draw a circle over the femural head;Teken een cirkel over de femurkop;Tracez un cercle sur la tête fémorale;Zeichnen Sie einen Kreis über den Femurkopf
-di-2;;Draw a circle over the acetabulum;Teken een cirkel over het acetabulum;Tracez un cercle sur l'acétabulum;Zeichnen Sie einen Kreis über das Acetabulum
-vez-1;;Mark 5 points over the femural head;Teken 5 punten over de femurkop;Marquez 5 points sur la tête fémorale;Markieren Sie 5 Punkte über dem Femurkopf
-vez-2;;Mark 4 points over the acetabulum;Teken 4 punten over het acetabulum;Marquez 4 points sur l'acétabulum;Markieren Sie 4 Punkte über dem Acetabulum
-noa-1;;Draw a circle over the right femural head;Teken een cirkel over de rechter femurkop;Tracez un cercle sur la tête fémorale droite;Zeichnen Sie einen Kreis über den rechten Femurkopf
-noa-2;;Draw a circle over the left femural head;Teken een cirkel over de linker femurkop;Tracez un cercle sur la tête fémorale gauche;Zeichnen Sie einen Kreis über den linken Femurkopf
-noa-3;;Draw a line from the first circle over the cranial rim of the right acetabular;Trek een lijn vanaf de eerste cirkel over de craniale rand van het rechter acetabulum;Tracez une ligne à partir du premier cercle sur le bord crânien de l'acétabulum droit;Zeichnen Sie vom ersten Kreis eine Linie über die Schädelkante des rechten Acetabulums
-noa-4;;Draw a line from the first circle over the cranial rim of the left acetabular;Trek een lijn vanaf de tweede cirkel over de craniale rand van het linker acetabulum;Tracez une ligne à partir du premier cercle sur le bord crânien de l'acétabulum gauche;Zeichnen Sie eine Linie vom zweiten Kreis über die Schädelkante des linken Acetabulums
-Save_measurements;;;Metingen opslaan;Enregistrer les mesures;Messungen speichern
-Number_of_thumbnails;;;Aantal miniaturen;Nombre de vignettes;Anzahl Miniaturen
-Number_of_viewports;;;Aantal viewports;Nombre de fenêtres;Anzahl Ansichtsfenster
-Next_series;;;Volgende serie;Série suivante;Nächste Serie
-Previous_series;;;Vorige serie;Série précédente;Vorherige Serie
-Show_Hide_annotations;;Show/hide annotations;Annotaties tonen/verbergen;Afficher/masquer les annotations;Anmerkungen ein-/ausblenden
-Split_study;;;Studie splitsen;Diviser l'examen;Studie aufteilen
-Download_series;;;Series downloaden;Télécharger des séries;Serie(n) herunterladen
-Reopen_study;;;Studie heropenen;Rouvrir un examen;Studie wieder öffnen
-Send_study;;;Studie versturen;Envoyer un examen;Studie senden
-Orientations;;;Oriëntaties;Orientations;Orientierungen
-Measurements;;;Metingen;Mesures;Messungen
-flag-explanation;;Flag or un-flag a series by clicking a selected thumbnail;(De)markeer een serie door te klikken op een geselecteerde miniatuur;Marquer ou annuler le marquage d'une série en cliquant sur une miniature sélectionnée;Markieren oder deaktivieren Sie eine Serie, indem Sie auf ein ausgewähltes Miniaturbild klicken
-Flagged_asterisk_series;;Flagged* series;Gemarkeerde* series;Séries marquées*;Markierte* Serien
-Non-flagged_series;;;Niet-gemarkeerde series;Séries non marquées;Nicht markierte serien
-Both;;;Beide;Les deux;Beide
-Selected_series;;;Geselecteerde series;Séries sélectionnées;Ausgewälte Serie(n)
-All;;;alles;tout;alle
+inner_angle;;;binnenhoek;angle intérieur;Innenwinkel
+outer_angle;;;buitenhoek;angle extérieur;Außenwinkel
+distance;;distance|+s;afstand|+en;distance|+s;Abstand|+e
+calib-1;;trace a line over the calibration object;traceer het kalibratie-object in de afbeelding;tracez une ligne sur l'objet de calibrage;Verfolgen Sie eine Linie über dem Kalibrierungsobjekt
+calib-2;;indicate the actual length of the object;selecteer de effectieve maat ervan;indiquez la longueur réelle de l'objet;Wählen Sie die tatsächliche Länge des Objekts
+custom;;;aangepast;ajusté;Angepasst
+reset;;;;réinitialiser;Zurücksetzen
+vhs-1;;draw a line along the longest axis of the cardiac silhouette;teken een lijn van de onderzijde van de carina tot de apex;tracez une ligne du bas de la carène trachéale à l'apex;Zeichnen Sie eine Linie entlang der längsten Achse der Herzsilhouette
+vhs-2;;draw a perpendicular line along the shortest axis of the cardiac silhouette;teken een loodrechte lijn ter hoogte van het breedste deel van het hart;tracez une ligne perpendiculaire à la partie la plus large du cœur;Zeichnen Sie eine senkrechte Linie entlang der kürzesten Achse der Herzsilhouette
+vhs-3;;draw a line counting 5 vertebrae, starting at the cranial edge of T4;teken een lijn vanaf de craniale zijde van T4 en dit 5 wervellichamen lang;tracez une ligne sur le côté du crâne de T4 et des 5 corps vertébraux suivants;Zeichnen Sie eine Linie mit 5 Wirbeln, beginnend am Schädelrand von T4
+ctr-1;;draw a line between the thoracic walls at height T8;teken een lijn tussen de thorax muren ter hoogte van T8;tracez une ligne entre les parois thoraciques sur T8;Zeichnen Sie eine Linie zwischen den Brustwänden in Höhe T8
+ctr-2;;draw a perpendicular line that divides the heart;teken een lijn loodrecht hierop die het hart verdeelt;tracez une ligne perpendiculaire à celle-ci qui divise le cœur;Zeichnen Sie eine senkrechte Linie, die das Herz teilt
+ctr-3;;draw a line to the outer left edge of the heart;teken een lijn tot de linkerzijde van het hart;tracer une ligne jusqu'au côté gauche du cœur;Zeichnen Sie eine Linie zum äußeren linken Rand des Herzens
+ctr-4;;draw a line to the outer right edge of the heart;teken een lijn tot de rechterzijde van het hart;tracer une ligne jusqu'au côté droite du cœur;Zeichnen Sie eine Linie zum äußeren rechten Rand des Herzens
+tpa-1;;draw a circle over the talus;teken een cirkel over de talus;tracez un cercle sur le talus;Zeichne einen Kreis über den Talus
+tpa-2;;draw a line from this circle to the center of the intercondylar eminences;teken een lijn van deze cirkel tot het midden van de intercondylaire eminentie;tracez une ligne de ce cercle au centre de l'éminence intercondylienne;Zeichnen Sie eine Linie von diesem Kreis zum Zentrum der interkondylären Eminenzen
+tpa-3;;draw a line through the cranial and the caudal aspects of the medial tibial plateau;teken een lijn door de craniale en caudale aspecten van het mediaal tibiaal plateau;tracez une ligne à travers les aspects crânien et caudal du plateau tibial médial;Zeichnen Sie eine Linie durch die kranialen und kaudalen Aspekte des medialen Tibiaplateaus
+tta-1;;draw functional axis tibia;teken een lijn over de functionele tibiale as;tracez le tibia de l'axe fonctionnel;Draw functional axis tibia
+tta-2;;draw tibial plateau;teken een lijn over het tibiaal plateau;tracez le plateau tibial;Draw tibial plateau
+tta-3;;draw patellar insertion point;teken het patella inbrengpunt;markez le point d'insertion rotulien;Draw patellar insertion point
+di-1;;draw a circle over the femural head;teken een cirkel over de femurkop;tracez un cercle sur la tête fémorale;Zeichnen Sie einen Kreis über den Femurkopf
+di-2;;draw a circle over the acetabulum;teken een cirkel over het acetabulum;tracez un cercle sur l'acétabulum;Zeichnen Sie einen Kreis über das Acetabulum
+vez-1;;mark 5 points over the femural head;teken 5 punten over de femurkop;marquez 5 points sur la tête fémorale;Markieren Sie 5 Punkte über dem Femurkopf
+vez-2;;mark 4 points over the acetabulum;teken 4 punten over het acetabulum;marquez 4 points sur l'acétabulum;Markieren Sie 4 Punkte über dem Acetabulum
+noa-1;;draw a circle over the right femural head;teken een cirkel over de rechter femurkop;tracez un cercle sur la tête fémorale droite;Zeichnen Sie einen Kreis über den rechten Femurkopf
+noa-2;;draw a circle over the left femural head;teken een cirkel over de linker femurkop;tracez un cercle sur la tête fémorale gauche;Zeichnen Sie einen Kreis über den linken Femurkopf
+noa-3;;draw a line from the first circle over the cranial rim of the right acetabular;trek een lijn vanaf de eerste cirkel over de craniale rand van het rechter acetabulum;tracez une ligne à partir du premier cercle sur le bord crânien de l'acétabulum droit;Zeichnen Sie vom ersten Kreis eine Linie über die Schädelkante des rechten Acetabulums
+noa-4;;draw a line from the first circle over the cranial rim of the left acetabular;trek een lijn vanaf de tweede cirkel over de craniale rand van het linker acetabulum;tracez une ligne à partir du premier cercle sur le bord crânien de l'acétabulum gauche;Zeichnen Sie eine Linie vom zweiten Kreis über die Schädelkante des linken Acetabulums
+save_measurements;;;metingen opslaan;enregistrer les mesures;Messungen speichern
+number_of_thumbnails;;;aantal miniaturen;nombre de vignettes;Anzahl Miniaturen
+number_of_viewports;;;aantal viewports;nombre de fenêtres;Anzahl Ansichtsfenster
+next_series;;;volgende serie;série suivante;Nächste Serie
+previous_series;;;vorige serie;série précédente;Vorherige Serie
+show_hide_annotations;;show/hide annotations;annotaties tonen/verbergen;afficher/masquer les annotations;Anmerkungen ein-/ausblenden
+split_study;;;studie splitsen;diviser l'examen;Studie aufteilen
+download_series;;;series downloaden;télécharger des séries;Serie(n) herunterladen
+reopen_study;;;studie heropenen;rouvrir un examen;Studie wieder öffnen
+send_study;;;studie versturen;envoyer un examen;Studie senden
+orientations;;;oriëntaties;orientations;Orientierungen
+measurements;;;metingen;mesures;Messungen
+flag-explanation;;flag or un-flag a series by clicking a selected thumbnail;(de)markeer een serie door te klikken op een geselecteerde miniatuur;marquer ou annuler le marquage d'une série en cliquant sur une miniature sélectionnée;Markieren oder deaktivieren Sie eine Serie, indem Sie auf ein ausgewähltes Miniaturbild klicken
+flagged_asterisk_series;;flagged* series;gemarkeerde* series;séries marquées*;Markierte* Serien
+non-flagged_series;;;niet-gemarkeerde series;séries non marquées;Nicht markierte serien
+both;;;beide;les deux;Beide
+selected_series;;;geselecteerde series;séries sélectionnées;Ausgewälte Serie(n)
+all;;;alles;tout;alle
 home;;;;;
 logout;;;;;
-change_organization;;;Wijzig organisatie;;
-select_an_organization;;;Kies een organisatie;;
-save;;;Oplaan;;
-save_copy;;;Kopie opslaan;;
-Imported;;;Geïmporteerd;;
+change_organization;;;wijzig organisatie;;
+select_an_organization;;;kies een organisatie;;
+save;;;oplaan;;
+save_copy;;;kopie opslaan;;
+imported;;;geïmporteerd;;
 row;;;rij;;
 rows;;;rijen;;
-Report;;;Rapport;;
-Change_owner;;;Wijzig eigenaar;;
-Change_patient;;;Wijzig patiënt;;
-Delete;;;Verwijder;;
-Open_in_viewer;;;Toon in de viewer;;
-Email;;;E-mail;;
-Download;;;Download;;
-SelectNewOwner;;Select a new owner for;Selecteer een nieuwe eigenaar voor;;
-Select_owner;;;Selecteer een eigenaar;;
-Select_patient;;;Selecteer een patiënt;;
-Edit;;;Wijzig;;
-Edit_description;;;Wijzig omschrijving;;
-Modify_tags;;Modify Dicom tags;Dicom-tags aanpassen;;
+report;;;rapport;;
+change_owner;;;wijzig eigenaar;;
+change_patient;;;wijzig patiënt;;
+delete;;;verwijder;;
+open_in_viewer;;;toon in de viewer;;
+email;;;e-mail;;
+download;;;download;;
+select_new_owner;;select a new owner for;selecteer een nieuwe eigenaar voor;;
+select_owner;;;selecteer een eigenaar;;
+select_patient;;;selecteer een patiënt;;
+edit;;;wijzig;;
+edit_description;;;wijzig omschrijving;;
+modify_tags;;modify dicom tags;dicom-tags aanpassen;;
 are_you_sure;;are you sure;bent u zeker;;
-Edit_study;;;Wijzig studie;;
-Edit_report;;;Wijzig rapport;;
-Study_description;;;Studie-omschrijving;;
-Copy;werkwoord;;Dupliceer;;
+edit_study;;;wijzig studie;;
+edit_report;;;wijzig rapport;;
+study_description;;;studie-omschrijving;;
+copy;werkwoord;;dupliceer;;
 veterinarian;;;dierenarts;;
 empty_in_parentheses;;(empty);(leeg);;
-Enter_new_study_descripion;;;Voer een nieuwe studie-omschrijving in;;
+enter_new_study_descripion;;;voer een nieuwe studie-omschrijving in;;
 description;;;omschrijving;;
-Copy_noun;;Copy;Kopie;;
-Prepare_download;;Your download is being prepared.;Uw download wordt voorbereid.;;
-Modify_report;;;Bewerk rapport;;
-_REP;label;;RAP;;
-_Report;;;Rapport;;
-_AQS;;;;;
-_Imported;;;;;
+copy_noun;;copy;kopie;;
+prepare_download;;your download is being prepared;uw download wordt voorbereid;;
+modify_report;;;bewerk rapport;;

@@ -1,0 +1,35 @@
+{
+	"app":{
+	},
+	"gui":{
+		"width": 1000,
+		"height": 800,
+		"x": 10,
+		"y": 10,
+		"maximized": false,
+		"undecorated": false,
+		"visible": true,
+		"leftHanded": false
+	},
+	"server":{
+		"name": "VSOL6 Server",
+		"port": 8100
+	},
+	"db":{
+		"type": "sqlite",
+		"host": "localhost",
+		"port": 3306,
+		"user": "root",
+		"password": ""
+	},
+	"vsol4":{
+		"host": "localhost",
+		"port": 8080,
+		"user": "firstuser",
+		"password": "password"
+	},
+	"orthanc":{
+		"host":"localhost",
+		"port":8800
+	}
+}

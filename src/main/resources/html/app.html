@@ -5,28 +5,53 @@
     <meta charset="UTF-8">
     <title>VSOL6</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="ico/logo?colored&size=32">
+    <link rel="icon" type="image/png" href="icon/logo/128?colored">
+
+    <!-- app -->
+    <link rel="stylesheet" href="app.css">
+    <!-- components -->
+    <link rel="stylesheet" href="components/button.css">
+    <link rel="stylesheet" href="components/checkbox.css">
+    <link rel="stylesheet" href="components/input.css">
+    <link rel="stylesheet" href="components/switch.css">
+    <link rel="stylesheet" href="components/table.css">
 </head>
 
-<body style="background-color: #73937e">
-    <h1>VSOL6</h1>
-    <p>%{Remember_me!}</p>
+<body>
 
-    @{app/explorer.html}
+    <div class="base-layer">
+        <div id="divNavbar" class="navbar-zone">@{app/navbar.html}</div>
+        <div class="content-zone">
+            <div id="divLogin" style="display: none">@{app/login.html}</div>
+            <div id="divExplorer" style="display: none">@{app/explorer.html}</div>
+            <div id="divViewer" style="display: none">@{app/viewer.html}</div>
+        </div>
+    </div>
 
+    <div class="popup-layer popup-dialog">@{popup/dialog.html}</div>
+    <div class="popup-layer popup-record-dialog">@{popup/record-dialog.html}</div>
+    <div class="popup-layer popup-client-fiche">@{popup/client-fiche.html}</div>
+    <div class="popup-layer popup-patient-fiche">@{popup/patient-fiche.html}</div>
+
+    <!-- lib -->
     <script type="text/javascript" src="lib/jquery"></script>
-
+    <!-- app -->
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="app/tools.js"></script>
+    <!-- model -->
+    <script type="text/javascript" src="model/vsol-record.js"></script>
     <script type="text/javascript" src="model/user.js"></script>
     <script type="text/javascript" src="model/organization.js"></script>
     <script type="text/javascript" src="model/client.js"></script>
     <script type="text/javascript" src="model/patient.js"></script>
     <script type="text/javascript" src="model/study.js"></script>
+    <script type="text/javascript" src="model/address.js"></script>
 
     <script>
         let app = new App();
-        $(() => { app.start(); }); // on document ready
-        $(window).on("resize", () => app.fill());
+        // $(() => { app.start(); }); // on document ready
+        // $(window).on("resize", () => app.fill());
     </script>
+
 </body>
 </html>

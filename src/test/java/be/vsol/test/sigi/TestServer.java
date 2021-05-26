@@ -17,7 +17,7 @@ public class TestServer {
             System.out.println(request.getPath());
             System.out.println(request.getParameters());
             System.out.println(request.getHeaders());
-            System.out.println(request.getBody(new JSONObject()));
+            System.out.println(request.getBodyAsJSONObject());
 
             return new HttpResponse("OK");
         }

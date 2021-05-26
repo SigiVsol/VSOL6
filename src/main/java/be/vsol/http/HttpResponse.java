@@ -28,6 +28,16 @@ public class HttpResponse extends HttpMessage {
         super(inputStream);
     }
 
+    // Static
+
+    public static HttpResponse get404() {
+        return get404("404 :(");
+    }
+
+    public static HttpResponse get404(String text) {
+        return new HttpResponse(HttpResponse.Status.NOT_FOUND, text);
+    }
+
     // Methods
 
     @Override public String getFirstLine() {

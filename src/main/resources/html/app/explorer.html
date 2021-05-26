@@ -1,1 +1,230 @@
-<h1>explorer</h1>
+<link rel="stylesheet" href="app/explorer.css">
+<script type="text/javascript" src="app/explorer.js"></script>
+<script type="text/javascript" src="app/explorer/explorer-table.js"></script>
+
+<div class="explorer-nav-zone">
+    <div class="main-toggle-bar">
+
+        <button id="btnClients" class="main-toggle clients-toggle" disabled onclick="app.explorer.showClients()">%{Clients}</button><!--
+        --><button id="btnPatients" class="main-toggle patients-toggle" onclick="app.explorer.showPatients()">%{Patients}</button><!--
+        --><button id="btnEntries" class="main-toggle entries-toggle" onclick="app.explorer.showEntries()">%{Studies}</button>
+
+
+        <button id="btnAddClient" class="ok" onclick="app.explorer.addClient()"><img src="icon/add/16"> %{Client}</button>
+    </div>
+    <div class="breadcrumb-bar" style="display: none">
+        <div class="left-add-bar">
+            <button class="breadcrumb gray" onclick="app.navbar.home()"><img src="icon/home/16"></button>
+            <button id="btnClientName" class="breadcrumb clients" onclick="app.explorer.backToClient()">(client name)</button>
+            <button id="btnPatientName" class="breadcrumb patients">(patient name)</button>
+        </div>
+        <div class="right-add-bar">
+            <button id="btnAddPatient" class="ok" onclick="app.explorer.addPatient()"><img src="icon/add/16"> %{Patient}</button><!--
+            --><button id="btnAddStudy" class="ok" onclick="app.explorer.addStudy()"><img src="icon/add/16"> %{Study}</button>
+        </div>
+    </div>
+</div>
+
+<div class="explorer-summary-zone">
+    <div class="summary clients-summary" onclick="app.explorer.editClient()">
+        <table class="summary clients-border">
+            <tr>
+                <td class="key">%{company}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientCompany"></td>
+            </tr>
+            <tr>
+                <td class="key">%{via}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientVia"></td>
+            </tr>
+            <tr>
+                <td class="key">%{language}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientLanguage"></td>
+            </tr>
+            <tr>
+                <td class="key">%{phone}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientPhone"></td>
+            </tr>
+            <tr>
+                <td class="key">%{email}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientEmail"></td>
+            </tr>
+            <tr>
+                <td class="key">%{address}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblClientAddress"></td>
+            </tr>
+            <tr>
+                <td colspan="3" id="lblClientExtraInfo" style="padding-top: 10px"></td>
+            </tr>
+            <tr>
+                <th class="icon" colspan="3"><img src="icon/edit/16"></th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="summary patients-summary" onclick="app.explorer.editPatient()">
+        <table class="summary patients-border">
+            <tr>
+                <td class="key">%{birthdate}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientBirthdate"></td>
+            </tr>
+            <tr>
+                <td class="key">%{chip_number}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientChip"></td>
+            </tr>
+            <tr>
+                <td class="key">%{ueln_number}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientUeln"></td>
+            </tr>
+            <tr>
+                <td class="key">%{species}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientSpecies"></td>
+            </tr>
+            <tr>
+                <td class="key">%{breed}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientBreed"></td>
+            </tr>
+            <tr>
+                <td class="key">%{sire}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientSire"></td>
+            </tr>
+            <tr>
+                <td class="key">%{damsire}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientDamsire"></td>
+            </tr>
+            <tr>
+                <td class="key">%{castrated}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientNeutered"></td>
+            </tr>
+            <tr>
+                <td class="key">%{gender}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientSex"></td>
+            </tr>
+            <tr>
+                <td class="key">%{color}</td>
+                <td class="separator"></td>
+                <td class="value" id="lblPatientColor"></td>
+            </tr>
+            <tr>
+                <th class="icon" colspan="3"><img src="icon/edit/16"></th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="explorer-filter-zone">
+    <div class="filter-area">
+        <label><input id="txtFilter" class="filter explorer-filter" type="text" placeholder="%{filter}"></label>
+        <span class="count">(0)</span>
+        <button class="clear-filter" onclick="app.explorer.clearFilter()" disabled>
+            <img src="icon/cancel/16">
+        </button>
+    </div>
+</div>
+
+<div class="explorer-table-zone">
+
+    <div class="explorer-scroll-pane">
+        <div class="table-area">
+
+            <table id="table-clients" class="explorer clients">
+                <thead id="thead-clients">
+                <tr>
+                    <th class="checkbox">
+                        <label class="checkbox clients">
+                            <input id="chk-all-clients" type="checkbox" disabled onchange="app.explorer.clientsTable.selectAll()">
+                            <span class="checkbox"></span>
+                        </label>
+                    </th>
+                    <th style="width: 30%"><button class="sort" onclick="app.explorer.clientsTable.applySort('name')">%{name}<img id="ico-sort-clients-name" src="icon/sort/16"></button></th>
+                    <th style="width: 25%"><button class="sort" onclick="app.explorer.clientsTable.applySort('via')">%{via}<img id="ico-sort-clients-via" src="icon/sort/16"></button></th>
+                    <th style="width: 45%"><button class="sort" onclick="app.explorer.clientsTable.applySort('address')">%{address}<img id="ico-sort-clients-address" src="icon/sort/16"></button></th>
+                    <th class="button">
+
+                    </th>
+                    <th class="button">
+                        <button class="multi cancel" onclick="app.explorer.clientsTable.deleteSelectedRecords()" disabled><img src="icon/delete/16"></button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="tbody-clients"></tbody>
+            </table>
+
+            <table id="table-patients" class="explorer patients">
+                <thead id="thead-patients">
+                <tr>
+                    <th class="checkbox">
+                        <label class="checkbox patients">
+                            <input id="chk-all-patients" type="checkbox" disabled onchange="app.explorer.patientsTable.selectAll()">
+                            <span class="checkbox"></span>
+                        </label>
+                    </th>
+                    <th style="width: 34%"><button class="sort" onclick="app.explorer.patientsTable.applySort('name')">%{name}<img id="ico-sort-patients-name" src="icon/sort/16"></button></th>
+                    <th style="width: 33%"><button class="sort" onclick="app.explorer.patientsTable.applySort('origin')">%{origin}<img id="ico-sort-patients-origin" src="icon/sort/16"></button></th>
+                    <th style="width: 33%"><button class="sort" onclick="app.explorer.patientsTable.applySort('reference')">%{reference}<img id="ico-sort-patients-reference" src="icon/sort/16"></button></th>
+                    <th class="button"></th>
+                    <th class="button">
+                        <button class="multi clients" onclick="app.explorer.patientsTable.multiChangeClient()" disabled><img src="icon/switch-user/16"></button>
+                    </th>
+                    <th class="button">
+                        <button class="multi cancel" onclick="app.explorer.patientsTable.deleteSelectedRecords()" disabled><img src="icon/delete/16"></button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="tbody-patients"></tbody>
+            </table>
+
+            <table id="table-entries" class="explorer entries">
+                <thead id="thead-entries">
+                <tr>
+                    <th class="checkbox">
+                        <label class="checkbox entries">
+                            <input id="chk-all-entries" type="checkbox" disabled onchange="app.explorer.entriesTable.selectAll()">
+                            <span class="checkbox"></span>
+                        </label>
+                    </th>
+                    <th class="hide-if-patient" style="width: 35%"><button class="sort" onclick="app.explorer.entriesTable.applySort('client')">%{client}<img id="ico-sort-entries-client" src="icon/sort/16"></button></th>
+                    <th class="hide-if-patient" style="width: 30%"><button class="sort" onclick="app.explorer.entriesTable.applySort('patient')">%{patient}<img id="ico-sort-entries-patient" src="icon/sort/16"></button></th>
+                    <th style="width: 1px; text-align: center"><button class="sort" onclick="app.explorer.entriesTable.applySort('date')">%{date}<img id="ico-sort-entries-date" src="icon/sort/16"></button></th>
+                    <th class="resize-if-patient" style="width: 35%"><button class="sort" onclick="app.explorer.entriesTable.applySort('description')">%{description}<img id="ico-sort-entries-description" src="icon/sort/16"></button></th>
+                    <th style="width: 1px; text-align: center"><button class="sort" onclick="app.explorer.entriesTable.applySort('seriesCount')">#<img id="ico-sort-entries-seriesCount" src="icon/sort/16"></button></th>
+
+                    <th class="button">
+                        <button class="multi ok" onclick="" disabled><img src="icon/eye/16"></button>
+                    </th>
+                    <th class="button">
+                        <button class="multi entries" onclick="" disabled><img src="icon/email/16"></button>
+                    </th>
+                    <th class="button">
+                        <button class="multi entries" onclick="" disabled><img src="icon/download/16"></button>
+                    </th>
+                    <th class="button">
+                        <button class="multi edit" onclick="" disabled><img src="icon/edit/16"></button>
+                    </th>
+                    <th class="button">
+                        <button class="multi cancel" onclick="app.explorer.patientsTable.deleteSelectedRecords()" disabled><img src="icon/delete/16"></button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="tbody-entries"></tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+

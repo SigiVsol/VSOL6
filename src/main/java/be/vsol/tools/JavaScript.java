@@ -1,12 +1,9 @@
 package be.vsol.tools;
 
-import be.vsol.http.HttpRequest;
-import be.vsol.http.HttpResponse;
 import be.vsol.util.Key;
 import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
-import be.vsol.vsol6.Vsol6;
 
 import java.io.BufferedReader;
 import java.io.IOException;

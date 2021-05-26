@@ -75,8 +75,12 @@ public class DbTable<E extends DbRecord> {
         return get(false, where, defaultValue);
     }
 
-    public E get(String id) {
+    public E getById(String id) {
         return get(true, "id = '" + id + "'", null);
+    }
+
+    public E get(String where) {
+        return get(true, where, null);
     }
 
     @Override public String toString() {

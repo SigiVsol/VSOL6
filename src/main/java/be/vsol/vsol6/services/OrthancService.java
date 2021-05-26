@@ -4,18 +4,10 @@ import be.vsol.tools.Service;
 
 public class OrthancService implements Service {
 
-    private boolean running = false;
+    @Override public void start() { }
 
-    @Override public void start() {
-        running = true;
-    }
-
-    @Override public void stop() {
-        running = false;
-    }
+    @Override public void stop() { }
 
     // Getters
-
-    @Override public boolean isRunning() { return running; }
 
 }

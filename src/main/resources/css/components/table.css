@@ -1,0 +1,35 @@
+::-webkit-scrollbar {
+    width: 10px; /* for vertical scrollbars */
+    height: 10px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #555;
+    border-radius: 5px;
+    /*margin-top: 60px;*/
+}
+
+::-webkit-scrollbar-track:disabled {
+    background-color: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--vsol);
+    border-radius: 5px;
+}
+
+.explorer-scrollbar ::-webkit-scrollbar-track {
+    margin-top: 60px; /* TODO */
+}
+
+.clients-scrollbar ::-webkit-scrollbar-thumb {
+    background-color: var(--clients);
+}
+
+.patients-scrollbar ::-webkit-scrollbar-thumb{
+    background-color: var(--patients);
+}
+
+.entries-scrollbar ::-webkit-scrollbar-thumb{
+    background-color: var(--entries);
+}

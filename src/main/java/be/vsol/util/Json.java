@@ -1,6 +1,7 @@
 package be.vsol.util;
 
-import be.vsol.tools.JsonField;
+import be.vsol.tools.json;
+import be.vsol.vsol6.model.config.Config;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,7 +15,7 @@ public class Json {
         JSONObject result = new JSONObject();
 
         try {
-            for (Field field : Reflect.getFields(object, JsonField.class)) {
+            for (Field field : Reflect.getFields(object, json.class)) {
                 field.setAccessible(true);
                 String name = field.getName();
 
@@ -28,7 +29,9 @@ public class Json {
                         case "double" -> result.put(name, field.getDouble(object));
                         case "float" -> result.put(name, field.getFloat(object));
 
-                        default -> result.put(name, field.get(object));
+                        case "Boolean", "Integer", "Long", "Float", "Double", "String" -> result.put(name, field.get(object));
+
+                        default -> result.put(name, get(field.get(object)));
                     }
                 }
             }
@@ -41,7 +44,7 @@ public class Json {
 
     public static <E> void load(E object, JSONObject jsonObject) {
         try {
-            for (Field field : Reflect.getFields(object, JsonField.class)) {
+            for (Field field : Reflect.getFields(object, json.class)) {
                 field.setAccessible(true);
                 String name = field.getName();
 
@@ -56,7 +59,9 @@ public class Json {
                             case "double" -> field.set(object, jsonObject.getDouble(name));
                             case "float" -> field.set(object, jsonObject.getFloat(name));
 
-                            default -> field.set(object, jsonObject.get(name));
+                            case "Boolean", "Integer", "Long", "Float", "Double", "String" -> field.set(object, jsonObject.get(name));
+
+                            default -> load(field.get(object), jsonObject.getJSONObject(name));
                         }
                     }
                 }

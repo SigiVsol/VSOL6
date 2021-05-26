@@ -1,0 +1,33 @@
+input, textarea {
+    min-height: 25px;
+    padding: 5px;
+    background-color: gray;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: monospace;
+    font-size: large;
+}
+
+input.submit {
+    background-color: var(--ok);
+    background-image: url("../icon/check/16");
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 100px;
+    min-height: 45px;
+    cursor: pointer;
+}
+
+input.submit:hover {
+    transition: .2s;
+    background-color: var(--ok-highlighted);
+}
+
+input.filter {
+    background-image: url("../icon/zoom/16");
+    background-position: left;
+    background-position-x: 10px;
+    background-repeat: no-repeat;
+    padding-left: 35px;
+}

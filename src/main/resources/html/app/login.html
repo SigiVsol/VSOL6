@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="app/login.css">
+<script type="text/javascript" src="app/login.js"></script>
+
+<div class="login">
+
+    <img src="icon/login/32" style="margin-top: 20px">
+
+    <div style="margin-top: 10px">
+        <label><input id="txtUsername" class="login username" type="text" style="margin-top: 5px" placeholder="%{username}"></label>
+        <label><input id="txtPassword" class="login password" type="password" style="margin-top: 5px" placeholder="%{password}"></label>
+    </div>
+
+    <div style="margin-top: 10px">
+        <button class="confirm" onclick="app.login.attemptLogin()"></button>
+    </div>
+
+    <div style="margin-top: 20px">
+        <label class="switch">
+            <input id="chkRememberMe" type="checkbox">
+            <span class="switch"></span>
+        </label>
+    </div>
+
+    <div>
+        <span class="remember-me">%{remember_me}</span>
+    </div>
+
+</div>

@@ -113,27 +113,27 @@ public abstract class HttpMessage {
     public String getLanguage() {
         String[] acceptLanguages = headers.getOrDefault("accept-language", "").split(",", -1);
         for (String acceptLanguage : acceptLanguages) {
-            if (acceptLanguage.matches("([nl]|[en]|[fr]|[de]).*")) {
+            if (acceptLanguage.matches("(nl|en|fr|de).*")) {
                 return acceptLanguage.substring(0, 2);
             }
         }
         return "en";
     }
 
-    public String getBody(String defaultValue) { return body == null ? defaultValue : new String(body); }
+    public String getBodyAsString() { return body == null ? null : new String(body); }
 
-    public JSONObject getBody(JSONObject defaultValue) { return body == null ? defaultValue : new JSONObject(new String(body)); }
+    public JSONObject getBodyAsJSONObject() { return body == null ? null : new JSONObject(new String(body)); }
 
-    public Png getBody(Png defaultValue) { return body == null ? defaultValue : new Png(body); }
+    public Png getBodyAsPng() { return body == null ? null : new Png(body); }
 
-    public Jpg getBody(Jpg defaultValue) { return body == null ? defaultValue : new Jpg(body); }
+    public Jpg getBodyAsJpg() { return body == null ? null : new Jpg(body); }
 
-    public Dicom getBody(Dicom defaultValue) { return body == null ? defaultValue : new Dicom(body); }
+    public Dicom getBodyAsDicom() { return body == null ? null : new Dicom(body); }
 
-    public Html getBody(Html defaultValue) { return body == null ? defaultValue : new Html(body); }
+    public Html getBodyAsHtml() { return body == null ? null : new Html(body); }
 
-    public JavaScript getBody(JavaScript defaultValue) { return body == null ? defaultValue : new JavaScript(body); }
+    public JavaScript getBodyAsJavaScript() { return body == null ? null : new JavaScript(body); }
 
-    public Css getBody(Css defaultValue) { return body == null ? defaultValue : new Css(body); }
+    public Css getBodyAsCss() { return body == null ? null : new Css(body); }
 
 }

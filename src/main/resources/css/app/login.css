@@ -1,0 +1,15 @@
+div.login {
+    text-align: center;
+}
+
+input.submit-login {
+    min-width: 100px;
+}
+
+span.remember-me {
+    display: block;
+    margin-top: 5px;
+    font-family: monospace;
+    font-size: large;
+    color: var(--text-field);
+}
