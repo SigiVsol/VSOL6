@@ -2,6 +2,7 @@ package be.vsol.vsol6.services;
 
 import be.vsol.fx.FxController;
 import be.vsol.tools.Service;
+import be.vsol.tools.Sig;
 import be.vsol.util.*;
 import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.controller.fx.App;
@@ -11,6 +12,7 @@ import be.vsol.vsol6.controller.fx.app.Login;
 import be.vsol.vsol6.controller.fx.app.Settings;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
+import be.vsol.vsol6.session.Session;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,11 +20,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.io.IOException;
 
 public class GuiService implements Service {
 
     private final Stage splashStage, primaryStage;
+    private final Sig sig;
+    private final File home;
+
+    private Session session;
 
     private final Splash splash;
     private App app;
@@ -32,7 +39,9 @@ public class GuiService implements Service {
 
     // Constructor
 
-    public GuiService(Stage primaryStage) {
+    public GuiService(Sig sig, File home, Stage primaryStage) {
+        this.sig = sig;
+        this.home = home;
         this.primaryStage = primaryStage;
         this.splashStage = new Stage(StageStyle.UNDECORATED);
 
@@ -50,34 +59,6 @@ public class GuiService implements Service {
 
     @Override public void stop() { }
 
-    private void addListeners() {
-        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized()) {
-                Task.run("save gui.width", 500, () -> Vsol6.getLocalSession().saveSystem(new Setting("gui.width", newValue.intValue())));
-            }
-        });
-
-        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized()) {
-                Task.run("save gui.height", 500, () -> Vsol6.getLocalSession().saveSystem(new Setting("gui.height", newValue.intValue())));
-            }
-        });
-
-        primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized()) {
-                Task.run("save gui.x", 500, () -> Vsol6.getLocalSession().saveSystem(new Setting("gui.x", newValue.intValue())));
-            }
-        });
-
-        primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
-            if (!primaryStage.isMaximized()) {
-                Task.run("save gui.y", 500, () -> Vsol6.getLocalSession().saveSystem(new Setting("gui.y", newValue.intValue())));
-            }
-        });
-
-        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> Vsol6.getLocalSession().saveSystem(new Setting("gui.maximized", newValue)));
-    }
-
     public void showSplash() {
         setTitleAndLogo(splashStage);
 
@@ -85,13 +66,15 @@ public class GuiService implements Service {
         splashStage.show();
     }
 
-    public void showApp() {
+    public void showApp(Session session) {
+        this.session = session;
+
         Platform.runLater(() -> {
             splashStage.hide();
 
             setTitleAndLogo(primaryStage);
 
-            Config.gui gui = Vsol6.getLocalSession().getConfig().gui;
+            Config.gui gui = session.getConfig().gui;
             primaryStage.setWidth(gui.width);
             primaryStage.setHeight(gui.height);
             primaryStage.setX(gui.x);
@@ -109,8 +92,36 @@ public class GuiService implements Service {
         });
     }
 
+    private void addListeners() {
+        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized()) {
+                Task.run("save gui.width", 500, () -> session.saveSystem(new Setting("gui.width", newValue.intValue())));
+            }
+        });
+
+        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized()) {
+                Task.run("save gui.height", 500, () -> session.saveSystem(new Setting("gui.height", newValue.intValue())));
+            }
+        });
+
+        primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized()) {
+                Task.run("save gui.x", 500, () -> session.saveSystem(new Setting("gui.x", newValue.intValue())));
+            }
+        });
+
+        primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
+            if (!primaryStage.isMaximized()) {
+                Task.run("save gui.y", 500, () -> session.saveSystem(new Setting("gui.y", newValue.intValue())));
+            }
+        });
+
+        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> session.saveSystem(new Setting("gui.maximized", newValue)));
+    }
+
     private void setTitleAndLogo(Stage stage) {
-        stage.setTitle(Vsol6.getSig().getAppTitle());
+        stage.setTitle(sig.getAppTitle());
         stage.getIcons().add(Icon.getImage(true, "logo", 64));
     }
 
@@ -122,6 +133,7 @@ public class GuiService implements Service {
             N root = fxmlLoader.load(Resource.getInputStream(resource));
             C controller = fxmlLoader.getController();
             controller.setRoot(root);
+            controller.setGuiService(this);
             controller.init();
             return controller;
         } catch (IOException e) {
@@ -141,5 +153,9 @@ public class GuiService implements Service {
     public Explorer getExplorer() { return explorer; }
 
     public Settings getSettings() { return settings; }
+
+    public Sig getSig() { return sig; }
+
+    public File getHome() { return home; }
 
 }

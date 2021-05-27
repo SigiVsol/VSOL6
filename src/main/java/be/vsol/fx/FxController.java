@@ -1,15 +1,21 @@
 package be.vsol.fx;
 
+import be.vsol.vsol6.services.GuiService;
 import javafx.scene.Node;
 
 public abstract class FxController<N extends Node> {
 
     private N root;
+    protected GuiService gui;
 
     // Methods
 
     public void setRoot(N root) {
         this.root = root;
+    }
+
+    public void setGuiService(GuiService guiService) {
+        this.gui = guiService;
     }
 
     public void init() {
@@ -19,5 +25,7 @@ public abstract class FxController<N extends Node> {
     // Getters
 
     public N getRoot() { return root; }
+
+    public GuiService getGui() { return gui; }
 
 }

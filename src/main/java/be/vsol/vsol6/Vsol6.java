@@ -4,15 +4,18 @@ import be.vsol.tools.Job;
 import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
 import be.vsol.util.Log;
+import be.vsol.util.Resource;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.services.*;
 import be.vsol.vsol6.session.Session;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -21,13 +24,11 @@ public class Vsol6 extends Application {
     private static final Sig sig = new Sig("VSOL6", 0, 0, 6, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
     private static File home;
-    private static Map<String, String> params;
     private static Session programSession, localSession;
 
     private static final Vector<Service> services = new Vector<>(); // will contain the following:
     private static GuiService guiService;
     private static DatabaseService databaseService;
-    private static ServerService serverService;
     private static Vsol4Service vsol4Service;
     private static OrthancService orthancService;
 
@@ -41,33 +42,40 @@ public class Vsol6 extends Application {
 
     @Override public void start(Stage primaryStage) { try {
         home = new File(getParameters().getNamed().getOrDefault("home", sig.getFolder()));
-        params = getParameters().getNamed();
 
-        Log.init(new File(home, "logs"), sig.getAppTitle());
+        Log.init(new File(home, "logs"), sig.getAppTitle(), getParameters().getUnnamed().contains("debug"));
         Log.out("Starting " + sig + ".");
+        Log.debug("Debug mode is on.");
 
-        programSession = new Session(); // pre-database settings
+        HashMap<String, String> variables = new HashMap<>(); {
+            variables.put("app.version", sig.getVersion());
+        }
+
+        JSONObject jsonDefaults = new JSONObject(Resource.getString("config/defaults.json"));
+
+        programSession = new Session(jsonDefaults, getParameters().getNamed(), null, null, null, null); // pre-database settings
 
         if (programSession.getConfig().gui.visible) {
-            services.add(guiService = new GuiService(primaryStage));
+            services.add(guiService = new GuiService(sig, home, primaryStage));
             guiService.showSplash(); // show splash screen while loading everything else in a thread
         }
 
         new Job(() -> {
-            services.add(databaseService = new DatabaseService());
+            services.add(databaseService = new DatabaseService(home, programSession));
 
-            localSession = new Session(new LocalSystem(), null, null); // TODO restore login from localStorage
+            localSession = new Session(jsonDefaults, getParameters().getNamed(), databaseService, new LocalSystem(), null, null); // TODO restore login from localStorage
 
-            services.add(serverService = new ServerService());
-            services.add(vsol4Service = new Vsol4Service());
+            services.add(vsol4Service = new Vsol4Service(localSession));
             services.add(orthancService = new OrthancService());
+
+            services.add(new ServerService(localSession, vsol4Service, variables));
 
             for (Service service : services) {
                 service.start();
             }
 
             if (guiService != null) {
-                guiService.showApp();
+                guiService.showApp(localSession);
             }
         });
     } catch (Exception e) { Log.trace(e); System.exit(1); } }
@@ -80,29 +88,5 @@ public class Vsol6 extends Application {
         Log.out("Exiting.\n");
         System.exit(0);
     } catch (Exception e) { Log.trace(e); } }
-
-    // Static Getters
-
-    public static Sig getSig() { return sig; }
-
-    public static Map<String, String> getParams() { return params; }
-
-    public static File getHome() { return home; }
-
-    public static File getHome(String sub) { return new File(home, sub); }
-
-    public static GuiService getGui() { return guiService; }
-
-    public static DatabaseService getDb() { return databaseService; }
-
-    public static ServerService getServer() { return serverService; }
-
-    public static Vsol4Service getVsol4() { return vsol4Service; }
-
-    public static OrthancService getOrthanc() { return orthancService; }
-
-    public static Session getProgramSession() { return programSession; }
-
-    public static Session getLocalSession() { return localSession; }
 
 }

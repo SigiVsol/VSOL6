@@ -2,11 +2,18 @@ package be.vsol.util;
 
 import be.vsol.tools.json;
 import be.vsol.vsol6.model.config.Config;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Vector;
 import java.util.function.Supplier;
 
 public class Json {
@@ -30,6 +37,11 @@ public class Json {
                         case "float" -> result.put(name, field.getFloat(object));
 
                         case "Boolean", "Integer", "Long", "Float", "Double", "String" -> result.put(name, field.get(object));
+
+                        case "LocalDate" -> result.put(name, field.get(object).toString());
+                        case "LocalTime" -> result.put(name, ((LocalTime) field.get(object)).truncatedTo(ChronoUnit.SECONDS).toString());
+                        case "LocalDateTime" -> result.put(name, ((LocalDateTime) field.get(object)).truncatedTo(ChronoUnit.SECONDS).toString());
+                        case "Instant" -> result.put(name, ((Instant) field.get(object)).truncatedTo(ChronoUnit.MILLIS).toString());
 
                         default -> result.put(name, get(field.get(object)));
                     }
@@ -61,6 +73,11 @@ public class Json {
 
                             case "Boolean", "Integer", "Long", "Float", "Double", "String" -> field.set(object, jsonObject.get(name));
 
+                            case "LocalDate" -> field.set(object, LocalDate.parse(jsonObject.getString(name)));
+                            case "LocalTime" -> field.set(object, LocalTime.parse(jsonObject.getString(name)));
+                            case "LocalDateTime" -> field.set(object, LocalDateTime.parse(jsonObject.getString(name)));
+                            case "Instant" -> field.set(object, Instant.parse(jsonObject.getString(name)));
+
                             default -> load(field.get(object), jsonObject.getJSONObject(name));
                         }
                     }
@@ -72,7 +89,9 @@ public class Json {
         }
     }
 
-    public static <E> E get(Supplier<E> supplier, JSONObject jsonObject) {
+    public static <E> E get(JSONObject jsonObject, Supplier<E> supplier) {
+        if (jsonObject == null) return null;
+
         E result = supplier.get();
         load(result, jsonObject);
         return result;
@@ -84,6 +103,16 @@ public class Json {
 
     public static JSONObject load(File file) {
         return new JSONObject(FileSys.readString(file, "{}"));
+    }
+
+    public static Vector<JSONObject> iterate(JSONArray jsonArray) {
+        Vector<JSONObject> result = new Vector<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            result.add(jsonArray.getJSONObject(i));
+        }
+
+        return result;
     }
 
     public static String getOrDefault(JSONObject jsonObject, String key, String defaultValue) {
@@ -101,5 +130,6 @@ public class Json {
     public static float getOrDefault(JSONObject jsonObject, String key, float defaultValue) { try { return jsonObject.getFloat(key); } catch (JSONException e) { return defaultValue; } }
 
     public static JSONObject getOrDefault(JSONObject jsonObject, String key, JSONObject defaultValue) { try { return jsonObject.getJSONObject(key); } catch (JSONException e) { return defaultValue; } }
+    public static JSONArray getOrDefault(JSONObject jsonObject, String key, JSONArray defaultValue) { try { return jsonObject.getJSONArray(key); } catch (JSONException e) { return defaultValue; } }
 
 }

@@ -1,13 +1,15 @@
 package be.vsol.test.sigi.db;
 
-import be.vsol.database.annotations.Db;
+import be.vsol.database.annotations.db;
 import be.vsol.database.structures.DbRecord;
 
 public class Car extends DbRecord {
 
-    @Db(length = 100) private String brand = "";
-    @Db private String model;
-    @Db private int year;
+    @db(length = 100) private String brand = "";
+    @db
+    private String model;
+    @db
+    private int year;
 
     public Car() {
 

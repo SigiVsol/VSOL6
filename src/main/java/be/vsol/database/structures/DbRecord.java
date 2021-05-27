@@ -1,15 +1,16 @@
 package be.vsol.database.structures;
 
-import be.vsol.database.annotations.Db;
+import be.vsol.database.annotations.db;
+import be.vsol.tools.json;
 
 import java.time.Instant;
 import java.util.Objects;
 
 public abstract class DbRecord {
 
-    @Db(primaryKey = true, length = 36, auto = true) protected String id;
-    @Db protected boolean deleted;
-    @Db(auto = true) protected Instant createdTime, updatedTime;
+    @json @db(primaryKey = true, length = 36, auto = true) protected String id;
+    @db protected boolean deleted;
+    @db(auto = true) protected Instant createdTime, updatedTime;
 
     public DbRecord() {
 

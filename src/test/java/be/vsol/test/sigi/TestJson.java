@@ -4,17 +4,42 @@ import be.vsol.tools.json;
 import be.vsol.util.Json;
 import be.vsol.util.Resource;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.organization.Patient;
 import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 public class TestJson {
 
     public static void main(String[] args) {
 
-        JSONObject jsonObject = new JSONObject(Resource.getString("config/defaults.json"));
+//        JSONObject jsonObject = new JSONObject(Resource.getString("config/defaults.json"));
+//
+//        Config config = Json.get(jsonObject, Config::new);
+//
+//        System.out.println(Json.get(config).toString(1));
 
-        Config config = Json.get(Config::new, jsonObject);
+        JSONObject jsonObject = new JSONObject(); {
+            jsonObject.put("name", "Sigo");
+            jsonObject.put("sire", "Ayo");
+            jsonObject.put("birthdate", "2020-05-06");
+        }
 
-        System.out.println(Json.get(config).toString(1));
+        Patient patient = Json.get(jsonObject, Patient::new);
+
+        System.out.println(patient.getName());
+        System.out.println(patient.getBirthdate());
+
+
+
+//        Patient patient = new Patient();
+//        patient.setName("Sigi");
+//        patient.setBirthdate(LocalDate.now());
+//
+//        JSONObject jsonObject = Json.get(patient);
+//
+//        System.out.println(jsonObject.toString(1));
+
 
 
     }

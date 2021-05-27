@@ -2,12 +2,12 @@ package be.vsol.vsol6.session;
 
 import be.vsol.database.structures.DbTable;
 import be.vsol.util.*;
-import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
+import be.vsol.vsol6.services.DatabaseService;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -17,45 +17,43 @@ import java.util.Vector;
 
 public class Session {
 
+    private final DatabaseService db;
+
     private final LocalSystem system;
     private final Organization organization;
     private final User user;
 
-    private Config config;
+    private final Config config;
 
-    public Session() {
-        this(null, null, null);
-    }
-
-    public Session(LocalSystem system, Organization organization, User user) {
+    public Session(JSONObject jsonDefaults, Map<String, String> params, DatabaseService databaseService, LocalSystem system, Organization organization, User user) {
+        this.db = databaseService;
         this.system = system;
         this.organization = organization;
         this.user = user;
 
-        loadConfig();
-    }
-
-    private void loadConfig() {
         // read defaults from resource file
-        config = Json.get(Config::new, new JSONObject(Resource.getString("config/defaults.json")));
+        config = Json.get(jsonDefaults, Config::new);
 
         HashMap<String, String> map = new HashMap<>();
 
-        // override with system database settings
-        if (Vsol6.getDb() != null && system != null) {
-            Vector<Setting> settings = Vsol6.getDb().getSystem().getSettings().getAll("systemId = '" + system.getId() + "'");
-            for (Setting setting : settings) {
-                map.put(setting.getKey(), setting.getValue());
+        // override with database settings
+        if (db != null) {
+            if (system != null) {
+                Vector<Setting> settings = db.getSystem().getSettings().getAll("systemId = '" + system.getId() + "'");
+                for (Setting setting : settings) {
+                    map.put(setting.getKey(), setting.getValue());
+                }
             }
         }
 
         // override with command line parameters
-        Map<String, String> params = Vsol6.getParams();
-        for (String key : params.keySet()) {
-            map.put(key, params.get(key));
+        if (params != null) {
+            for (String key : params.keySet()) {
+                map.put(key, params.get(key));
+            }
         }
 
-        System.out.println("-> " + map);
+        Log.debug("Config: " + map);
 
         try {
             for (String key : map.keySet()) {
@@ -80,7 +78,6 @@ public class Session {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Log.trace(e);
         }
-
     }
 
     public void saveSystem(Setting newSetting) {
@@ -88,7 +85,7 @@ public class Session {
             String key = newSetting.getKey();
             String value = newSetting.getValue();
 
-            DbTable<Setting> dbTable = Vsol6.getDb().getSystem().getSettings();
+            DbTable<Setting> dbTable = db.getSystem().getSettings();
             Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND key = '" + key + "'");
             if (setting == null) {
                 setting = new Setting(key, value);

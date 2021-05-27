@@ -1,12 +1,13 @@
 package be.vsol.vsol6.model;
 
-import be.vsol.database.annotations.Db;
+import be.vsol.database.annotations.db;
 import be.vsol.database.structures.DbRecord;
 import be.vsol.util.Uid;
 
 public class LocalSystem extends DbRecord {
 
-    @Db private String name;
+    @db
+    private String name;
 
 
     public LocalSystem() {

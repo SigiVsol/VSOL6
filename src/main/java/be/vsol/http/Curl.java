@@ -8,6 +8,7 @@ import java.net.Socket;
 public class Curl {
 
     public static HttpResponse get(String host, int port, int timeout, HttpRequest httpRequest) {
+//        Log.debug("> " + httpRequest.getPath());
         try {
             Socket socket = new Socket(host, port);
             socket.setSoTimeout(timeout);

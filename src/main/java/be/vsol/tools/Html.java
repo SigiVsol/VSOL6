@@ -2,6 +2,7 @@ package be.vsol.tools;
 
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
+import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
 import be.vsol.vsol6.Vsol6;
 
@@ -9,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 public class Html implements ContentType, ByteArray {
 
@@ -18,7 +20,7 @@ public class Html implements ContentType, ByteArray {
         this.bytes = bytes;
     }
 
-    public Html(String resource, String language) {
+    public Html(String resource, RequestHandler requestHandler, String language, Map<String, String> variables) {
         InputStream inputStream = Resource.getInputStream(resource);
         if (inputStream == null) {
             bytes = new byte[0];
@@ -30,17 +32,23 @@ public class Html implements ContentType, ByteArray {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.trim().startsWith("<!--") && line.trim().endsWith("-->")) continue;
-                    for (String key : Key.get(line, '@')) { // @{...} : relay a new request to the webserver
-                        HttpRequest httpRequest = new HttpRequest(key);
-                        httpRequest.getHeaders().put("accept-language", language);
-                        HttpResponse httpResponse = Vsol6.getServer().getRequestHandler().respond(httpRequest);
-                        line = line.replace(Key.make(key, '@'), httpResponse.getBodyAsString());
+                    if (requestHandler != null) {
+                        for (String key : Key.get(line, '@')) { // @{...} : relay a new request to the webserver
+                            HttpRequest httpRequest = new HttpRequest(key);
+                            httpRequest.getHeaders().put("accept-language", language);
+                            HttpResponse httpResponse = requestHandler.respond(httpRequest);
+                            line = line.replace(Key.make(key, '@'), httpResponse.getBodyAsString());
+                        }
                     }
-                    for (String key : Key.get(line, '%')) { // %{...} ; translations
-                        line = line.replace(Key.make(key, '%'), Lang.get(key, language));
+                    if (language != null) {
+                        for (String key : Key.get(line, '%')) { // %{...} ; translations
+                            line = line.replace(Key.make(key, '%'), Lang.get(key, language));
+                        }
                     }
-                    for (String key : Key.get(line, '$')) { // %{...} ; translations
-                        line = line.replace(Key.make(key, '$'), Var.get(key));
+                    if (variables != null) {
+                        for (String key : Key.get(line, '$')) { // %{...} ; translations
+                            line = line.replace(Key.make(key, '$'), variables.getOrDefault(key, key));
+                        }
                     }
 
                     result.append(line).append("\n");

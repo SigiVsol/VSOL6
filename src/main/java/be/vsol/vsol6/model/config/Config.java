@@ -21,9 +21,8 @@ public class Config {
     }
 
     public static class vsol4 {
-        @json public String host;
-        @json public int port;
-        @json public String user, password;
+        @json public String host, username, password;
+        @json public int port, timeout, lifespan;
     }
 
     public static class orthanc {
@@ -32,8 +31,7 @@ public class Config {
     }
 
     public static class db {
-        @json public String type;
-        @json public String host, user, password;
+        @json public String type, host, user, password;
         @json public int port;
     }
 

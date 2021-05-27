@@ -37,8 +37,8 @@ public class Explorer extends FxController<BrowserView> {
         disableWarning();
 
         Engine engine = Engine.newInstance(EngineOptions.newBuilder(RenderingMode.HARDWARE_ACCELERATED)
-                .userAgent(Vsol6.getSig().toString())
-                .userDataDir(Path.of(Vsol6.getHome("app/browser").toURI()))
+                .userAgent(gui.getSig().toString())
+                .userDataDir(Path.of(new File(gui.getHome(), "app/browser").toURI()))
                 .enableProprietaryFeature(ProprietaryFeature.AAC) // this is a licensed feature
                 .enableProprietaryFeature(ProprietaryFeature.H_264) // this is a licensed feature
                 .build());

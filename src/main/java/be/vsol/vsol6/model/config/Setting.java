@@ -1,6 +1,6 @@
 package be.vsol.vsol6.model.config;
 
-import be.vsol.database.annotations.Db;
+import be.vsol.database.annotations.db;
 import be.vsol.database.structures.DbRecord;
 import be.vsol.util.Bool;
 import be.vsol.util.Dbl;
@@ -9,9 +9,12 @@ import be.vsol.util.Lng;
 
 public class Setting extends DbRecord {
 
-    @Db private String systemId, userId, organizationId;
-    @Db private String key;
-    @Db private String value;
+    @db
+    private String systemId, userId, organizationId;
+    @db
+    private String key;
+    @db
+    private String value;
 
     // Constructors
 

@@ -10,12 +10,19 @@ import be.vsol.tools.JavaScript;
 import be.vsol.util.Icon;
 import be.vsol.util.Int;
 import be.vsol.util.Str;
+import be.vsol.vsol6.services.Vsol4Service;
 
 import java.util.Map;
 
 public class ServerHandler implements RequestHandler {
 
-    private final API api = new API();
+    private final API api;
+    private final Map<String, String> variables;
+
+    public ServerHandler(Vsol4Service vsol4Service, Map<String, String> variables) {
+        api = new LegacyAPI(vsol4Service); // TODO -> LegacyAPI, BridgeAPI or NewAPI
+        this.variables = variables;
+    }
 
     @Override public HttpResponse respond(HttpRequest request) {
 //        System.out.println("< " + request);
@@ -44,12 +51,12 @@ public class ServerHandler implements RequestHandler {
     }
 
     private HttpResponse getApp(String language) {
-        return new HttpResponse(new Html("html/app.html", language));
+        return new HttpResponse(new Html("html/app.html", this, language, variables));
     }
 
     private HttpResponse getHtml(String path, String language) {
         path = Str.addonHead(path, "html");
-        return new HttpResponse(new Html(path, language));
+        return new HttpResponse(new Html(path, this, language, variables));
     }
 
     private HttpResponse getJs(String path, String language) {

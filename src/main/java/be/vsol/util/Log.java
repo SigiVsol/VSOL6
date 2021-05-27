@@ -12,16 +12,18 @@ public class Log {
 
     private static File dir;
     private static String filename;
+    private static boolean debug = false;
 
     private static File logFile, errFile;
 
     static {
-        init(new File("./logs"), null);
+        init(new File("./logs"), null, false);
     }
 
-    public static void init(File dir, String filename) {
+    public static void init(File dir, String filename, boolean debug) {
         Log.dir = dir;
         Log.filename = filename == null ? null : filename.replace(" ", "_");
+        Log.debug = debug;
         logFile = null;
         FileSys.create(dir);
     }
@@ -32,6 +34,12 @@ public class Log {
 
     public static void err(String message) {
         log(message, true, true);
+    }
+
+    public static void debug(String message) {
+        if (debug) {
+            out("[DEBUG] " + message);
+        }
     }
 
     public static void trace(Exception e) {

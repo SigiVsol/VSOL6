@@ -1,5 +1,7 @@
 package be.vsol.util;
 
+import java.text.Normalizer;
+
 public class Str {
     public static String cutoff(String string, String head, String tail) {
         if (string.startsWith(head)) {
@@ -39,6 +41,12 @@ public class Str {
 
     public static String capitalize(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
+
+    public static String normalize(String string) {
+        string = Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD);
+        string = string.replaceAll("[^\\p{ASCII}]", "");
+        return string;
     }
 
 }

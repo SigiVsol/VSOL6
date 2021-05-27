@@ -1,6 +1,6 @@
 package be.vsol.database.connection;
 
-import be.vsol.database.annotations.Db;
+import be.vsol.database.annotations.db;
 import be.vsol.database.structures.DbRecord;
 import be.vsol.database.structures.DbTable;
 import be.vsol.database.structures.RS;
@@ -58,7 +58,7 @@ public abstract class DbDriver {
             Vector<Field> current = new Vector<>();
 
             for (Field field : currentClass.getDeclaredFields()) {
-                if (field.getAnnotation(Db.class) != null) {
+                if (field.getAnnotation(db.class) != null) {
                     current.add(field);
                 }
             }
@@ -92,7 +92,7 @@ public abstract class DbDriver {
                 String name = field.getName();
                 field.setAccessible(true);
 
-                if (field.getAnnotation(Db.class).auto()) {
+                if (field.getAnnotation(db.class).auto()) {
                     continue;
                 }
 
@@ -144,7 +144,7 @@ public abstract class DbDriver {
                                 query += (query.isEmpty() ? "" : ", ") + name + " = '" + field.get(record) + "'";
                             }
                         }
-                        case "Instant" -> {
+                        case "Instant" -> { // TODO check for LocalDate, LocalTime, LocalDateTime and Instant
                             if (currentlyNull || !field.get(current).equals(field.get(record))) {
                                 query += (query.isEmpty() ? "" : ", ") + name + " = '" + getString((Instant) field.get(record)) + "'";
                             }
@@ -191,6 +191,7 @@ public abstract class DbDriver {
 
                         case "String" -> field.set(result, isNull ? null : rs.getString(name));
                         case "Instant" -> field.set(result, isNull ? null : getInstant(rs.getString(name)));
+                        // TODO check for LocalDate, LocalTime, LocalDateTime and Instant
                     }
                 }
             } catch (IllegalAccessException e) {
@@ -238,7 +239,7 @@ public abstract class DbDriver {
 
         try {
             field.setAccessible(true);
-            Db annotation = field.getAnnotation(Db.class);
+            db annotation = field.getAnnotation(db.class);
 
             result += switch (field.getType().getSimpleName()) {
                 case "boolean" -> "BOOLEAN NOT NULL";

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Db {
+public @interface db {
 
     int length() default 50;
     boolean primaryKey() default false;

@@ -11,7 +11,9 @@ import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.database.SystemDb;
 import be.vsol.vsol6.model.database.UserDb;
+import be.vsol.vsol6.session.Session;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +25,11 @@ public class DatabaseService implements Service {
 
     // Constructor
 
-    public DatabaseService() {
-        Config.db db = Vsol6.getProgramSession().getConfig().db;
+    public DatabaseService(File home, Session session) {
+        Config.db db = session.getConfig().db;
 
         DbDriver driver = switch (db.type) {
-            case "sqlite" -> new SQLite(Vsol6.getHome("data"));
+            case "sqlite" -> new SQLite(new File(home, "data"));
             case "mysql" -> new MySQL(db.host, db.port, db.user, db.password);
             default -> null;
         };

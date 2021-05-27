@@ -17,7 +17,7 @@ public class App extends FxController<StackPane> {
     @FXML private BorderPane borderPane;
 
     @Override public void init() {
-        lblVersion.setText(Vsol6.getSig().getVersion());
+        lblVersion.setText(gui.getSig().getVersion());
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
     }
 
@@ -30,11 +30,11 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML private void home() {
-        show(Vsol6.getGui().getExplorer());
+        show(gui.getExplorer());
     }
 
     @FXML private void logout() {
-        show(Vsol6.getGui().getLogin());
+        show(gui.getLogin());
     }
 
     @FXML private void organizations() {
@@ -42,7 +42,7 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML private void settings() {
-        show(Vsol6.getGui().getSettings());
+        show(gui.getSettings());
     }
 
 }
