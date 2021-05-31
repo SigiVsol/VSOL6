@@ -11,6 +11,7 @@ public class TestCurl {
     public static void main(String[] args) throws IOException {
         testVsol4();
 //        testOrthanc();
+//        testVsol4Config();
     }
 
     private static void testVsol4() {
@@ -37,6 +38,17 @@ public class TestCurl {
             System.out.println(httpResponse.getHeaders());
             System.out.println(httpResponse.getBodyAsString());
 //            System.out.println(httpResponse.getBody(new JSONObject()).toString(1));
+        }
+
+    }
+
+    private static void testVsol4Config() {
+        HttpRequest httpRequest = new HttpRequest("v0/organizations/ea9475c5-29f6-4da5-9d79-df3c552f519e/configurations?User=firstuser");
+
+        HttpResponse httpResponse = Curl.get("localhost", 8080, 1000, httpRequest);
+
+        if (httpResponse != null) {
+            System.out.println(httpResponse.getBodyAsString());
         }
 
     }

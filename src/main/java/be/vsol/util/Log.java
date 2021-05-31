@@ -61,7 +61,7 @@ public class Log {
 
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime midnight = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0, 0));
-            long delayTillMidnight = Cal.getMillis(midnight) - Cal.getMillis(now);
+            long delayTillMidnight = Date.getMillis(midnight) - Date.getMillis(now);
             new Job(delayTillMidnight, () -> logFile = null);
         }
 

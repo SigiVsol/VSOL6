@@ -21,10 +21,10 @@ class ClientFiche {
         client.phone = $("#txtClientPhone").val();
         client.email = $("#txtClientEmail").val();
 
-        client.address.street = $("#txtClientStreet").val();
-        client.address.postal = $("#txtClientPostal").val();
-        client.address.city = $("#txtClientCity").val();
-        client.address.country = $("#txtClientCountry").val();
+        client.street = $("#txtClientStreet").val();
+        client.postal = $("#txtClientPostal").val();
+        client.city = $("#txtClientCity").val();
+        client.country = $("#txtClientCountry").val();
 
         client.extraInfo = $("#txaClientExtraInfo").val();
 
@@ -56,10 +56,10 @@ class ClientFiche {
         $("#txtClientPhone").val(client.phone);
         $("#txtClientEmail").val(client.email);
 
-        $("#txtClientStreet").val(client.address.street);
-        $("#txtClientPostal").val(client.address.postal);
-        $("#txtClientCity").val(client.address.city);
-        $("#txtClientCountry").val(client.address.country);
+        $("#txtClientStreet").val(client.street);
+        $("#txtClientPostal").val(client.postal);
+        $("#txtClientCity").val(client.city);
+        $("#txtClientCountry").val(client.country);
 
         $("#txaClientExtraInfo").val(client.extraInfo);
 

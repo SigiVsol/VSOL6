@@ -36,4 +36,8 @@ public class Uid {
         return result;
     }
 
+    public static String regex() {
+        return "[0-9a-fA-F-]*";
+    }
+
 }

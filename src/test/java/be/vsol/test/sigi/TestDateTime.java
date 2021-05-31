@@ -6,7 +6,9 @@ import org.json.JSONObject;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Vector;
 
 public class TestDateTime {
     public static void main(String[] args) {
@@ -36,6 +38,21 @@ public class TestDateTime {
 
 //        Instant y = Instant.parse("2021-05-27T01:35:28");
 //        System.out.println(y);
+
+
+        Instant a = Instant.parse("2021-01-01T14:00:00.000Z");
+        Instant b = Instant.parse("2021-05-01T14:00:00.001Z");
+        Instant c = Instant.parse("2021-01-01T14:00:00.002Z");
+
+        Vector<Instant> vector = new Vector<>(); {
+            vector.add(b);
+            vector.add(a);
+            vector.add(c);
+        }
+
+        vector.sort(Comparator.comparing(Instant::getEpochSecond));
+
+        System.out.println(vector);
 
 
 

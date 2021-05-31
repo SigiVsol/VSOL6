@@ -5,6 +5,7 @@ import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
 import be.vsol.vsol6.Vsol6;
+import be.vsol.vsol6.model.enums.Language;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class Html implements ContentType, ByteArray {
         this.bytes = bytes;
     }
 
-    public Html(String resource, RequestHandler requestHandler, String language, Map<String, String> variables) {
+    public Html(String resource, RequestHandler requestHandler, Language language, Map<String, String> variables) {
         InputStream inputStream = Resource.getInputStream(resource);
         if (inputStream == null) {
             bytes = new byte[0];
@@ -35,7 +36,7 @@ public class Html implements ContentType, ByteArray {
                     if (requestHandler != null) {
                         for (String key : Key.get(line, '@')) { // @{...} : relay a new request to the webserver
                             HttpRequest httpRequest = new HttpRequest(key);
-                            httpRequest.getHeaders().put("accept-language", language);
+                            if (language != null) httpRequest.getHeaders().put("accept-language", language.toString());
                             HttpResponse httpResponse = requestHandler.respond(httpRequest);
                             line = line.replace(Key.make(key, '@'), httpResponse.getBodyAsString());
                         }

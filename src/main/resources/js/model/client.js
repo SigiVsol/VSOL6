@@ -1,6 +1,6 @@
 class Client extends VsolRecord {
     constructor(id = null, lastName = "", firstName = "", company = "", via = "", language = "en",
-                phone = "", email = "", address = new Address(), extraInfo = "") {
+                phone = "", email = "", street = "", postal = "", city = "", country = "", extraInfo = "") {
         super(id);
 
         this.lastName = lastName;
@@ -10,7 +10,10 @@ class Client extends VsolRecord {
         this.language = language;
         this.phone = phone;
         this.email = email;
-        this.address = address;
+        this.street = street;
+        this.postal = postal;
+        this.city = city;
+        this.country = country;
         this.extraInfo = extraInfo;
     }
 
@@ -23,12 +26,29 @@ class Client extends VsolRecord {
         this.language = json.language;
         this.phone = json.phone;
         this.email = json.email;
-        this.address.loadJson(json.address);
+        this.street = json.street;
+        this.postal = json.postal;
+        this.city = json.city;
+        this.country = json.country;
         this.extraInfo = json.extraInfo;
     }
 
     getName() {
-        return (this.firstName + " " + this.lastName).trim();
+        return (this.lastName + " " + this.firstName).trim();
+    }
+
+    getAddress() {
+        let result = (this.postal + " " + this.city).trim();
+        if (this.country.trim() !== "") {
+            result = (result + " (" + this.country + ")").trim();
+        }
+
+        if (this.street !== "") {
+            if (result === "") result = this.street;
+            else result = this.street + ", " + result;
+        }
+
+        return result;
     }
 
     toString() {

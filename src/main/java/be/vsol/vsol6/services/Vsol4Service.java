@@ -9,6 +9,7 @@ import be.vsol.tools.Service;
 import be.vsol.util.Filter;
 import be.vsol.util.Json;
 import be.vsol.util.Log;
+import be.vsol.vsol4.Vsol4Configuration;
 import be.vsol.vsol4.Vsol4Organization;
 import be.vsol.vsol4.Vsol4Record;
 import be.vsol.vsol4.Vsol4User;
@@ -17,6 +18,7 @@ import be.vsol.vsol6.session.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Vector;
 import java.util.function.Supplier;
 
@@ -65,10 +67,10 @@ public class Vsol4Service implements Service {
         return Json.get(getContent(response), Vsol4User::new);
     }
 
-    public Vector<Vsol4Organization> getOrganizations(Vsol4User user) {
+    public Vector<Vsol4Organization> getOrganizations(String username) {
         Vector<Vsol4Organization> result = new Vector<>();
 
-        HttpResponse response = getResponse(null, user.getUsername(), "organizations");
+        HttpResponse response = getResponse(null, username, "organizations");
 
         for (JSONObject jsonOrganization : Json.iterate(getContentArray(response))) {
             result.add(Json.get(jsonOrganization, Vsol4Organization::new));
@@ -78,8 +80,8 @@ public class Vsol4Service implements Service {
     }
 
     /** return the default organization associated with this user if defined, otherwise the first one, otherwise null */
-    public Vsol4Organization getDefaultOrganization(Vsol4User user) {
-        Vector<Vsol4Organization> organizations = getOrganizations(user);
+    public Vsol4Organization getDefaultOrganization(String username) {
+        Vector<Vsol4Organization> organizations = getOrganizations(username);
         if (organizations.isEmpty()) return null;
 
         Vsol4Organization result = null;
@@ -91,6 +93,17 @@ public class Vsol4Service implements Service {
         }
 
         return result;
+    }
+
+    public Vsol4Configuration getConfiguration(String organizationId, String username) {
+        HttpResponse response = getResponse(organizationId, username, "configurations");
+
+        if (isSuccess(response)) {
+            JSONObject jsonObject = getContent(response);
+            return Json.get(jsonObject, Vsol4Configuration::new);
+        } else {
+            return null;
+        }
     }
 
     public <E extends Vsol4Record> E getById(String organizationId, String id, Supplier<E> supplier) {
@@ -125,15 +138,14 @@ public class Vsol4Service implements Service {
         return result;
     }
 
-    public <E extends Vsol4Record> Vector<E> getAll(String organizationId, String filter, Supplier<E> supplier) {
+    public <E extends Vsol4Record> Vector<E> getAll(String organizationId, String request, String filter, Supplier<E> supplier) {
         Vector<E> result = new Vector<>();
-        E e = supplier.get();
 
-        HttpResponse response = getResponse(organizationId, null, e.getApiName());
+        HttpResponse response = getResponse(organizationId, null, request);
         JSONArray jsonArray = getContentArray(response);
 
         for (JSONObject jsonObject : Json.iterate(jsonArray)) {
-            e = supplier.get();
+            E e = supplier.get();
             Json.load(e, jsonObject);
 
             if (Filter.matches(filter, e.getFilterFields())) {
@@ -142,6 +154,31 @@ public class Vsol4Service implements Service {
         }
 
         return result;
+    }
+
+    public <E extends Vsol4Record> Vector<E> getAll(String organizationId, String filter, Supplier<E> supplier) {
+        return getAll(organizationId, supplier.get().getApiName(), filter, supplier);
+    }
+
+    public <E extends Vsol4Record> boolean delete(String organizationId, String id, Supplier<E> supplier) {
+        HttpResponse response = getResponse(HttpRequest.Method.DELETE, organizationId, null, supplier.get().getApiName() + "/" + id, null);
+        return isSuccess(response);
+    }
+
+    public <E extends Vsol4Record> boolean save(String organizationId, E vsolRecord) {
+        if (vsolRecord == null) return false;
+
+        JSONObject jsonRecord = Json.get(vsolRecord);
+        HttpResponse response;
+        if (vsolRecord.getId() == null) {
+            response = getResponse(HttpRequest.Method.POST, organizationId, null, vsolRecord.getApiName(), jsonRecord);
+            if (isSuccess(response)) {
+                vsolRecord.setId(Json.getOrDefault(getContent(response), "id", (String) null));
+            }
+        } else {
+            response = getResponse(HttpRequest.Method.PUT, organizationId, null, vsolRecord.getApiName() + "/" + vsolRecord.getId(), jsonRecord);
+        }
+        return isSuccess(response);
     }
 
     private JSONObject getContent(HttpResponse response) {
@@ -175,7 +212,18 @@ public class Vsol4Service implements Service {
         Config.vsol4 vsol4 = session.getConfig().vsol4;
 
         Log.debug("VSOL4 < " + httpRequest);
-        return Curl.get(vsol4.host, vsol4.port, vsol4.timeout, httpRequest);
+        HttpResponse response = Curl.get(vsol4.host, vsol4.port, vsol4.timeout, httpRequest);
+
+        if (!isSuccess(response)) {
+            if (response == null) Log.err("VSOL4: empty response");
+            else Log.err(response.getBodyAsString());
+        }
+
+        return response;
+    }
+
+    private boolean isSuccess(HttpResponse response) {
+        return response != null && response.isValid() && response.getStatusCode() >= 200 && response.getStatusCode() < 300;
     }
 
 

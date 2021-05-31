@@ -3,10 +3,7 @@ package be.vsol.http;
 import be.vsol.util.Flow;
 import be.vsol.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.zip.GZIPInputStream;
 
 public class HttpInputStream extends BufferedInputStream {
@@ -41,8 +38,20 @@ public class HttpInputStream extends BufferedInputStream {
     }
 
     public byte[] readChunked(String encoding) {
-        int chunkSize = Integer.parseInt(readLine(), 16);
-        return readBytes(chunkSize, encoding);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        while (true) {
+            int chunkSize = Integer.parseInt(readLine(), 16);
+            if (chunkSize == 0) {
+                break;
+            } else {
+                byte[] chunk = readBytes(chunkSize, encoding);
+                byteArrayOutputStream.writeBytes(chunk);
+                readLine();
+            }
+        }
+
+        return byteArrayOutputStream.toByteArray();
     }
 
     public byte[] readBytes(int length, String encoding) {

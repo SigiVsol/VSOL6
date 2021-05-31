@@ -85,7 +85,7 @@ class Explorer {
             $("#lblClientLanguage").text(app.client.language);
             $("#lblClientEmail").text(app.client.email);
             $("#lblClientPhone").text(app.client.phone);
-            $("#lblClientAddress").text(app.client.address.getText());
+            $("#lblClientAddress").text(app.client.getAddress());
             $("#lblClientExtraInfo").text(app.client.extraInfo);
 
             $('html').removeClass("clients-scrollbar").removeClass("entries-scrollbar").addClass('patients-scrollbar');

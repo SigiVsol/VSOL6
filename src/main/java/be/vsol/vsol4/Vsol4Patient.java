@@ -6,7 +6,8 @@ import java.time.LocalDate;
 
 public class Vsol4Patient extends Vsol4Record {
 
-    @json private String name, chip, ueln, breed, color, sire, damsire, sex, species;
+    @json private String name, chip, ueln, breed, color, sire, damsire, species;
+    @json private Vsol4Sex sex;
     @json private LocalDate birthDate;
     @json private boolean neutered;
     @json private Vsol4Client client = new Vsol4Client();
@@ -17,8 +18,9 @@ public class Vsol4Patient extends Vsol4Record {
         super("patients");
     }
 
-    public Vsol4Patient(String name, String chip, String ueln, String breed, String color, String sire, String damsire, String sex, String species, LocalDate birthDate, boolean neutered, Vsol4Client client) {
+    public Vsol4Patient(String id, String name, String chip, String ueln, String breed, String color, String sire, String damsire, Vsol4Sex sex, String species, LocalDate birthDate, boolean neutered, Vsol4Client client) {
         this();
+        this.id = id;
         this.name = name;
         this.chip = chip;
         this.ueln = ueln;
@@ -36,35 +38,11 @@ public class Vsol4Patient extends Vsol4Record {
     // Methods
 
     @Override public String[] getFilterFields() {
-        return new String[] { name, getOrigin(), getReference() };
+        return new String[] { name, sire, damsire, chip, ueln };
     }
 
     @Override public String toString() {
         return name;
-    }
-
-    public String getOrigin() {
-        if (sire.isBlank() && damsire.isBlank()) {
-            return "";
-        } else if (sire.isBlank()) {
-            return damsire;
-        } else if (damsire.isBlank()) {
-            return sire;
-        } else {
-            return sire + " x " + damsire;
-        }
-    }
-
-    public String getReference() {
-        if (chip.isBlank() && ueln.isBlank()) {
-            return "";
-        } else if (chip.isBlank()) {
-            return ueln;
-        } else if (ueln.isBlank()) {
-            return chip;
-        } else {
-            return chip + " - " + ueln;
-        }
     }
 
     // Getters
@@ -83,7 +61,7 @@ public class Vsol4Patient extends Vsol4Record {
 
     public String getDamsire() { return damsire; }
 
-    public String getSex() { return sex; }
+    public Vsol4Sex getSex() { return sex; }
 
     public String getSpecies() { return species; }
 

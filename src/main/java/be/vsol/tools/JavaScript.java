@@ -4,6 +4,7 @@ import be.vsol.util.Key;
 import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
+import be.vsol.vsol6.model.enums.Language;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class JavaScript implements ContentType, ByteArray {
         bytes = Resource.getBytes(resource);
     }
 
-    public JavaScript(String resource, String language) {
+    public JavaScript(String resource, Language language) {
         InputStream inputStream = Resource.getInputStream(resource);
         if (inputStream == null) {
             bytes = new byte[0];

@@ -45,8 +45,9 @@ class ExplorerTable {
         this.fill();
     }
 
-    getUrl() {
-        return "api/organizations/" + app.organization.id + "/" + this.type + "?filter=" + this.filter + "&sortField=" + this.sortField + "&sortAsc=" + this.sortAsc + "&part=" + this.part;
+    getUrl(request) {
+        // return "api/organizations/" + app.organization.id + "/" + this.type + (id == null ? "" : "/" + id) + "?filter=" + this.filter + "&sortField=" + this.sortField + "&sortAsc=" + this.sortAsc + "&part=" + this.part;
+        return "api/organizations/" + app.organization.id + "/" + request + "?filter=" + this.filter + "&sortField=" + this.sortField + "&sortAsc=" + this.sortAsc + "&part=" + this.part;
     }
 
     getTdText(text, action) {
@@ -157,33 +158,31 @@ class ExplorerTable {
         Dialog.confirm("%{Are_you_sure}?", () => {
             $.ajax({
                 method: "delete",
-                url: "api/organizations/" + app.organization.id + "/" + this.type,
-                data: JSON.stringify(record),
-                contentType: "application/json",
-                success: () => {
-                    app.show();
-                }
+                url: "api/organizations/" + app.organization.id + "/" + this.type + "/" + record.id,
+                success: () => app.show()
             });
         })
     }
 
     deleteSelectedRecords() {
         Dialog.confirm("%{Are_you_sure}?", () => {
-            let records = [];
+            let ids = [];
 
             $("#tbody-" + this.type + " tr").each((index, element) => {
                 let tr = $(element);
-                if (tr.hasClass("selected")) records.push(tr.data("record"));
+                if (tr.hasClass("selected")) ids.push(tr.data("record").id);
             });
 
-            $.ajax({
-                method: "delete",
-                url: "api/organizations/" + app.organization.id + "/" + this.type + "/multi",
-                data: JSON.stringify(records),
+            let data = {
+                action: "delete",
+                ids: ids
+            };
+
+            $.post({
+                url: "api/organizations/" + app.organization.id + "/" + this.type,
+                data: JSON.stringify(data),
                 contentType: "application/json",
-                success: () => {
-                    app.show();
-                }
+                success: () => app.show()
             });
         });
     }
@@ -216,7 +215,7 @@ class ClientsTable extends ExplorerTable {
         this.part = part;
 
         $.get({
-            url: this.getUrl(),
+            url: this.getUrl("clients"),
             success: json => {
                 for (let jsonClient of json.rows) {
                     let client = new Client();
@@ -226,7 +225,7 @@ class ClientsTable extends ExplorerTable {
                         this.getTdCheckbox().appendTo(tr);
                         this.getTdText(client.getName(), () => app.explorer.showClient(client)).appendTo(tr);
                         this.getTdText(client.via, () => app.explorer.showClient(client)).appendTo(tr);
-                        this.getTdText(client.address.getText(), () => app.explorer.showClient(client)).appendTo(tr);
+                        this.getTdText(client.getAddress(), () => app.explorer.showClient(client)).appendTo(tr);
                         this.getTdButton("clients", "open", () => app.explorer.showClient(client)).appendTo(tr);
                         this.getTdButton("cancel", "delete", () => this.deleteRecord(client)).appendTo(tr);
 
@@ -257,48 +256,39 @@ class PatientsTable extends ExplorerTable {
     add(part) {
         this.part = part;
 
-        let success = json => {
-            for (let jsonPatient of json.rows) {
-                let patient = new Patient();
-                patient.loadJson(jsonPatient);
 
-                let tr = $("<tr></tr>"); {
-                    this.getTdCheckbox().appendTo(tr);
-                    this.getTdText(patient.name, () => app.explorer.showPatient(patient)).appendTo(tr);
-                    this.getTdText(patient.getOrigin(), () => app.explorer.showPatient(patient)).appendTo(tr);
-                    this.getTdText(patient.getReference(), () => app.explorer.showPatient(patient)).appendTo(tr);
-                    this.getTdButton("patients", "open", () => app.explorer.showPatient(patient)).appendTo(tr);
-                    this.getTdButton("clients", "switch-user", () => this.changeClient(patient)).appendTo(tr);
-                    this.getTdButton("cancel", "delete", () => this.deleteRecord(patient)).appendTo(tr);
+        $.get({
+            url: this.getUrl(app.page === "patients" ? "patients" : "clients/" + app.client.id + "/patients"),
+            success: json => {
+                for (let jsonPatient of json.rows) {
+                    let patient = new Patient();
+                    patient.loadJson(jsonPatient);
 
-                    tr.data("record", patient);
+                    let tr = $("<tr></tr>");
+                    {
+                        this.getTdCheckbox().appendTo(tr);
+                        this.getTdText(patient.name, () => app.explorer.showPatient(patient)).appendTo(tr);
+                        this.getTdText(patient.getOrigin(), () => app.explorer.showPatient(patient)).appendTo(tr);
+                        this.getTdText(patient.getReference(), () => app.explorer.showPatient(patient)).appendTo(tr);
+                        this.getTdButton("patients", "open", () => app.explorer.showPatient(patient)).appendTo(tr);
+                        this.getTdButton("clients", "switch-user", () => this.changeClient(patient)).appendTo(tr);
+                        this.getTdButton("cancel", "delete", () => this.deleteRecord(patient)).appendTo(tr);
+
+                        tr.data("record", patient);
+                    }
+
+                    tr.appendTo($("#tbody-patients"));
+
+                    this.loadedRows++;
                 }
+                this.availableRows = json.availableRows;
+                this.postFill();
 
-                tr.appendTo($("#tbody-patients"));
-
-                this.loadedRows++;
+                this.setSortIcon("name");
+                this.setSortIcon("origin");
+                this.setSortIcon("reference");
             }
-            this.availableRows = json.availableRows;
-            this.postFill();
-
-            this.setSortIcon("name");
-            this.setSortIcon("origin");
-            this.setSortIcon("reference");
-        };
-
-        if (app.page === "patients") {
-            $.get({
-                url: this.getUrl(),
-                success: success
-            });
-        } else if (app.page === "client") {
-            $.post({
-                url: this.getUrl(),
-                data: JSON.stringify(app.client),
-                contentType: "application/json",
-                success: success
-            });
-        }
+        });
     }
 
     changeClient(patient = new Patient()) {
@@ -328,60 +318,50 @@ class EntriesTable extends ExplorerTable {
     add(part) {
         this.part = part;
 
-        let success = json => {
-            for (let jsonStudy of json.rows) {
-                let study = new Study();
-                study.loadJson(jsonStudy);
+        $.get({
+            url: this.getUrl(app.page === "entries" ? "entries" : "patients/" + app.patient.id + "/entries"),
+            success: json => {
+                for (let jsonStudy of json.rows) {
+                    let study = new Study();
+                    study.loadJson(jsonStudy);
 
-                let tr = $("<tr></tr>"); {
-                    this.getTdCheckbox().appendTo(tr);
+                    let tr = $("<tr></tr>"); {
+                        this.getTdCheckbox().appendTo(tr);
 
-                    if (app.page === "entries") {
-                        this.getTdText(study.patient.client.getName(), () => app.explorer.showClient(study.patient.client)).appendTo(tr);
-                        this.getTdText(study.patient.name, () => app.explorer.showPatient(study.patient)).appendTo(tr);
+                        if (app.page === "entries") {
+                            this.getTdText(study.patient.client.getName(), () => app.explorer.showClient(study.patient.client)).appendTo(tr);
+                            this.getTdText(study.patient.name, () => app.explorer.showPatient(study.patient)).appendTo(tr);
+                        }
+
+                        this.getTdDate(study.dateTime, () => { /* TODO */ }).appendTo(tr);
+                        this.getTdText(study.description, () => { /* TODO */ }).appendTo(tr);
+                        this.getTdNumber(study.seriesCount, () => { /* TODO */ }).appendTo(tr);
+
+                        this.getTdButton("ok", "eye", () => { /* TODO */ }).appendTo(tr);
+                        this.getTdEmailButton().appendTo(tr);
+                        this.getTdDownloadButton().appendTo(tr);
+                        this.getTdEditButton().appendTo(tr);
+
+                        this.getTdButton("cancel", "delete", () => this.deleteRecord(study)).appendTo(tr);
+
+                        tr.data("record", study);
                     }
 
-                    this.getTdDate(study.dateTime, () => { /* TODO */ }).appendTo(tr);
-                    this.getTdText(study.description, () => { /* TODO */ }).appendTo(tr);
-                    this.getTdNumber(study.seriesCount, () => { /* TODO */ }).appendTo(tr);
+                    tr.appendTo($("#tbody-entries"));
 
-                    this.getTdButton("ok", "eye", () => { /* TODO */ }).appendTo(tr);
-                    this.getTdEmailButton().appendTo(tr);
-                    this.getTdDownloadButton().appendTo(tr);
-                    this.getTdEditButton().appendTo(tr);
-
-                    this.getTdButton("cancel", "delete", () => this.deleteRecord(study)).appendTo(tr);
-
-                    tr.data("record", study);
+                    this.loadedRows++;
                 }
+                this.availableRows = json.availableRows;
+                this.postFill();
 
-                tr.appendTo($("#tbody-entries"));
-
-                this.loadedRows++;
+                this.setSortIcon("client");
+                this.setSortIcon("patient");
+                this.setSortIcon("date");
+                this.setSortIcon("description");
+                this.setSortIcon("seriesCount");
             }
-            this.availableRows = json.availableRows;
-            this.postFill();
+        });
 
-            this.setSortIcon("client");
-            this.setSortIcon("patient");
-            this.setSortIcon("date");
-            this.setSortIcon("description");
-            this.setSortIcon("seriesCount");
-        }
-
-        if (app.page === "entries") {
-            $.get({
-                url: this.getUrl(),
-                success: success
-            });
-        } else if (app.page === "patient") {
-            $.post({
-                url: this.getUrl(),
-                data: JSON.stringify(app.patient),
-                contentType: "application/json",
-                success: success
-            });
-        }
     }
 
     getTdEmailButton() {

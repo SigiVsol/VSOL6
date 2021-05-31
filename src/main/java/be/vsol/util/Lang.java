@@ -2,6 +2,7 @@ package be.vsol.util;
 
 import be.vsol.tools.CaseReport;
 import be.vsol.tools.Csv;
+import be.vsol.vsol6.model.enums.Language;
 
 import java.util.Arrays;
 
@@ -11,22 +12,22 @@ public class Lang {
 
     private static Csv csv;
 
-    public static String get(String key, String lang) {
+    public static String get(String key, Language language) {
         String[] subs = key.split("\\|", 3);
 
         if (subs.length == 1) {
-            return get(key, lang, 1);
+            return get(key, language, 1);
         } else if (subs.length == 2) {
-            return get(subs[0], lang, Int.parse(subs[1], 1));
+            return get(subs[0], language, Int.parse(subs[1], 1));
         } else {
             String[] substitutions = subs[2].split("\\|", -1);
-            return get(subs[0], lang, Int.parse(subs[1], 1), substitutions);
+            return get(subs[0], language, Int.parse(subs[1], 1), substitutions);
         }
     }
 
-    public static String get(String key, String lang, String... substitutions) { return get(key, lang, 1, substitutions); }
+    public static String get(String key, Language language, String... substitutions) { return get(key, language, 1, substitutions); }
 
-    public static String get(String key, String lang, int count, String... substitutions) {
+    public static String get(String key, Language language, int count, String... substitutions) {
         if (key.isEmpty()) return "";
 
         if (csv == null) {
@@ -42,7 +43,7 @@ public class Lang {
 
         if (punctuation != Punctuation.None) key = key.substring(0, key.length() - 1);
 
-        String result = csv.getValue(key.toLowerCase(), lang);
+        String result = csv.getValue(key.toLowerCase(), language.toString());
         if (result == null || result.isEmpty()) {
             result = csv.getValue(key.toLowerCase(), "en");
         }

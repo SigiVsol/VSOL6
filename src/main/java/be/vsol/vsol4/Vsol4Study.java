@@ -2,14 +2,10 @@ package be.vsol.vsol4;
 
 import be.vsol.tools.json;
 
-import java.time.LocalDateTime;
+public class Vsol4Study extends Vsol4Entry {
 
-public class Vsol4Study extends Vsol4Record {
-
-    @json private String description, type, orthancUuid, status, modalityType, laptopSerial, origin;
-    @json private LocalDateTime date;
+    @json private String type, orthancUuid, status, modalityType, laptopSerial, origin;
     @json private int seriesCount;
-    @json private Vsol4Patient patient = new Vsol4Patient();
 
     // Constructors
 
@@ -19,18 +15,11 @@ public class Vsol4Study extends Vsol4Record {
 
     // Methods
 
-
-    @Override public String[] getFilterFields() {
-        return new String[] {  }; // TODO
-    }
-
     @Override public String toString() {
         return description;
     }
 
     // Getters
-
-    public String getDescription() { return description; }
 
     public String getType() { return type; }
 
@@ -45,9 +34,5 @@ public class Vsol4Study extends Vsol4Record {
     public String getOrigin() { return origin; }
 
     public int getSeriesCount() { return seriesCount; }
-
-    public LocalDateTime getDate() { return date; }
-
-    public Vsol4Patient getPatient() { return patient; }
 
 }

@@ -1,6 +1,8 @@
 package be.vsol.http;
 
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +66,7 @@ public class HttpRequest extends HttpMessage {
                 String[] split = param.split("=", 2);
                 String key = split[0];
                 String value = split.length > 1 ? split[1] : "";
+                value = URLDecoder.decode(value, Charset.defaultCharset());
                 parameters.put(key, value);
             }
 

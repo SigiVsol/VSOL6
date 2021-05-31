@@ -2,6 +2,7 @@ package be.vsol.util;
 
 import be.vsol.tools.json;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.enums.Sex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,8 @@ public class Json {
 
                 if (field.get(object) == null) {
                     result.put(name, JSONObject.NULL);
+                } else if (field.getType().isEnum()) {
+                    result.put(name, field.get(object));
                 } else {
                     switch (field.getType().getSimpleName()) {
                         case "boolean" -> result.put(name, field.getBoolean(object));
@@ -38,10 +41,10 @@ public class Json {
 
                         case "Boolean", "Integer", "Long", "Float", "Double", "String" -> result.put(name, field.get(object));
 
-                        case "LocalDate" -> result.put(name, field.get(object).toString());
-                        case "LocalTime" -> result.put(name, ((LocalTime) field.get(object)).truncatedTo(ChronoUnit.SECONDS).toString());
-                        case "LocalDateTime" -> result.put(name, ((LocalDateTime) field.get(object)).truncatedTo(ChronoUnit.SECONDS).toString());
-                        case "Instant" -> result.put(name, ((Instant) field.get(object)).truncatedTo(ChronoUnit.MILLIS).toString());
+                        case "LocalDate" -> result.put(name, Date.format(((LocalDate) field.get(object))));
+                        case "LocalTime" -> result.put(name, Date.format(((LocalTime) field.get(object))));
+                        case "LocalDateTime" -> result.put(name, Date.format(((LocalDateTime) field.get(object))));
+                        case "Instant" -> result.put(name, Date.format(((Instant) field.get(object))));
 
                         default -> result.put(name, get(field.get(object)));
                     }
@@ -54,6 +57,52 @@ public class Json {
         return result;
     }
 
+    public static <E> JSONArray getArray(Vector<E> vector) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (E e : vector) {
+            jsonArray.put(get(e));
+        }
+
+        return jsonArray;
+    }
+
+    public static <E> JSONArray getArray(E[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (E e : array) { jsonArray.put(e); }
+        return jsonArray;
+    }
+
+    public static JSONArray getArray(boolean[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (boolean i : array) { jsonArray.put(i); }
+        return jsonArray;
+    }
+
+    public static JSONArray getArray(int[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (int i : array) { jsonArray.put(i); }
+        return jsonArray;
+    }
+
+    public static JSONArray getArray(long[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (long i : array) { jsonArray.put(i); }
+        return jsonArray;
+    }
+
+    public static JSONArray getArray(float[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (float i : array) { jsonArray.put(i); }
+        return jsonArray;
+    }
+
+    public static JSONArray getArray(double[] array) {
+        JSONArray jsonArray = new JSONArray();
+        for (double i : array) { jsonArray.put(i); }
+        return jsonArray;
+    }
+
     public static <E> void load(E object, JSONObject jsonObject) {
         try {
             for (Field field : Reflect.getFields(object, json.class)) {
@@ -63,6 +112,8 @@ public class Json {
                 if (jsonObject.has(name)) {
                     if (jsonObject.isNull(name)) {
                         field.set(object, null);
+                    } else if (field.getType().isEnum()) {
+                        field.set(object, Enum.valueOf(field.getType().asSubclass(Enum.class), jsonObject.get(name).toString()));
                     } else {
                         switch (field.getType().getSimpleName()) {
                             case "boolean" -> field.set(object, jsonObject.getBoolean(name));
@@ -73,10 +124,10 @@ public class Json {
 
                             case "Boolean", "Integer", "Long", "Float", "Double", "String" -> field.set(object, jsonObject.get(name));
 
-                            case "LocalDate" -> field.set(object, LocalDate.parse(jsonObject.getString(name)));
-                            case "LocalTime" -> field.set(object, LocalTime.parse(jsonObject.getString(name)));
-                            case "LocalDateTime" -> field.set(object, LocalDateTime.parse(jsonObject.getString(name)));
-                            case "Instant" -> field.set(object, Instant.parse(jsonObject.getString(name)));
+                            case "LocalDate" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalDate) null));
+                            case "LocalTime" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalTime) null));
+                            case "LocalDateTime" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalDateTime) null));
+                            case "Instant" -> field.set(object, Date.parse(jsonObject.getString(name), (Instant) null));
 
                             default -> load(field.get(object), jsonObject.getJSONObject(name));
                         }
@@ -94,6 +145,55 @@ public class Json {
 
         E result = supplier.get();
         load(result, jsonObject);
+        return result;
+    }
+
+    public static Vector<Boolean> getBooleanVector(JSONArray jsonArray) {
+        Vector<Boolean> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getBoolean(i)); }
+        return result;
+    }
+
+    public static Vector<Integer> getIntegerVector(JSONArray jsonArray) {
+        Vector<Integer> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getInt(i)); }
+        return result;
+    }
+
+    public static Vector<Long> getLongVector(JSONArray jsonArray) {
+        Vector<Long> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getLong(i)); }
+        return result;
+    }
+
+    public static Vector<Double> getDoubleVector(JSONArray jsonArray) {
+        Vector<Double> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getDouble(i)); }
+        return result;
+    }
+
+    public static Vector<Float> getFloatVector(JSONArray jsonArray) {
+        Vector<Float> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getFloat(i)); }
+        return result;
+    }
+
+    public static Vector<String> getStringVector(JSONArray jsonArray) {
+        Vector<String> result = new Vector<>();
+        for (int i = 0; i < jsonArray.length(); i++) { result.add(jsonArray.getString(i)); }
+        return result;
+    }
+
+    public static <E> Vector<E> getVector(JSONArray jsonArray, Supplier<E> supplier) {
+        Vector<E> result = new Vector<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            E e = supplier.get();
+            load(e, jsonObject);
+            result.add(e);
+        }
+
         return result;
     }
 

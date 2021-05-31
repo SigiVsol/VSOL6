@@ -22,7 +22,7 @@ public class Config {
 
     public static class vsol4 {
         @json public String host, username, password;
-        @json public int port, timeout, lifespan;
+        @json public int port, timeout, lifespan, limit;
     }
 
     public static class orthanc {

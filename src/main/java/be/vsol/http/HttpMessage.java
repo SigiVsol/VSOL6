@@ -7,6 +7,7 @@ import be.vsol.tools.*;
 import be.vsol.util.Lang;
 import be.vsol.util.Log;
 import be.vsol.util.Int;
+import be.vsol.vsol6.model.enums.Language;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -110,14 +111,14 @@ public abstract class HttpMessage {
 
     public byte[] getBody() { return body; }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         String[] acceptLanguages = headers.getOrDefault("accept-language", "").split(",", -1);
         for (String acceptLanguage : acceptLanguages) {
-            if (acceptLanguage.matches("(nl|en|fr|de).*")) {
-                return acceptLanguage.substring(0, 2);
+            if (acceptLanguage.matches(Language.getRegex())) {
+                return Language.parse(acceptLanguage.substring(0, 2));
             }
         }
-        return "en";
+        return Language.getDefault();
     }
 
     public String getBodyAsString() { return body == null ? null : new String(body); }

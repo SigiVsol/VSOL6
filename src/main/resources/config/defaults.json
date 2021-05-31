@@ -28,7 +28,8 @@
 		"username": "firstuser",
 		"password": "password",
 		"timeout": 2500,
-		"lifespan": 60
+		"lifespan": 60,
+		"limit": 20
 	},
 	"orthanc":{
 		"host":"localhost",

@@ -11,7 +11,7 @@ public class Organization extends Record {
     // Constructors
 
     public Organization(Vsol4Organization vsol4Organization) {
-        super(vsol4Organization.getId());
+        super(vsol4Organization.getId(), vsol4Organization.getLastOpenedDate());
         name = vsol4Organization.getName();
         description = vsol4Organization.getDescription();
     }

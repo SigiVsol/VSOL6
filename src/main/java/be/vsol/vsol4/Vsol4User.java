@@ -14,7 +14,6 @@ public class Vsol4User extends Vsol4Record {
 
     // Methods
 
-
     @Override public String[] getFilterFields() {
         return new String[] { firstName, lastName, email };
     }

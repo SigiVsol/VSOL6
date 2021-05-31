@@ -9,7 +9,7 @@ import java.util.Map;
 public class ServerService extends HttpServer {
 
     public ServerService(Session session, Vsol4Service vsol4Service, Map<String, String> variables) {
-        super(session.getConfig().server.name, session.getConfig().server.port, new ServerHandler(vsol4Service, variables));
+        super(session.getConfig().server.name, session.getConfig().server.port, new ServerHandler(session, vsol4Service, variables));
     }
 
 }

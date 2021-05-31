@@ -1,7 +1,7 @@
 package be.vsol.vsol4;
 
 import be.vsol.tools.json;
-import be.vsol.util.Str;
+import be.vsol.vsol6.model.enums.Language;
 
 public class Vsol4Client extends Vsol4Record {
     @json private Contact contact = new Contact();
@@ -13,8 +13,9 @@ public class Vsol4Client extends Vsol4Record {
         super("clients");
     }
 
-    public Vsol4Client(Contact contact, String extraInfo, String via) {
+    public Vsol4Client(String id, Contact contact, String extraInfo, String via) {
         this();
+        this.id = id;
         this.contact = contact;
         this.extraInfo = extraInfo;
         this.via = via;
@@ -41,14 +42,15 @@ public class Vsol4Client extends Vsol4Record {
     // Static Classes
 
     public static class Contact {
-        @json private String lastName, firstName, company, language, phone, email;
+        @json private String lastName, firstName, company, phone, email;
+        @json private Language language;
         @json private Address address = new Address();
 
         // Constructors
 
         public Contact() { }
 
-        public Contact(String lastName, String firstName, String company, String language, String phone, String email, Address address) {
+        public Contact(String lastName, String firstName, String company, Language language, String phone, String email, Address address) {
             this.lastName = lastName;
             this.firstName = firstName;
             this.company = company;
@@ -72,7 +74,7 @@ public class Vsol4Client extends Vsol4Record {
 
         public String getCompany() { return company; }
 
-        public String getLanguage() { return language; }
+        public Language getLanguage() { return language; }
 
         public String getPhone() { return phone; }
 
@@ -98,17 +100,7 @@ public class Vsol4Client extends Vsol4Record {
         // Methods
 
         @Override public String toString() {
-            String result = (postalCode + " " + city).trim();
-            if (!country.isBlank()) {
-                result = (result + " (" + country + ")").trim();
-            }
-
-            if (!line.isBlank()) {
-                if (result.isBlank()) result = line;
-                else result = line + ", " + result;
-            }
-
-            return result;
+            return be.vsol.util.Address.format(line, postalCode, city, country);
         }
 
         // Getters
