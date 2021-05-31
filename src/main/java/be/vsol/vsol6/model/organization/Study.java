@@ -27,6 +27,7 @@ public class Study extends Record {
         this.dateTime = vsol4Study.getDate();
         this.seriesCount = vsol4Study.getSeriesCount();
         this.patient = new Patient(vsol4Study.getPatient());
+        this.patient.setClient(new Client(vsol4Study.getClient()));
     }
 
     // Methods

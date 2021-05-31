@@ -35,6 +35,8 @@ public abstract class API implements RequestHandler {
         // LOGIN
         if (method == Method.POST && path.matches("/api/authenticate")) return postAuthentication(request);
         else if (method == Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
+        // ORGANIZATIONS
+        else if (method == Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
         // CLIENTS
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
@@ -52,7 +54,7 @@ public abstract class API implements RequestHandler {
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return getStudies(request);
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/(studies|entries)")) return getStudiesOfPatient(request);
         else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/(studies|entries)/" + uid)) return deleteStudy(request);
-        else if (method == Method.POST && path.matches("")) return postStudyAction(request);
+        else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return postStudyAction(request);
 
         else return HttpResponse.get404();
     }
@@ -87,6 +89,10 @@ public abstract class API implements RequestHandler {
 
         return new HttpResponse(jsonResponse);
     }
+
+    // ORGANIZATIONS
+
+    protected abstract HttpResponse getOrganizations(HttpRequest request);
 
     // CLIENTS
 
@@ -149,6 +155,10 @@ public abstract class API implements RequestHandler {
 
     protected String getFilter(HttpRequest request) {
         return request.getParameters().getOrDefault("filter", "");
+    }
+
+    protected String getUsername(HttpRequest request) {
+        return request.getParameters().getOrDefault("username", "");
     }
 
     protected String getSortField(HttpRequest request) {

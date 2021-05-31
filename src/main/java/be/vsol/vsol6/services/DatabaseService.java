@@ -29,7 +29,7 @@ public class DatabaseService implements Service {
         Config.db db = session.getConfig().db;
 
         DbDriver driver = switch (db.type) {
-            case "sqlite" -> new SQLite(new File(home, "data"));
+            case "sqlite" -> new SQLite(new File(home, "data/databases"));
             case "mysql" -> new MySQL(db.host, db.port, db.user, db.password);
             default -> null;
         };

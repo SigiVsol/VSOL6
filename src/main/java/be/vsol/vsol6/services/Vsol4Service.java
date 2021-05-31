@@ -66,13 +66,17 @@ public class Vsol4Service implements Service {
         return Json.get(getContent(response), Vsol4User::new);
     }
 
-    public Vector<Vsol4Organization> getOrganizations(String username) {
+    public Vector<Vsol4Organization> getOrganizations(String username, String filter) {
         Vector<Vsol4Organization> result = new Vector<>();
 
         HttpResponse response = getResponse(null, username, "organizations");
 
         for (JSONObject jsonOrganization : Json.iterate(getContentArray(response))) {
-            result.add(Json.get(jsonOrganization, Vsol4Organization::new));
+            Vsol4Organization organization = new Vsol4Organization();
+            Json.load(organization, jsonOrganization);
+            if (Filter.matches(filter, organization.getFilterFields())) {
+                result.add(organization);
+            }
         }
 
         return result;
@@ -80,7 +84,7 @@ public class Vsol4Service implements Service {
 
     /** return the default organization associated with this user if defined, otherwise the first one, otherwise null */
     public Vsol4Organization getDefaultOrganization(String username) {
-        Vector<Vsol4Organization> organizations = getOrganizations(username);
+        Vector<Vsol4Organization> organizations = getOrganizations(username, "");
         if (organizations.isEmpty()) return null;
 
         Vsol4Organization result = null;

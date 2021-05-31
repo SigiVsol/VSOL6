@@ -35,7 +35,7 @@ public class ServerHandler implements RequestHandler {
 
         if (path.matches("/api/.*")) {
             return api.respond(request);
-        } else if (path.matches("/(|clients|patients|studies)")) {
+        } else if (path.matches("/(|client|clients|patient|patients|entries)")) {
             return getApp(language);
         } else if (path.matches(".*\\.html")) {
             return getHtml(path, language);

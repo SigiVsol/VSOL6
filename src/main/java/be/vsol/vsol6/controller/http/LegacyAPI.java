@@ -56,6 +56,18 @@ public class LegacyAPI extends API {
         return postLogin(user, organization);
     }
 
+    // ORGANIZATIONS
+
+    @Override protected HttpResponse getOrganizations(HttpRequest request) {
+        Vector<Vsol4Organization> vsol4Organizations = vsol4.getOrganizations(getUsername(request), getFilter(request));
+        Vector<Organization> organizations = new Vector<>();
+        for (Vsol4Organization vsol4Organization : vsol4Organizations) {
+            organizations.add(new Organization(vsol4Organization));
+        }
+
+        return getRows(organizations, getPart(request), session.getConfig().vsol4.limit);
+    }
+
     // CLIENTS
 
     @Override protected HttpResponse getClients(HttpRequest request) {
@@ -163,7 +175,7 @@ public class LegacyAPI extends API {
         return postRecordsAction(request, Vsol4Patient::new);
     }
 
-    // STUDIES
+    // ENTRIES / STUDIES
 
     @Override protected HttpResponse getStudies(HttpRequest request) {
         String organizationId = getSplit(request, 3);
@@ -191,17 +203,12 @@ public class LegacyAPI extends API {
     }
 
     @Override protected HttpResponse deleteStudy(HttpRequest request) {
-        return null;
+        return deleteRecords(request, Vsol4Study::new);
     }
 
     @Override protected HttpResponse postStudyAction(HttpRequest request) {
-        return null;
+        return postRecordsAction(request, Vsol4Study::new);
     }
-
-
-    // REPORTS
-
-    // ENTRIES
 
     // Methods
 

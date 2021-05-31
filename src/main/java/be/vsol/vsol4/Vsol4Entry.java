@@ -9,6 +9,7 @@ public abstract class Vsol4Entry extends Vsol4Record {
 
     @json protected String description;
     @json protected LocalDateTime date;
+    @json protected Vsol4Client client = new Vsol4Client();
     @json protected Vsol4Patient patient = new Vsol4Patient();
 
     // Constructors
@@ -18,7 +19,7 @@ public abstract class Vsol4Entry extends Vsol4Record {
     }
 
     @Override public String[] getFilterFields() {
-        return new String[] { patient.getClient().toString(), patient.toString(), Date.format(date), description };
+        return new String[] { client.toString(), patient.toString(), Date.format(date), description };
     }
 
     // Getters
@@ -26,6 +27,8 @@ public abstract class Vsol4Entry extends Vsol4Record {
     public String getDescription() { return description; }
 
     public LocalDateTime getDate() { return date; }
+
+    public Vsol4Client getClient() { return client; }
 
     public Vsol4Patient getPatient() { return patient; }
 

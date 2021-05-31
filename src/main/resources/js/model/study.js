@@ -1,21 +1,11 @@
-class Study extends VsolRecord {
+class Study extends Entry {
     constructor(id = null, patient = new Patient(), dateTime = "", description = "", seriesCount = 0) {
-        super(id);
-        this.patient = patient;
-        this.dateTime = dateTime;
-        this.description = description;
+        super(id, patient, dateTime, description);
         this.seriesCount = seriesCount;
     }
 
     loadJson(json) {
-        this.id = json.id;
-        this.patient.loadJson(json.patient);
-        this.dateTime = json.dateTime;
-        this.description = json.description;
+        super.loadJson(json);
         this.seriesCount = json.seriesCount;
-    }
-
-    toString() {
-        return this.description;
     }
 }

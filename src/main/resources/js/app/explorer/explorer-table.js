@@ -333,7 +333,7 @@ class EntriesTable extends ExplorerTable {
                             this.getTdText(study.patient.name, () => app.explorer.showPatient(study.patient)).appendTo(tr);
                         }
 
-                        this.getTdDate(study.dateTime, () => { /* TODO */ }).appendTo(tr);
+                        this.getTdDate(study.getDateTime(), () => { /* TODO */ }).appendTo(tr);
                         this.getTdText(study.description, () => { /* TODO */ }).appendTo(tr);
                         this.getTdNumber(study.seriesCount, () => { /* TODO */ }).appendTo(tr);
 

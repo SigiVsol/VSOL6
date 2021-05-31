@@ -42,6 +42,14 @@ public class FileSys {
 
     // Write
 
+    public static void writeBytes(File file, byte[] bytes) {
+        try {
+            FileUtils.writeByteArrayToFile(file, bytes);
+        } catch (IOException e) {
+            Log.trace(e);
+        }
+    }
+
     public static void writeString(File file, String string) {
         try {
             FileUtils.writeStringToFile(file, string, "utf8", false);

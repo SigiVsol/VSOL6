@@ -20,7 +20,7 @@ public class Vsol4Organization extends Vsol4Record {
     }
 
     @Override public String[] getFilterFields() {
-        return new String[] { name };
+        return new String[] { name, description };
     }
 
     // Getters
