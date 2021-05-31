@@ -1,4 +1,4 @@
-package be.vsol.vsol6.controller.http;
+package be.vsol.vsol6.controller.api;
 
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
@@ -17,18 +17,16 @@ import org.json.JSONObject;
 import java.util.Vector;
 import java.util.function.Supplier;
 
-public class LegacyAPI extends API {
+public class LegacyAbstractAPI extends AbstractAPI {
 
-    public LegacyAPI(Session session, Vsol4Service vsol4Service) {
+    public LegacyAbstractAPI(Session session, Vsol4Service vsol4Service) {
         super(session, vsol4Service);
     }
 
     // LOGIN
 
     @Override protected HttpResponse postAuthentication(HttpRequest request) {
-        JSONObject jsonRequest = request.getBodyAsJSONObject();
-        String username = Json.getOrDefault(jsonRequest, "username", "");
-        String password = Json.getOrDefault(jsonRequest, "password", "");
+
 
         if (vsol4.authenticate(username, password) == null) {
             return HttpResponse.get404(Lang.get("Bad_credentials.", request.getLanguage()));

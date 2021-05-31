@@ -29,13 +29,14 @@ public class GuiService implements Service {
     private final Sig sig;
     private final File home;
 
-    private Session session;
-
     private final Splash splash;
+
     private App app;
     private Login login;
     private Explorer explorer;
     private Settings settings;
+
+    private Session localSession;
 
     // Constructor
 
@@ -66,58 +67,55 @@ public class GuiService implements Service {
         splashStage.show();
     }
 
-    public void showApp(Session session) {
-        this.session = session;
+    public void showApp(Session systemSession, Session localSession) {
+        this.localSession = localSession;
 
         Platform.runLater(() -> {
-            splashStage.hide();
-
             setTitleAndLogo(primaryStage);
 
-            Config.gui gui = session.getConfig().gui;
+            Config.gui gui = systemSession.getConfig().gui;
             primaryStage.setWidth(gui.width);
             primaryStage.setHeight(gui.height);
             primaryStage.setX(gui.x);
             primaryStage.setY(gui.y);
             primaryStage.setMaximized(gui.maximized);
             if (gui.undecorated) primaryStage.initStyle(StageStyle.UNDECORATED);
-
             primaryStage.setScene(new Scene(app.getRoot()));
+            addListeners(systemSession);
 
-            explorer.loadUrl("http://localhost:8100");
-            app.show(explorer);
+            app.home();
 
+            splashStage.hide();
             primaryStage.show();
-            addListeners();
         });
     }
 
-    private void addListeners() {
+    private void addListeners(Session systemSession) {
         primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
             if (!primaryStage.isMaximized()) {
-                Task.run("save gui.width", 500, () -> session.saveSystem(new Setting("gui.width", newValue.intValue())));
+                Task.run("save gui.width", 500, () -> systemSession.saveSystem(new Setting("gui.width", newValue.intValue())));
             }
         });
 
         primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
             if (!primaryStage.isMaximized()) {
-                Task.run("save gui.height", 500, () -> session.saveSystem(new Setting("gui.height", newValue.intValue())));
+                Task.run("save gui.height", 500, () -> systemSession.saveSystem(new Setting("gui.height", newValue.intValue())));
             }
         });
 
         primaryStage.xProperty().addListener((observable, oldValue, newValue) -> {
             if (!primaryStage.isMaximized()) {
-                Task.run("save gui.x", 500, () -> session.saveSystem(new Setting("gui.x", newValue.intValue())));
+                Task.run("save gui.x", 500, () -> systemSession.saveSystem(new Setting("gui.x", newValue.intValue())));
             }
         });
 
         primaryStage.yProperty().addListener((observable, oldValue, newValue) -> {
             if (!primaryStage.isMaximized()) {
-                Task.run("save gui.y", 500, () -> session.saveSystem(new Setting("gui.y", newValue.intValue())));
+                Task.run("save gui.y", 500, () -> systemSession.saveSystem(new Setting("gui.y", newValue.intValue())));
             }
         });
 
-        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> session.saveSystem(new Setting("gui.maximized", newValue)));
+        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> systemSession.saveSystem(new Setting("gui.maximized", newValue)));
     }
 
     private void setTitleAndLogo(Stage stage) {

@@ -10,6 +10,8 @@ public class User extends Record {
 
     // Constructors
 
+    public User() { }
+
     public User(Vsol4User vsol4User) {
         super(vsol4User.getId(), vsol4User.getLastOpenedDate());
         username = vsol4User.getUsername();

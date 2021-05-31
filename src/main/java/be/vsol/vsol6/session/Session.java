@@ -1,6 +1,7 @@
 package be.vsol.vsol6.session;
 
 import be.vsol.database.structures.DbTable;
+import be.vsol.tools.LocalStorage;
 import be.vsol.util.*;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
@@ -39,7 +40,7 @@ public class Session {
         // override with database settings
         if (db != null) {
             if (system != null) {
-                Vector<Setting> settings = db.getSystem().getSettings().getAll("systemId = '" + system.getId() + "'");
+                Vector<Setting> settings = db.getSystemDb().getSettings().getAll("systemId = '" + system.getId() + "'");
                 for (Setting setting : settings) {
                     map.put(setting.getKey(), setting.getValue());
                 }
@@ -85,7 +86,7 @@ public class Session {
             String key = newSetting.getKey();
             String value = newSetting.getValue();
 
-            DbTable<Setting> dbTable = db.getSystem().getSettings();
+            DbTable<Setting> dbTable = db.getSystemDb().getSettings();
             Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND key = '" + key + "'");
             if (setting == null) {
                 setting = new Setting(key, value);

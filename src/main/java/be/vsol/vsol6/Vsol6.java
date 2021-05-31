@@ -6,7 +6,10 @@ import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
+import be.vsol.vsol6.controller.api.AbstractAPI;
 import be.vsol.vsol6.model.LocalSystem;
+import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.services.*;
 import be.vsol.vsol6.session.Session;
 import javafx.application.Application;
@@ -23,16 +26,11 @@ public class Vsol6 extends Application {
 
     private static final Sig sig = new Sig("VSOL6", 0, 0, 6, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
-    private static File home;
-    private static LocalStorage localStorage;
-    private static Session programSession, localSession;
-
-    private static final Vector<Service> services = new Vector<>(); // will contain the following:
-    private static GuiService guiService;
+    private static final Vector<Service> services = new Vector<>();
     private static DatabaseService databaseService;
+    private static GuiService guiService;
     private static Vsol4Service vsol4Service;
-    private static OrthancService orthancService;
-    private static ConsoleService consoleService;
+    private static AbstractAPI abstractApi;
 
     // Static Method
 
@@ -43,8 +41,8 @@ public class Vsol6 extends Application {
     // Methods
 
     @Override public void start(Stage primaryStage) { try {
-        home = new File(getParameters().getNamed().getOrDefault("home", sig.getFolder()));
-        localStorage = new LocalStorage(new File(home, "data/localStorage"));
+        File home = new File(getParameters().getNamed().getOrDefault("home", sig.getFolder()));
+        LocalStorage localStorage = new LocalStorage(new File(home, "data/localStorage"));
 
         Log.init(new File(home, "logs"), sig.getAppTitle(), getParameters().getUnnamed().contains("debug"));
         Log.out("Starting " + sig + ".");
@@ -56,7 +54,8 @@ public class Vsol6 extends Application {
 
         JSONObject jsonDefaults = new JSONObject(Resource.getString("config/defaults.json"));
 
-        programSession = new Session(jsonDefaults, getParameters().getNamed(), null, null, null, null); // pre-database settings
+        Session programSession = new Session(jsonDefaults, getParameters().getNamed(), null, null, null, null); // pre-database settings
+        LocalSystem system = new LocalSystem();
 
         if (programSession.getConfig().gui.visible) {
             services.add(guiService = new GuiService(sig, home, primaryStage));
@@ -65,20 +64,25 @@ public class Vsol6 extends Application {
 
         new Job(() -> {
             services.add(databaseService = new DatabaseService(home, programSession));
+            Session systemSession = new Session(jsonDefaults, getParameters().getNamed(), databaseService, system, null, null);
 
-            localSession = new Session(jsonDefaults, getParameters().getNamed(), databaseService, new LocalSystem(), null, null); // TODO restore login from localStorage
+            services.add(vsol4Service = new Vsol4Service(systemSession));
+            services.add(new OrthancService());
+            services.add(new ConsoleService());
 
-            services.add(vsol4Service = new Vsol4Service(localSession));
-            services.add(orthancService = new OrthancService());
-            services.add(new ServerService(localSession, vsol4Service, variables));
-            services.add(consoleService = new ConsoleService());
+
+
+            services.add(new ServerService(systemSession, vsol4Service, variables));
 
             for (Service service : services) {
                 service.start();
             }
 
             if (guiService != null) {
-                guiService.showApp(localSession);
+                User user = databaseService.getUserDb().getUsers().getById(localStorage.get("user.id", null));
+                Organization organization = databaseService.getOrganizationDb().getOrganizations().getById(localStorage.get("organization.id", null));
+
+                guiService.showApp(systemSession, new Session(jsonDefaults, getParameters().getNamed(), databaseService, system, organization, user));
             }
         });
     } catch (Exception e) { Log.trace(e); System.exit(1); } }

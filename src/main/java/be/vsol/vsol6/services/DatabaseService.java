@@ -9,6 +9,8 @@ import be.vsol.util.Int;
 import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.database.OrgDb;
+import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.database.SystemDb;
 import be.vsol.vsol6.model.database.UserDb;
 import be.vsol.vsol6.session.Session;
@@ -20,8 +22,9 @@ import java.util.Map;
 public class DatabaseService implements Service {
 
     private final SystemDb systemDb;
-    private final Database userDb;
-    private final HashMap<Organization, Database> organizations = new HashMap<>();
+    private final UserDb userDb;
+    private final OrganizationDb organizationDb;
+    private final HashMap<Organization, OrgDb> orgDbs = new HashMap<>();
 
     // Constructor
 
@@ -36,6 +39,7 @@ public class DatabaseService implements Service {
 
         systemDb = driver == null ? null : new SystemDb(driver);
         userDb = driver == null ? null : new UserDb(driver);
+        organizationDb = driver == null ? null : new OrganizationDb(driver);
     }
 
     // Methods
@@ -46,7 +50,9 @@ public class DatabaseService implements Service {
 
     // Getters
 
+    public SystemDb getSystemDb() { return systemDb; }
 
-    public SystemDb getSystem() { return systemDb; }
+    public UserDb getUserDb() { return userDb; }
 
+    public OrganizationDb getOrganizationDb() { return organizationDb; }
 }

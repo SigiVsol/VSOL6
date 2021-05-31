@@ -6,9 +6,7 @@ import be.vsol.util.Uid;
 
 public class LocalSystem extends DbRecord {
 
-    @db
-    private String name;
-
+    @db private String name;
 
     public LocalSystem() {
         id = Uid.getMachineUuid();
