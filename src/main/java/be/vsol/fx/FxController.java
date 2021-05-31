@@ -5,7 +5,7 @@ import javafx.scene.Node;
 
 public abstract class FxController<N extends Node> {
 
-    private N root;
+    protected N root;
     protected GuiService gui;
 
     // Methods

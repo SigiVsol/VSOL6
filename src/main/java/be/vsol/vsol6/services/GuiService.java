@@ -54,7 +54,7 @@ public class GuiService implements Service {
         app = loadFxml("app");
         login = loadFxml("app/login");
         settings = loadFxml("app/settings");
-        explorer = new Explorer();
+        explorer = new Explorer(this);
     }
 
     @Override public void stop() { }

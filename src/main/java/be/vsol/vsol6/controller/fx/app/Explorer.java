@@ -3,6 +3,7 @@ package be.vsol.vsol6.controller.fx.app;
 import be.vsol.fx.FxController;
 import be.vsol.util.Icon;
 import be.vsol.vsol6.Vsol6;
+import be.vsol.vsol6.services.GuiService;
 import com.teamdev.jxbrowser.browser.Browser;
 import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
@@ -28,11 +29,13 @@ public class Explorer extends FxController<BrowserView> {
 
     private final Browser browser;
 
-    public Explorer() {
-        this(null);
+    public Explorer(GuiService gui) {
+        this(gui, null);
     }
 
-    public Explorer(String url) {
+    public Explorer(GuiService gui, String url) {
+        this.gui = gui;
+
         System.setProperty("jxbrowser.license.key", "1BNDIEOFAYZEE9HQYY5M5ESGI6GCWTNOGK6CZWMWN94GQFFG96AB10J8YJC2KNKP5ZONEW"); // license
         disableWarning();
 

@@ -18,7 +18,6 @@ import be.vsol.vsol6.session.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.Vector;
 import java.util.function.Supplier;
 

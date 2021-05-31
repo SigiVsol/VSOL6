@@ -49,9 +49,9 @@ public abstract class API implements RequestHandler {
         else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return deletePatient(request);
         else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/patients")) return postPatientsAction(request);
         // STUDIES
-        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/studies")) return getStudies(request);
-        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/studies")) return getStudiesOfPatient(request);
-        else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/studies/" + uid)) return deleteStudy(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return getStudies(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/(studies|entries)")) return getStudiesOfPatient(request);
+        else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/(studies|entries)/" + uid)) return deleteStudy(request);
         else if (method == Method.POST && path.matches("")) return postStudyAction(request);
 
         else return HttpResponse.get404();
