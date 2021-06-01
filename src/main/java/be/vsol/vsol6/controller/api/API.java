@@ -1,19 +1,23 @@
 package be.vsol.vsol6.controller.api;
 
 import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
 import be.vsol.vsol6.model.organization.Study;
+import javafx.application.Application;
 
 import java.util.Vector;
 
 public abstract class API {
 
+    protected Application application;
+
     // Constructors
 
-    public API() {
-
+    public API(Application application) {
+        this.application = application;
     }
 
     // Login
@@ -22,9 +26,15 @@ public abstract class API {
 
     public abstract UserOrg restoreUserOrg(String userId, String organizationId);
 
+    // Users
+
+    public abstract User getUser(String userId);
+
     // Organizations
 
     public abstract Vector<Organization> getOrganizations(String username, String filter);
+
+    public abstract Organization getOrganization(String organizationId);
 
     // Clients
 

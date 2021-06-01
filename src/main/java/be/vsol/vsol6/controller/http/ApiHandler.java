@@ -38,22 +38,22 @@ public class ApiHandler implements RequestHandler {
         // LOGIN
         if (method == HttpRequest.Method.POST && path.matches("/api/authenticate")) return postAuthentication(request);
         else if (method == HttpRequest.Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
-            // ORGANIZATIONS
+        // ORGANIZATIONS
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
-            // CLIENTS
+        // CLIENTS
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
         else if (method == HttpRequest.Method.PUT && path.matches("/api/organizations/" + uid + "/clients")) return putClient(request);
         else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return deleteClient(request);
         else if (method == HttpRequest.Method.POST && path.matches("/api/organizations/" + uid + "/clients")) return postClientsAction(request);
-            // PATIENTS
+        // PATIENTS
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients")) return getPatients(request);
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid + "/patients")) return getPatientsOfClient(request);
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return getPatient(request);
         else if (method == HttpRequest.Method.PUT && path.matches("/api/organizations/" + uid + "/patients")) return putPatient(request);
         else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return deletePatient(request);
         else if (method == HttpRequest.Method.POST && path.matches("/api/organizations/" + uid + "/patients")) return postPatientsAction(request);
-            // STUDIES
+        // STUDIES
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return getStudies(request);
         else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/(studies|entries)")) return getStudiesOfPatient(request);
         else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/(studies|entries)/" + uid)) return deleteStudy(request);

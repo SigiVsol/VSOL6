@@ -21,16 +21,20 @@ import org.json.JSONObject;
 import java.util.Vector;
 import java.util.function.Supplier;
 
-public class Vsol4Service implements Service {
+public class Vsol4Service {
 
     private final Session session;
     private String token = null;
+
+    public Vsol4Service() {
+        session = null;
+    }
 
     public Vsol4Service(Session session) {
         this.session = session;
     }
 
-    @Override public void start() {
+    public void start() {
         Config.vsol4 vsol4 = session.getConfig().vsol4;
 
         token = authenticate(vsol4.username, vsol4.password);
@@ -39,7 +43,7 @@ public class Vsol4Service implements Service {
         new Job(Minute.ms(vsol4.lifespan), Minute.ms(vsol4.lifespan), () -> token = authenticate(vsol4.username, vsol4.password));
     }
 
-    @Override public void stop() {
+    public void stop() {
         token = null;
     }
 
@@ -110,6 +114,8 @@ public class Vsol4Service implements Service {
     }
 
     public <E extends Vsol4Record> E getById(String organizationId, String id, Supplier<E> supplier) {
+        if (id == null) return null;
+
         E result = supplier.get();
 
         if (result instanceof Vsol4User) {

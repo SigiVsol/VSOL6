@@ -17,7 +17,7 @@ public class App extends FxController<StackPane> {
     @FXML private BorderPane borderPane;
 
     @Override public void init() {
-        lblVersion.setText(gui.getSig().getVersion());
+//        lblVersion.setText(gui.getSig().getVersion());
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
     }
 

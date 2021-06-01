@@ -23,7 +23,7 @@ public class TestVsol4 {
         Vsol4Service vsol4 = new Vsol4Service(session);
         vsol4.start();
 
-        String username = "sigi";
+        String username = "firstuser";
 //        Vsol4User user = vsol4.getUser("sigi");
         Vsol4Organization organization = vsol4.getDefaultOrganization(username);
 

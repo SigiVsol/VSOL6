@@ -1,15 +1,17 @@
 package be.vsol.vsol6.services;
 
 import be.vsol.fx.FxController;
+import be.vsol.tools.LocalStorage;
 import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
 import be.vsol.util.*;
-import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.controller.fx.App;
 import be.vsol.vsol6.controller.fx.Splash;
 import be.vsol.vsol6.controller.fx.app.Explorer;
 import be.vsol.vsol6.controller.fx.app.Login;
 import be.vsol.vsol6.controller.fx.app.Settings;
+import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 import be.vsol.vsol6.session.Session;
@@ -22,12 +24,13 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-public class GuiService implements Service {
+public class GuiService {
 
     private final Stage splashStage, primaryStage;
-    private final Sig sig;
     private final File home;
+    private final LocalStorage localStorage;
 
     private final Splash splash;
 
@@ -40,9 +43,9 @@ public class GuiService implements Service {
 
     // Constructor
 
-    public GuiService(Sig sig, File home, Stage primaryStage) {
-        this.sig = sig;
+    public GuiService(File home, Stage primaryStage, Map<String, String> variables, LocalStorage localStorage) {
         this.home = home;
+        this.localStorage = localStorage;
         this.primaryStage = primaryStage;
         this.splashStage = new Stage(StageStyle.UNDECORATED);
 
@@ -51,15 +54,6 @@ public class GuiService implements Service {
 
     // Methods
 
-    @Override public void start() {
-        app = loadFxml("app");
-        login = loadFxml("app/login");
-        settings = loadFxml("app/settings");
-        explorer = new Explorer(this);
-    }
-
-    @Override public void stop() { }
-
     public void showSplash() {
         setTitleAndLogo(splashStage);
 
@@ -67,8 +61,21 @@ public class GuiService implements Service {
         splashStage.show();
     }
 
-    public void showApp(Session systemSession, Session localSession) {
-        this.localSession = localSession;
+    public void start() {
+        app = loadFxml("app");
+        login = loadFxml("app/login");
+        settings = loadFxml("app/settings");
+        explorer = new Explorer(this);
+    }
+
+//    @Override public void stop() { }
+
+
+
+    public void showApp(Session systemSession) {
+//        Organization organization = api.getOrganization(localStorage.get("organization.id", null));
+//        User user = api.getUser(localStorage.get("user.id", null));
+//        new Session(jsonDefaults, getParameters().getNamed(), databaseService, system, organization, user);
 
         Platform.runLater(() -> {
             setTitleAndLogo(primaryStage);
@@ -119,7 +126,7 @@ public class GuiService implements Service {
     }
 
     private void setTitleAndLogo(Stage stage) {
-        stage.setTitle(sig.getAppTitle());
+//        stage.setTitle(sig.getAppTitle());
         stage.getIcons().add(Icon.getImage(true, "logo", 64));
     }
 
@@ -152,8 +159,8 @@ public class GuiService implements Service {
 
     public Settings getSettings() { return settings; }
 
-    public Sig getSig() { return sig; }
-
     public File getHome() { return home; }
+
+    public Session getLocalSession() { return localSession; }
 
 }

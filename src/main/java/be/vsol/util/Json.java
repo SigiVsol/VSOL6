@@ -40,6 +40,7 @@ public class Json {
                         case "float" -> result.put(name, field.getFloat(object));
 
                         case "Boolean", "Integer", "Long", "Float", "Double", "String" -> result.put(name, field.get(object));
+                        case "JSONObject" -> result.put(name, new JSONObject(field.get(object)));
 
                         case "LocalDate" -> result.put(name, Date.format(((LocalDate) field.get(object))));
                         case "LocalTime" -> result.put(name, Date.format(((LocalTime) field.get(object))));
@@ -123,6 +124,7 @@ public class Json {
                             case "float" -> field.set(object, jsonObject.getFloat(name));
 
                             case "Boolean", "Integer", "Long", "Float", "Double", "String" -> field.set(object, jsonObject.get(name));
+                            case "JSONObject" -> field.set(object, jsonObject.getJSONObject(name));
 
                             case "LocalDate" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalDate) null));
                             case "LocalTime" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalTime) null));

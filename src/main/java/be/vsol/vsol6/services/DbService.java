@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseService implements Service {
+public class DbService {
 
     private final SystemDb systemDb;
     private final UserDb userDb;
@@ -28,8 +28,8 @@ public class DatabaseService implements Service {
 
     // Constructor
 
-    public DatabaseService(File home, Session session) {
-        Config.db db = session.getConfig().db;
+    public DbService(File home, Config.db db) {
+//        Config.db db = session.getConfig().db;
 
         DbDriver driver = switch (db.type) {
             case "sqlite" -> new SQLite(new File(home, "data/databases"));
@@ -44,9 +44,6 @@ public class DatabaseService implements Service {
 
     // Methods
 
-    @Override public void start() { }
-
-    @Override public void stop() {  }
 
     // Getters
 

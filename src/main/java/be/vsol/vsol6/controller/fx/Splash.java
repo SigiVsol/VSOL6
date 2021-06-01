@@ -8,12 +8,10 @@ import javafx.scene.layout.VBox;
 
 public class Splash extends FxController<VBox> {
 
-//    @FXML private Label lblLoading;
     @FXML private ImageView imgLogo;
 
     @Override public void init() {
         imgLogo.setImage(Icon.getImage(true, "logo", 128));
-//        lblLoading.setText(Lang.get("Loading."));
     }
 
     @FXML private void cancel() {

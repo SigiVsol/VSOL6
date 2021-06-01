@@ -40,7 +40,7 @@ public class Explorer extends FxController<BrowserView> {
         disableWarning();
 
         Engine engine = Engine.newInstance(EngineOptions.newBuilder(RenderingMode.HARDWARE_ACCELERATED)
-                .userAgent(gui.getSig().toString())
+//                .userAgent(gui.getSig().toString())
                 .userDataDir(Path.of(new File(gui.getHome(), "app/browser").toURI()))
                 .enableProprietaryFeature(ProprietaryFeature.AAC) // this is a licensed feature
                 .enableProprietaryFeature(ProprietaryFeature.H_264) // this is a licensed feature

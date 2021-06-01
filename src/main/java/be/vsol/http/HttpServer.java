@@ -14,12 +14,14 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
 
-public class HttpServer implements Runnable, Service {
+public class HttpServer implements Service {
 
     private final String name;
-    private int port;
+    private final int port;
     private final RequestHandler requestHandler;
     private final Semaphore semaphore = new Semaphore(16);
+
+    private ServerSocket serverSocket;
 
     public HttpServer(String name, int port, RequestHandler requestHandler) {
         this.name = name;
@@ -28,14 +30,23 @@ public class HttpServer implements Runnable, Service {
     }
 
     @Override public void start() {
+        stop();
         new Thread(this).start();
     }
 
-    @Override public void stop() { }
+    @Override public void stop() {
+        if (serverSocket != null && !serverSocket.isClosed()) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                Log.trace(e);
+            }
+        }
+    }
 
     @Override public void run() {
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
             Log.out("Server " + name + " started. Listening on port " + port + ".");
             while (!serverSocket.isClosed()) {
                 try {
@@ -62,7 +73,9 @@ public class HttpServer implements Runnable, Service {
                         });
                     } Sema.release(semaphore);
                 } catch (SocketException e) {
-                    Log.trace(e);
+                    if (!serverSocket.isClosed()) { // stop() closes the socket, so this is allowed
+                        Log.trace(e);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -76,8 +89,8 @@ public class HttpServer implements Runnable, Service {
 
     public String getName() { return name; }
 
-    // Setters
-
-    public void setPort(int port) { this.port = port; }
+    public boolean isRunning() {
+        return serverSocket != null && !serverSocket.isClosed();
+    }
 
 }

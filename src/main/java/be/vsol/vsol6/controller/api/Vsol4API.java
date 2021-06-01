@@ -1,7 +1,5 @@
 package be.vsol.vsol6.controller.api;
 
-import be.vsol.http.HttpResponse;
-import be.vsol.util.Json;
 import be.vsol.vsol4.*;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
@@ -21,7 +19,7 @@ public class Vsol4API extends API {
     // Constructors
 
     public Vsol4API(Vsol4Service vsol4Service) {
-        super();
+        super(null);
         this.vsol4 = vsol4Service;
     }
 
@@ -49,6 +47,13 @@ public class Vsol4API extends API {
         }
     }
 
+    // Users
+
+    @Override public User getUser(String userId) {
+        Vsol4User vsol4User = vsol4.getById(null, userId, Vsol4User::new);
+        return vsol4User == null ? null : new User(vsol4User);
+    }
+
     // Organizations
 
     @Override public Vector<Organization> getOrganizations(String username, String filter) {
@@ -58,6 +63,11 @@ public class Vsol4API extends API {
             organizations.add(new Organization(vsol4Organization));
         }
         return organizations;
+    }
+
+    @Override public Organization getOrganization(String organizationId) {
+        Vsol4Organization vsol4Organization = vsol4.getById(null, organizationId, Vsol4Organization::new);
+        return vsol4Organization == null ? null : new Organization(vsol4Organization);
     }
 
     // Clients
@@ -76,7 +86,7 @@ public class Vsol4API extends API {
 
     @Override public Client getClient(String organizationId, String clientId) {
         Vsol4Client vsol4Client = vsol4.getById(organizationId, clientId, Vsol4Client::new);
-        return new Client(vsol4Client);
+        return vsol4Client == null ? null : new Client(vsol4Client);
     }
 
     @Override public boolean saveClient(String organizationId, Client client) {
@@ -119,7 +129,7 @@ public class Vsol4API extends API {
 
     @Override public Patient getPatient(String organizationId, String patientId) {
         Vsol4Patient vsol4Patient = vsol4.getById(organizationId, patientId, Vsol4Patient::new);
-        return new Patient(vsol4Patient);
+        return vsol4Patient == null ? null : new Patient(vsol4Patient);
     }
 
     @Override public boolean savePatient(String organizationId, Patient patient) {
@@ -162,7 +172,7 @@ public class Vsol4API extends API {
 
     @Override public Study getStudy(String organizationId, String studyId) {
         Vsol4Study vsol4Study = vsol4.getById(organizationId, studyId, Vsol4Study::new);
-        return new Study(vsol4Study);
+        return vsol4Study == null ? null : new Study(vsol4Study);
     }
 
     @Override public boolean saveStudy(String organizationId, Study study) {

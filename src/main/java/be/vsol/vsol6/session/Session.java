@@ -1,14 +1,13 @@
 package be.vsol.vsol6.session;
 
 import be.vsol.database.structures.DbTable;
-import be.vsol.tools.LocalStorage;
 import be.vsol.util.*;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
-import be.vsol.vsol6.services.DatabaseService;
+import be.vsol.vsol6.services.DbService;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -18,7 +17,7 @@ import java.util.Vector;
 
 public class Session {
 
-    private final DatabaseService db;
+    private final DbService db;
 
     private final LocalSystem system;
     private final Organization organization;
@@ -26,8 +25,16 @@ public class Session {
 
     private final Config config;
 
-    public Session(JSONObject jsonDefaults, Map<String, String> params, DatabaseService databaseService, LocalSystem system, Organization organization, User user) {
-        this.db = databaseService;
+    public Session(JSONObject jsonDefaults, Map<String, String> params) {
+        this(jsonDefaults, params, null, null, null, null);
+    }
+
+    public Session(JSONObject jsonDefaults, Map<String, String> params, DbService dbService, LocalSystem system) {
+        this(jsonDefaults, params, dbService, system, null, null);
+    }
+
+    public Session(JSONObject jsonDefaults, Map<String, String> params, DbService dbService, LocalSystem system, Organization organization, User user) {
+        this.db = dbService;
         this.system = system;
         this.organization = organization;
         this.user = user;
