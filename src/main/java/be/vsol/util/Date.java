@@ -51,7 +51,7 @@ public class Date {
     }
 
     public static String format(LocalDateTime localDateTime) {
-        return localDateTime.truncatedTo(ChronoUnit.SECONDS).toString();
+        return localDateTime == null ? null : localDateTime.truncatedTo(ChronoUnit.SECONDS).toString();
     }
 
     public static String format(Instant instant) {

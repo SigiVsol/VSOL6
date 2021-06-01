@@ -6,7 +6,8 @@ import be.vsol.tools.Service;
 import be.vsol.tools.Sig;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
-import be.vsol.vsol6.controller.api.AbstractAPI;
+import be.vsol.vsol6.controller.api.API;
+import be.vsol.vsol6.controller.api.Vsol4API;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
@@ -30,7 +31,7 @@ public class Vsol6 extends Application {
     private static DatabaseService databaseService;
     private static GuiService guiService;
     private static Vsol4Service vsol4Service;
-    private static AbstractAPI abstractApi;
+    private static API api;
 
     // Static Method
 
@@ -64,15 +65,20 @@ public class Vsol6 extends Application {
 
         new Job(() -> {
             services.add(databaseService = new DatabaseService(home, programSession));
+
             Session systemSession = new Session(jsonDefaults, getParameters().getNamed(), databaseService, system, null, null);
 
-            services.add(vsol4Service = new Vsol4Service(systemSession));
+            switch (systemSession.getConfig().app.backend) {
+                case vsol4 -> {
+                    services.add(vsol4Service = new Vsol4Service(systemSession));
+                    api = new Vsol4API(vsol4Service);
+                }
+            }
+
             services.add(new OrthancService());
             services.add(new ConsoleService());
 
-
-
-            services.add(new ServerService(systemSession, vsol4Service, variables));
+            services.add(new ServerService(systemSession, variables, api));
 
             for (Service service : services) {
                 service.start();

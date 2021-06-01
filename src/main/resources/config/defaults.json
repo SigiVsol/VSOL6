@@ -1,5 +1,6 @@
 {
 	"app":{
+		"backend": "vsol4"
 	},
 	"gui":{
 		"width": 1000,
@@ -13,7 +14,8 @@
 	},
 	"server":{
 		"name": "VSOL6 Server",
-		"port": 8100
+		"port": 8100,
+		"rowLimit": 20
 	},
 	"db":{
 		"type": "sqlite",
@@ -28,8 +30,7 @@
 		"username": "firstuser",
 		"password": "password",
 		"timeout": 2500,
-		"lifespan": 60,
-		"limit": 20
+		"lifespan": 60		
 	},
 	"orthanc":{
 		"host":"localhost",

@@ -2,6 +2,8 @@ package be.vsol.vsol4;
 
 import be.vsol.tools.json;
 
+import java.time.LocalDateTime;
+
 public class Vsol4Study extends Vsol4Entry {
 
     @json private String type, orthancUuid, status, modalityType, laptopSerial, origin;
@@ -11,6 +13,11 @@ public class Vsol4Study extends Vsol4Entry {
 
     public Vsol4Study() {
         super("studies");
+    }
+
+    public Vsol4Study(String id, String description, LocalDateTime date, Vsol4Patient patient, int seriesCount) {
+        super("studies", id, description, date, patient);
+        this.seriesCount = seriesCount;
     }
 
     // Methods

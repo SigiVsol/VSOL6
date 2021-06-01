@@ -173,14 +173,9 @@ class ExplorerTable {
                 if (tr.hasClass("selected")) ids.push(tr.data("record").id);
             });
 
-            let data = {
-                action: "delete",
-                ids: ids
-            };
-
             $.post({
-                url: "api/organizations/" + app.organization.id + "/" + this.type,
-                data: JSON.stringify(data),
+                url: "api/organizations/" + app.organization.id + "/" + this.type + "?action=delete",
+                data: JSON.stringify(ids),
                 contentType: "application/json",
                 success: () => app.show()
             });

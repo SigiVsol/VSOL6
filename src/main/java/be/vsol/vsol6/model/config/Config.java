@@ -4,11 +4,17 @@ import be.vsol.tools.json;
 
 public class Config {
 
+    @json public app app = new app();
     @json public gui gui = new gui();
     @json public server server = new server();
     @json public vsol4 vsol4 = new vsol4();
     @json public orthanc orthanc = new orthanc();
     @json public db db = new db();
+
+    public static class app {
+        public enum Backend { vsol4, bridge, vsol6 }
+        @json public Backend backend;
+    }
 
     public static class gui {
         @json public int width, height, x, y;
@@ -17,12 +23,12 @@ public class Config {
 
     public static class server {
         @json public String name;
-        @json public int port;
+        @json public int port, rowLimit;
     }
 
     public static class vsol4 {
         @json public String host, username, password;
-        @json public int port, timeout, lifespan, limit;
+        @json public int port, timeout, lifespan;
     }
 
     public static class orthanc {

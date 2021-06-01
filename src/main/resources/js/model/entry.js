@@ -18,6 +18,6 @@ class Entry extends VsolRecord {
     }
 
     getDateTime() {
-        return this.dateTime.replace("T", " ");
+        return this.dateTime == null ? "" : this.dateTime.replace("T", " ");
     }
 }

@@ -32,6 +32,10 @@ public class Study extends Record {
 
     // Methods
 
+    public Vsol4Study getVsol4Study() {
+        return new Vsol4Study(id, description, dateTime, patient == null ? null : patient.getVsol4Patient(), seriesCount);
+    }
+
     public String getClientString() {
         return patient.getClient().toString();
     }

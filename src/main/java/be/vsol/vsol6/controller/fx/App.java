@@ -30,7 +30,7 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML public void home() {
-//        explorer.loadUrl("http://localhost:8100");
+        gui.getExplorer().loadUrl("http://localhost:8100");
         show(gui.getExplorer());
     }
 
