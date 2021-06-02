@@ -1,9 +1,8 @@
-package be.vsol.vsol4;
+package be.vsol.vsol4.model;
 
 import be.vsol.tools.json;
 import be.vsol.util.Date;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public abstract class Vsol4Entry extends Vsol4Record {

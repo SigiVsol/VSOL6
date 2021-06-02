@@ -1,4 +1,4 @@
-package be.vsol.vsol4;
+package be.vsol.vsol4.model;
 
 public class Vsol4Report extends Vsol4Entry {
 

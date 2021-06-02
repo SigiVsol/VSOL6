@@ -2,7 +2,7 @@ package be.vsol.vsol6.model.organization;
 
 import be.vsol.database.annotations.db;
 import be.vsol.tools.json;
-import be.vsol.vsol4.Vsol4Study;
+import be.vsol.vsol4.model.Vsol4Study;
 import be.vsol.vsol6.model.Record;
 
 import java.time.LocalDateTime;

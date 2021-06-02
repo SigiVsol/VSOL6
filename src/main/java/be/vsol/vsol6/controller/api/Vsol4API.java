@@ -1,6 +1,6 @@
 package be.vsol.vsol6.controller.api;
 
-import be.vsol.vsol4.*;
+import be.vsol.vsol4.model.*;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;

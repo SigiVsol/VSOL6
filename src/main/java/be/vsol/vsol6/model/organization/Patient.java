@@ -2,8 +2,8 @@ package be.vsol.vsol6.model.organization;
 
 import be.vsol.database.annotations.db;
 import be.vsol.tools.json;
-import be.vsol.vsol4.Vsol4Patient;
-import be.vsol.vsol4.Vsol4Sex;
+import be.vsol.vsol4.model.Vsol4Patient;
+import be.vsol.vsol4.model.Vsol4Sex;
 import be.vsol.vsol6.model.Record;
 import be.vsol.vsol6.model.enums.Sex;
 

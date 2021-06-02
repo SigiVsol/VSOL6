@@ -1,8 +1,8 @@
 package be.vsol.jurien;
 
 import be.vsol.util.Resource;
-import be.vsol.vsol4.Vsol4Configuration;
-import be.vsol.vsol4.Vsol4Organization;
+import be.vsol.vsol4.model.Vsol4Configuration;
+import be.vsol.vsol4.model.Vsol4Organization;
 import be.vsol.vsol6.services.Vsol4Service;
 import be.vsol.vsol6.session.Session;
 import org.json.JSONObject;

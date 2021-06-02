@@ -12,7 +12,7 @@
    <children>
       <ImageView fx:id="imgLogo" fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@/icons/colored/logo.png" />
+            <Image url="@/icons/colored/splash.png" />
          </image>
       </ImageView>
       <ProgressBar prefWidth="200.0" />

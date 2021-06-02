@@ -1,19 +1,13 @@
 package be.vsol.test.sigi;
 
 import be.vsol.util.Resource;
-import be.vsol.vsol4.*;
-import be.vsol.vsol6.model.organization.Client;
+import be.vsol.vsol4.model.Vsol4Configuration;
+import be.vsol.vsol4.model.Vsol4Organization;
 import be.vsol.vsol6.services.Vsol4Service;
 import be.vsol.vsol6.session.Session;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Vector;
 
 public class TestVsol4 {
     public static void main(String[] args) {

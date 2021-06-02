@@ -1,4 +1,4 @@
-package be.vsol.vsol4;
+package be.vsol.vsol4.model;
 
 public enum Vsol4Sex {
     M, F, U, O;

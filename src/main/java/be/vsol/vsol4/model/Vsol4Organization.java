@@ -1,4 +1,4 @@
-package be.vsol.vsol4;
+package be.vsol.vsol4.model;
 
 import be.vsol.tools.json;
 

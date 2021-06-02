@@ -7,12 +7,14 @@ import be.vsol.tools.Sig;
 import be.vsol.util.Icon;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
+import be.vsol.util.Thr;
 import be.vsol.vsol6.controller.api.API;
 import be.vsol.vsol6.controller.api.Vsol4API;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.services.*;
 import be.vsol.vsol6.session.Session;
+import be.vsol.vsol6.view.Gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -26,7 +28,7 @@ import java.util.Vector;
 
 public class Vsol6 extends Application {
 
-    private static final Sig sig = new Sig("VSOL6", 0, 0, 6, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
+    private final Sig sig = new Sig("VSOL6", 0, 0, 6, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
 //    private final File home;
 
@@ -53,33 +55,60 @@ public class Vsol6 extends Application {
             File home = new File(getParameters().getNamed().getOrDefault("home", sig.getFolder()));
             Log.init(new File(home, "logs"), sig.getAppTitle(), getParameters().getUnnamed().contains("debug"));
             Log.out("Starting " + sig + ".");
-            Log.debug("Debug mode is on.");
 
             LocalStorage localStorage = new LocalStorage(new File(home, "data/localStorage"));
-            Map<String, String> variables = getVariables();
             Map<String, String> params = getParameters().getNamed();
             JSONObject jsonDefaults = new JSONObject(Resource.getString("config/defaults.json"));
 
-            Config programConfig = new Session(jsonDefaults, params).getConfig();
+            Config appConfig = new Session(jsonDefaults, params).getConfig();
 
-            GuiService guiService = new GuiService(home, primaryStage, variables, localStorage);
-            DbService dbService = new DbService(home, programConfig.db);
-            Vsol4Service vsol4Service = new Vsol4Service();
-//            OrthancService orthancService = new OrthancService();
-//            ServerService serverService = new ServerService();
-//            ConsoleService consoleService = new ConsoleService(this);
-
-            if (programConfig.gui.visible) {
-                guiService.showSplash();
-            }
+            new Console(this).start();
+            if (appConfig.gui.visible) Gui.showSplashScreen(sig);
 
             new Job(() -> {
-//                dbService.start();
-
-
-
 
             });
+
+
+
+//
+
+
+
+//            Gui gui = new Gui(primaryStage);
+//            Console console = new Console(this);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//            GuiService guiService = new GuiService(home, primaryStage, variables, localStorage);
+//            DbService dbService = new DbService(home, programConfig.db);
+//            Vsol4Service vsol4Service = new Vsol4Service();
+////            OrthancService orthancService = new OrthancService();
+////            ServerService serverService = new ServerService();
+////            ConsoleService consoleService = new ConsoleService(this);
+//
+//            if (programConfig.gui.visible) {
+//                guiService.showSplash();
+//            }
+//
+//            new Job(() -> {
+////                dbService.start();
+//
+//
+//
+//
+//            });
 
 
 //            DbService dbService = new DbService(home, programConfig.db);
@@ -160,15 +189,8 @@ public class Vsol6 extends Application {
         }
     }
 
-    private Map<String, String> getVariables() {
-        HashMap<String, String> result = new HashMap<>();
-        result.put("app.name", sig.getAppTitle());
-        result.put("app.version", sig.getVersion());
-        return result;
-    }
-
     // Getters
 
-
+    public Sig getSig() { return sig; }
 
 }
