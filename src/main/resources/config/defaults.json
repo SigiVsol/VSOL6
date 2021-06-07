@@ -1,23 +1,32 @@
 {
 	"app":{
+		"home": "C:/VSOL6",
+		"debug": false,
 		"backend": "vsol4"
 	},
+	"console":{
+		"active": true
+	},
 	"gui":{
+		"active": true,
 		"width": 1000,
 		"height": 800,
 		"x": 10,
 		"y": 10,
 		"maximized": false,
 		"undecorated": false,
-		"visible": true,
-		"leftHanded": false
+		"leftHanded": false,
+		"userId": null,
+		"organizationId": null
 	},
 	"server":{
+		"active": true,
 		"name": "VSOL6 Server",
 		"port": 8100,
 		"rowLimit": 20
 	},
 	"db":{
+		"active": true,
 		"type": "sqlite",
 		"host": "localhost",
 		"port": 3306,
@@ -25,6 +34,7 @@
 		"password": ""
 	},
 	"vsol4":{
+		"active": true,
 		"host": "localhost",
 		"port": 8080,
 		"username": "firstuser",
@@ -33,6 +43,7 @@
 		"lifespan": 60		
 	},
 	"orthanc":{
+		"active": true,
 		"host":"localhost",
 		"port":8800
 	}

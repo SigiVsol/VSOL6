@@ -1,4 +1,4 @@
-package be.vsol.database.annotations;
+package be.vsol.database;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

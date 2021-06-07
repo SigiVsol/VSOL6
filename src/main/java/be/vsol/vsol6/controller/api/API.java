@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.api;
 
+import be.vsol.vsol6.Ctrl;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
@@ -12,12 +13,12 @@ import java.util.Vector;
 
 public abstract class API {
 
-    protected Application application;
+    protected final Ctrl ctrl;
 
     // Constructors
 
-    public API(Application application) {
-        this.application = application;
+    public API(Ctrl ctrl) {
+        this.ctrl = ctrl;
     }
 
     // Login

@@ -1,7 +1,7 @@
 package be.vsol.vsol6.model.config;
 
-import be.vsol.database.annotations.db;
-import be.vsol.database.structures.DbRecord;
+import be.vsol.database.db;
+import be.vsol.database.model.DbRecord;
 import be.vsol.util.Bool;
 import be.vsol.util.Dbl;
 import be.vsol.util.Int;

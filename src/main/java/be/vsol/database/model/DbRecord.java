@@ -1,6 +1,6 @@
-package be.vsol.database.structures;
+package be.vsol.database.model;
 
-import be.vsol.database.annotations.db;
+import be.vsol.database.db;
 import be.vsol.tools.json;
 
 import java.time.Instant;

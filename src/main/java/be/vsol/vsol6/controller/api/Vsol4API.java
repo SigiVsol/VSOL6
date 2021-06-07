@@ -1,44 +1,42 @@
 package be.vsol.vsol6.controller.api;
 
 import be.vsol.vsol4.model.*;
+import be.vsol.vsol6.Ctrl;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
 import be.vsol.vsol6.model.organization.Study;
-import be.vsol.vsol6.services.Vsol4Service;
+import be.vsol.vsol4.Vsol4;
 
 import java.util.Vector;
 import java.util.function.Supplier;
 
 public class Vsol4API extends API {
 
-    private final Vsol4Service vsol4;
-
     // Constructors
 
-    public Vsol4API(Vsol4Service vsol4Service) {
-        super(null);
-        this.vsol4 = vsol4Service;
+    public Vsol4API(Ctrl ctrl) {
+        super(ctrl);
     }
 
     // Login
 
     @Override public UserOrg getUserOrg(String username, String password) {
-        if (vsol4.authenticate(username, password) == null) {
+        if (ctrl.getVsol4().authenticate(username, password) == null) {
             return null;
         } else {
-            Vsol4User vsol4User = vsol4.getUser(username);
-            Vsol4Organization vsol4Organization = vsol4.getDefaultOrganization(username);
+            Vsol4User vsol4User = ctrl.getVsol4().getUser(username);
+            Vsol4Organization vsol4Organization = ctrl.getVsol4().getDefaultOrganization(username);
 
             return new UserOrg(new User(vsol4User), new Organization(vsol4Organization));
         }
     }
 
     @Override public UserOrg restoreUserOrg(String userId, String organizationId) {
-        Vsol4User vsol4User = vsol4.getById(null, userId, Vsol4User::new);
-        Vsol4Organization vsol4Organization = vsol4.getById(null, organizationId, Vsol4Organization::new);
+        Vsol4User vsol4User = ctrl.getVsol4().getById(null, userId, Vsol4User::new);
+        Vsol4Organization vsol4Organization = ctrl.getVsol4().getById(null, organizationId, Vsol4Organization::new);
 
         if (vsol4User == null || vsol4Organization == null) {
             return null;
@@ -50,14 +48,14 @@ public class Vsol4API extends API {
     // Users
 
     @Override public User getUser(String userId) {
-        Vsol4User vsol4User = vsol4.getById(null, userId, Vsol4User::new);
+        Vsol4User vsol4User = ctrl.getVsol4().getById(null, userId, Vsol4User::new);
         return vsol4User == null ? null : new User(vsol4User);
     }
 
     // Organizations
 
     @Override public Vector<Organization> getOrganizations(String username, String filter) {
-        Vector<Vsol4Organization> vsol4Organizations = vsol4.getOrganizations(username, filter);
+        Vector<Vsol4Organization> vsol4Organizations = ctrl.getVsol4().getOrganizations(username, filter);
         Vector<Organization> organizations = new Vector<>();
         for (Vsol4Organization vsol4Organization : vsol4Organizations) {
             organizations.add(new Organization(vsol4Organization));
@@ -66,14 +64,14 @@ public class Vsol4API extends API {
     }
 
     @Override public Organization getOrganization(String organizationId) {
-        Vsol4Organization vsol4Organization = vsol4.getById(null, organizationId, Vsol4Organization::new);
+        Vsol4Organization vsol4Organization = ctrl.getVsol4().getById(null, organizationId, Vsol4Organization::new);
         return vsol4Organization == null ? null : new Organization(vsol4Organization);
     }
 
     // Clients
 
     @Override public Vector<Client> getClients(String organizationId, String filter, String sortField, boolean sortAsc) {
-        Vector<Vsol4Client> vsol4Clients = vsol4.getAll(organizationId, filter, Vsol4Client::new);
+        Vector<Vsol4Client> vsol4Clients = ctrl.getVsol4().getAll(organizationId, filter, Vsol4Client::new);
 
         Vector<Client> clients = new Vector<>();
         for (Vsol4Client vsol4Client : vsol4Clients) {
@@ -85,14 +83,14 @@ public class Vsol4API extends API {
     }
 
     @Override public Client getClient(String organizationId, String clientId) {
-        Vsol4Client vsol4Client = vsol4.getById(organizationId, clientId, Vsol4Client::new);
+        Vsol4Client vsol4Client = ctrl.getVsol4().getById(organizationId, clientId, Vsol4Client::new);
         return vsol4Client == null ? null : new Client(vsol4Client);
     }
 
     @Override public boolean saveClient(String organizationId, Client client) {
         Vsol4Client vsol4Client = client.getVsol4Client();
 
-        boolean success = vsol4.save(organizationId, vsol4Client);
+        boolean success = ctrl.getVsol4().save(organizationId, vsol4Client);
         if (success) {
             client.setId(vsol4Client.getId());
         }
@@ -101,7 +99,7 @@ public class Vsol4API extends API {
     }
 
     @Override public boolean deleteClient(String organizationId, String clientId) {
-        return vsol4.delete(organizationId, clientId, Vsol4Client::new);
+        return ctrl.getVsol4().delete(organizationId, clientId, Vsol4Client::new);
     }
 
     @Override public int deleteClients(String organizationId, Vector<String> clientIds) {
@@ -113,9 +111,9 @@ public class Vsol4API extends API {
     @Override public Vector<Patient> getPatients(String organizationId, String clientId, String filter, String sortField, boolean sortAsc) {
         Vector<Vsol4Patient> vsol4Patients;
         if (clientId == null) {
-            vsol4Patients = vsol4.getAll(organizationId, filter, Vsol4Patient::new);
+            vsol4Patients = ctrl.getVsol4().getAll(organizationId, filter, Vsol4Patient::new);
         } else {
-            vsol4Patients = vsol4.getAll(organizationId, "clients/" + clientId + "/patients", filter, Vsol4Patient::new);
+            vsol4Patients = ctrl.getVsol4().getAll(organizationId, "clients/" + clientId + "/patients", filter, Vsol4Patient::new);
         }
 
         Vector<Patient> patients = new Vector<>();
@@ -128,14 +126,14 @@ public class Vsol4API extends API {
     }
 
     @Override public Patient getPatient(String organizationId, String patientId) {
-        Vsol4Patient vsol4Patient = vsol4.getById(organizationId, patientId, Vsol4Patient::new);
+        Vsol4Patient vsol4Patient = ctrl.getVsol4().getById(organizationId, patientId, Vsol4Patient::new);
         return vsol4Patient == null ? null : new Patient(vsol4Patient);
     }
 
     @Override public boolean savePatient(String organizationId, Patient patient) {
         Vsol4Patient vsol4Patient = patient.getVsol4Patient();
 
-        boolean success = vsol4.save(organizationId, vsol4Patient);
+        boolean success = ctrl.getVsol4().save(organizationId, vsol4Patient);
         if (success) {
             patient.setId(vsol4Patient.getId());
         }
@@ -144,7 +142,7 @@ public class Vsol4API extends API {
     }
 
     @Override public boolean deletePatient(String organizationId, String patientId) {
-        return vsol4.delete(organizationId, patientId, Vsol4Patient::new);
+        return ctrl.getVsol4().delete(organizationId, patientId, Vsol4Patient::new);
     }
 
     @Override public int deletePatients(String organizationId, Vector<String> patientIds) {
@@ -156,9 +154,9 @@ public class Vsol4API extends API {
     @Override public Vector<Study> getStudies(String organizationId, String patientId, String filter, String sortField, boolean sortAsc) {
         Vector<Vsol4Study> vsol4Studies;
         if (patientId == null) {
-            vsol4Studies = vsol4.getAll(organizationId, filter, Vsol4Study::new);
+            vsol4Studies = ctrl.getVsol4().getAll(organizationId, filter, Vsol4Study::new);
         } else {
-            vsol4Studies = vsol4.getAll(organizationId, "patients/" + patientId + "/studies", filter, Vsol4Study::new);
+            vsol4Studies = ctrl.getVsol4().getAll(organizationId, "patients/" + patientId + "/studies", filter, Vsol4Study::new);
         }
 
         Vector<Study> studies = new Vector<>();
@@ -171,14 +169,14 @@ public class Vsol4API extends API {
     }
 
     @Override public Study getStudy(String organizationId, String studyId) {
-        Vsol4Study vsol4Study = vsol4.getById(organizationId, studyId, Vsol4Study::new);
+        Vsol4Study vsol4Study = ctrl.getVsol4().getById(organizationId, studyId, Vsol4Study::new);
         return vsol4Study == null ? null : new Study(vsol4Study);
     }
 
     @Override public boolean saveStudy(String organizationId, Study study) {
         Vsol4Study vsol4Study = study.getVsol4Study();
 
-        boolean success = vsol4.save(organizationId, vsol4Study);
+        boolean success = ctrl.getVsol4().save(organizationId, vsol4Study);
         if (success) {
             study.setId(vsol4Study.getId());
         }
@@ -187,7 +185,7 @@ public class Vsol4API extends API {
     }
 
     @Override public boolean deleteStudy(String organizationId, String studyId) {
-        return vsol4.delete(organizationId, studyId, Vsol4Study::new);
+        return ctrl.getVsol4().delete(organizationId, studyId, Vsol4Study::new);
     }
 
     @Override public int deleteStudies(String organizationId, Vector<String> studyIds) {
@@ -199,7 +197,7 @@ public class Vsol4API extends API {
     private <E extends Vsol4Record> int deleteRecords(String organizationId, Vector<String> ids, Supplier<E> supplier) {
         int total = 0;
         for (String id : ids) {
-            if (vsol4.delete(organizationId, id, supplier)) {
+            if (ctrl.getVsol4().delete(organizationId, id, supplier)) {
                 total++;
             }
         }

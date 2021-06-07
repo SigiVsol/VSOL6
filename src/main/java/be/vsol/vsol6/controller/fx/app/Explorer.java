@@ -1,53 +1,39 @@
 package be.vsol.vsol6.controller.fx.app;
 
-import be.vsol.fx.FxController;
-import be.vsol.util.Icon;
-import be.vsol.vsol6.Vsol6;
-import be.vsol.vsol6.services.GuiService;
+import be.vsol.vsol6.controller.fx.FxController;
 import com.teamdev.jxbrowser.browser.Browser;
 import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
 import com.teamdev.jxbrowser.engine.ProprietaryFeature;
 import com.teamdev.jxbrowser.engine.RenderingMode;
 import com.teamdev.jxbrowser.view.javafx.BrowserView;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebView;
 import sun.misc.Unsafe;
 
-import java.io.File;
 import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Explorer extends FxController<BrowserView> {
 
     private final Browser browser;
 
-    public Explorer(GuiService gui) {
-        this(gui, null);
-    }
+//    public Explorer(GuiService gui) {
+//        this(gui, null);
+//    }
 
-    public Explorer(GuiService gui, String url) {
-        this.gui = gui;
+    public Explorer(String url) {
+//        this.gui = gui;
 
         System.setProperty("jxbrowser.license.key", "1BNDIEOFAYZEE9HQYY5M5ESGI6GCWTNOGK6CZWMWN94GQFFG96AB10J8YJC2KNKP5ZONEW"); // license
         disableWarning();
 
         Engine engine = Engine.newInstance(EngineOptions.newBuilder(RenderingMode.HARDWARE_ACCELERATED)
 //                .userAgent(gui.getSig().toString())
-                .userDataDir(Path.of(new File(gui.getHome(), "app/browser").toURI()))
+//                .userDataDir(Path.of(new File(gui.getHome(), "app/browser").toURI()))
                 .enableProprietaryFeature(ProprietaryFeature.AAC) // this is a licensed feature
                 .enableProprietaryFeature(ProprietaryFeature.H_264) // this is a licensed feature
                 .build());
 
         browser = engine.newBrowser();
-        setRoot(BrowserView.newInstance(browser));
+//        setRoot(BrowserView.newInstance(browser));
 
         if (url != null) loadUrl(url);
     }

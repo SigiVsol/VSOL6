@@ -1,6 +1,6 @@
 package be.vsol.vsol6.model;
 
-import be.vsol.database.annotations.db;
+import be.vsol.database.db;
 import be.vsol.tools.json;
 import be.vsol.vsol4.model.Vsol4User;
 

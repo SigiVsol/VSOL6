@@ -1,10 +1,8 @@
-package be.vsol.vsol6.services;
+package be.vsol.vsol4;
 
 import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
-import be.vsol.tools.Job;
-import be.vsol.tools.Minute;
 import be.vsol.util.Filter;
 import be.vsol.util.Json;
 import be.vsol.util.Log;
@@ -12,42 +10,31 @@ import be.vsol.vsol4.model.Vsol4Configuration;
 import be.vsol.vsol4.model.Vsol4Organization;
 import be.vsol.vsol4.model.Vsol4Record;
 import be.vsol.vsol4.model.Vsol4User;
-import be.vsol.vsol6.model.config.Config;
-import be.vsol.vsol6.session.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Vector;
 import java.util.function.Supplier;
 
-public class Vsol4Service {
+public class Vsol4 implements Runnable {
 
-    private final Session session;
-    private String token = null;
+    private String host, username, password, token;
+    private int port, timeout;
 
-    public Vsol4Service() {
-        session = null;
+    public Vsol4() { }
+
+    public void start(String host, int port, String username, String password, int timeout) {
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        this.timeout = timeout;
+
+        new Thread(this).start();
     }
 
-    public Vsol4Service(Session session) {
-        this.session = session;
-    }
-
-    public void start() {
-        Config.vsol4 vsol4 = session.getConfig().vsol4;
-
-        token = authenticate(vsol4.username, vsol4.password);
-
-        // periodically renew the authentication
-        new Job(Minute.ms(vsol4.lifespan), Minute.ms(vsol4.lifespan), () -> token = authenticate(vsol4.username, vsol4.password));
-    }
-
-    public void stop() {
-        token = null;
-    }
-
-    public boolean isConnected() {
-        return token != null;
+    @Override public void run() {
+        this.token = authenticate(username, password);
     }
 
     public String authenticate(String username, String password) {
@@ -217,10 +204,8 @@ public class Vsol4Service {
             httpRequest.getParameters().put("Authorization", "Bearer%20" + token);
         }
 
-        Config.vsol4 vsol4 = session.getConfig().vsol4;
-
         Log.debug("VSOL4 < " + httpRequest);
-        HttpResponse response = Curl.get(vsol4.host, vsol4.port, vsol4.timeout, httpRequest);
+        HttpResponse response = Curl.get(host, port, timeout, httpRequest);
 
         if (!isSuccess(response)) {
             if (response == null) Log.err("VSOL4: empty response");

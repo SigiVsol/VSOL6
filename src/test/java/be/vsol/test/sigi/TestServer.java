@@ -7,14 +7,14 @@ import org.json.JSONObject;
 public class TestServer {
 
     public static void main(String[] args) {
-        HttpServer server = new HttpServer("Test Server", 8600, new Handler());
-        server.start();
+//        HttpServer server = new HttpServer("Test Server", 8600, new Handler());
+//        server.start();
 
 
-        new Job(2000, () -> {
-            server.stop();
-            System.out.println(server.isRunning() );
-        });
+//        new Job(2000, () -> {
+//            server.stop();
+//            System.out.println(server.isRunning() );
+//        });
 
 
 

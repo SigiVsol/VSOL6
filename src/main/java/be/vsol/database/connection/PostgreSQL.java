@@ -1,8 +1,9 @@
 package be.vsol.database.connection;
 
-import be.vsol.database.structures.DbRecord;
-import be.vsol.database.structures.DbTable;
-import be.vsol.database.structures.RS;
+import be.vsol.database.model.Database;
+import be.vsol.database.model.DbRecord;
+import be.vsol.database.model.DbTable;
+import be.vsol.database.model.RS;
 import be.vsol.util.Log;
 
 import java.lang.reflect.Field;
@@ -11,22 +12,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class PostgreSQL extends DbDriver {
-
-    private Connection connection;
-    private final String host, user, password;
-    private final int port;
+public class PostgreSQL extends ServiceBasedDbDriver {
 
     public PostgreSQL(String host, int port, String user, String password) {
-        this.host = host;
-        this.port = port;
-        this.user = user;
-        this.password = password;
+        super("postgresql", host, port, user, password);
+    }
 
+    @Override public void start() {
         try {
             Class.forName("org.postgresql.Driver");
-//            connection = DriverManager.getConnection("jdbc:postgresql://" + user + ":" + password + "@" + host + ":" + port + "/tests");
-            connection = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/", user, password);
+            connection = DriverManager.getConnection("jdbc:" + protocol + "://" + host + ":" + port + "/", user, password);
         } catch (SQLException | ClassNotFoundException e) {
             Log.trace(e);
         }
@@ -35,7 +30,7 @@ public class PostgreSQL extends DbDriver {
     public Connection getConnection(String dbname) {
         boolean found = false;
 
-        RS rs = query(connection, "SELECT datname FROM pg_database");
+        RS rs = query(null, "SELECT datname FROM pg_database");
         while (rs.next()) {
             if (dbname.equals(rs.getString(0))) {
                 found = true;
@@ -44,23 +39,23 @@ public class PostgreSQL extends DbDriver {
         } rs.close();
 
         if (!found) {
-            update(connection, "CREATE DATABASE " + dbname);
+            update(null, "CREATE DATABASE " + dbname);
         }
 
         try {
-            return DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + dbname, user, password);
+            return DriverManager.getConnection("jdbc:" + protocol + "://" + host + ":" + port + "/" + dbname, user, password);
         } catch (SQLException e) {
             Log.trace(e);
             return null;
         }
     }
 
-    @Override public <E extends DbRecord> void matchStructure(Connection connection, DbTable<E> dbTable) {
+    @Override public <R extends DbRecord> void matchStructure(DbTable<R> dbTable) {
         Object object = dbTable.getSupplier().get();
 
-        if (exists(connection, "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema' AND tablename = '" + dbTable.getName() + "'")) { // the table exists -> check
+        if (exists(dbTable.getDb(), "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema' AND tablename = '" + dbTable.getName() + "'")) { // the table exists -> check
             HashMap<String, DbField> dbFields = new HashMap<>();
-            RS rs = query(connection, "SELECT * FROM information_schema.columns WHERE table_name = '" + dbTable.getName() + "' ORDER BY ordinal_position");
+            RS rs = query(dbTable.getDb(), "SELECT * FROM information_schema.columns WHERE table_name = '" + dbTable.getName() + "' ORDER BY ordinal_position");
             while (rs.next()) {
                 String field = rs.getString("column_name");
                 String type = rs.getString("data_type");
@@ -68,7 +63,7 @@ public class PostgreSQL extends DbDriver {
                 String nullable = rs.getString("is_nullable");
                 String defaultValue = rs.getString("column_default");
 
-                boolean primaryKey = exists(connection, "SELECT * FROM information_schema.constraint_column_usage WHERE TABLE_NAME = '" + dbTable.getName() + "' AND COLUMN_NAME = '" + field + "'");
+                boolean primaryKey = exists(dbTable.getDb(), "SELECT * FROM information_schema.constraint_column_usage WHERE TABLE_NAME = '" + dbTable.getName() + "' AND COLUMN_NAME = '" + field + "'");
 
                 DbField dbField = new DbField(field, type, nullable.equals("YES"), primaryKey, defaultValue);
                 dbFields.put(dbField.getField(), dbField);
@@ -81,10 +76,10 @@ public class PostgreSQL extends DbDriver {
                     String targetStructure = getFieldStructure(field, object);
 
                     if (!targetStructure.equals(dbStructure)) { // the field's signature is different
-                        update(connection, "ALTER TABLE " + dbTable.getName() + " CHANGE COLUMN " + field.getName() + " " + targetStructure);
+                        update(dbTable.getDb(), "ALTER TABLE " + dbTable.getName() + " CHANGE COLUMN " + field.getName() + " " + targetStructure);
                     }
                 } else {
-                    update(connection, "ALTER TABLE " + dbTable.getName() + " ADD COLUMN " + getFieldStructure(field, object));
+                    update(dbTable.getDb(), "ALTER TABLE " + dbTable.getName() + " ADD COLUMN " + getFieldStructure(field, object));
                 }
             }
         } else { // the table doesn't exist -> create
@@ -94,7 +89,7 @@ public class PostgreSQL extends DbDriver {
                 structure += getFieldStructure(field, object);
             }
 
-            update(connection, "CREATE TABLE " + dbTable.getName() + " (" + structure + ")");
+            update(dbTable.getDb(), "CREATE TABLE " + dbTable.getName() + " (" + structure + ")");
         }
     }
 

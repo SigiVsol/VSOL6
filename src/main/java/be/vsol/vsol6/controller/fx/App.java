@@ -1,8 +1,6 @@
 package be.vsol.vsol6.controller.fx;
 
-import be.vsol.fx.FxController;
 import be.vsol.util.Icon;
-import be.vsol.vsol6.Vsol6;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,7 +15,7 @@ public class App extends FxController<StackPane> {
     @FXML private BorderPane borderPane;
 
     @Override public void init() {
-//        lblVersion.setText(gui.getSig().getVersion());
+        lblVersion.setText(ctrl.getSig().getVersion());
         imgLogo.setImage(Icon.getImage(true, "logo", 48));
     }
 
@@ -30,12 +28,12 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML public void home() {
-        gui.getExplorer().loadUrl("http://localhost:8100");
-        show(gui.getExplorer());
+//        gui.getExplorer().loadUrl("http://localhost:8100");
+//        show(gui.getExplorer());
     }
 
     @FXML private void logout() {
-        show(gui.getLogin());
+//        show(gui.getLogin());
     }
 
     @FXML private void organizations() {
@@ -43,7 +41,7 @@ public class App extends FxController<StackPane> {
     }
 
     @FXML private void settings() {
-        show(gui.getSettings());
+//        show(gui.getSettings());
     }
 
 }

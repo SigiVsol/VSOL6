@@ -1,9 +1,10 @@
 package be.vsol.database.connection;
 
-import be.vsol.database.annotations.db;
-import be.vsol.database.structures.DbRecord;
-import be.vsol.database.structures.DbTable;
-import be.vsol.database.structures.RS;
+import be.vsol.database.db;
+import be.vsol.database.model.Database;
+import be.vsol.database.model.DbRecord;
+import be.vsol.database.model.DbTable;
+import be.vsol.database.model.RS;
 import be.vsol.util.Log;
 import be.vsol.util.Uid;
 
@@ -17,20 +18,29 @@ import java.util.Vector;
 
 public abstract class DbDriver {
 
+    protected final String protocol;
+    protected Connection connection;
+
+    public DbDriver(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public abstract void start();
+
     public abstract Connection getConnection(String dbname);
 
-    public boolean exists(Connection connection, String sql) {
-        RS rs = query(connection, sql);
+    public boolean exists(Database db, String sql) {
+        RS rs = query(db, sql);
         boolean exists = rs.next();
         rs.close();
         return exists;
     }
 
-    public RS query(Connection connection, String sql) {
+    public RS query(Database db, String sql) {
 //        Log.out("SQL> " + sql);
         RS rs = null;
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = (db == null ? this.connection : db.getConnection()).createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             rs = new RS(resultSet);
         } catch (SQLException e) {
@@ -39,10 +49,10 @@ public abstract class DbDriver {
         return rs;
     }
 
-    public void update(Connection connection, String sql) {
-        Log.out("SQL> " + sql);
+    public void update(Database db, String sql) {
+        Log.out(protocol + (db == null ? "" : " (" + db.getName()) + ")" + " > " + sql);
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = (db == null ? this.connection : db.getConnection()).createStatement();
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             Log.trace(e);
@@ -71,21 +81,21 @@ public abstract class DbDriver {
         return result;
     }
 
-    public abstract <E extends DbRecord> void matchStructure(Connection connection, DbTable<E> dbTable);
+    public abstract <R extends DbRecord> void matchStructure(DbTable<R> dbTable);
 
-    public <E extends DbRecord> void insertRecord(Connection connection, DbTable<E> dbTable, E record) {
+    public <R extends DbRecord> void insertRecord(DbTable<R> dbTable, R record) {
         if (record.getId() == null) {
             record.setId(Uid.getRandom());
         }
         record.setCreatedTime(Instant.now());
 
-        update(connection, "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')");
+        update(dbTable.getDb(), "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')");
     }
 
-    public <E extends DbRecord> void updateRecord(Connection connection, DbTable<E> dbTable, E record) {
+    public <R extends DbRecord> void updateRecord(DbTable<R> dbTable, R record) {
         String query = "";
 
-        E current = getRecord(connection, dbTable, record.getId());
+        R current = getRecord(dbTable, record.getId());
 
         try {
             for (Field field : getDbFields(record)) {
@@ -157,15 +167,15 @@ public abstract class DbDriver {
         }
 
         if (!query.isEmpty()) {
-            update(connection, "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + query + " WHERE id = '" + record.getId() + "'");
+            update(dbTable.getDb(), "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + query + " WHERE id = '" + record.getId() + "'");
         }
 
     }
 
-    public <E extends DbRecord> E getRecord(Connection connection, DbTable<E> dbTable, String id) {
-        E result = dbTable.getSupplier().get();
+    public <R extends DbRecord> R getRecord(DbTable<R> dbTable, String id) {
+        R result = dbTable.getSupplier().get();
 
-        RS rs = query(connection, "SELECT * FROM " + dbTable.getName() + " WHERE id = '" + id + "'");
+        RS rs = query(dbTable.getDb(), "SELECT * FROM " + dbTable.getName() + " WHERE id = '" + id + "'");
         if (rs.next()) {
 
             try {

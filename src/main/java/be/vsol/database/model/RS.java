@@ -1,4 +1,4 @@
-package be.vsol.database.structures;
+package be.vsol.database.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

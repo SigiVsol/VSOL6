@@ -41,6 +41,7 @@ public class Json {
 
                         case "Boolean", "Integer", "Long", "Float", "Double", "String" -> result.put(name, field.get(object));
                         case "JSONObject" -> result.put(name, new JSONObject(field.get(object)));
+                        case "File" -> result.put(name, ((File) field.get(object)).getAbsolutePath());
 
                         case "LocalDate" -> result.put(name, Date.format(((LocalDate) field.get(object))));
                         case "LocalTime" -> result.put(name, Date.format(((LocalTime) field.get(object))));
@@ -125,6 +126,7 @@ public class Json {
 
                             case "Boolean", "Integer", "Long", "Float", "Double", "String" -> field.set(object, jsonObject.get(name));
                             case "JSONObject" -> field.set(object, jsonObject.getJSONObject(name));
+                            case "File" -> field.set(object, new File(jsonObject.getString(name)));
 
                             case "LocalDate" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalDate) null));
                             case "LocalTime" -> field.set(object, Date.parse(jsonObject.getString(name), (LocalTime) null));

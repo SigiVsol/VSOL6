@@ -12,7 +12,6 @@ import be.vsol.vsol6.model.enums.Language;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
 import be.vsol.vsol6.model.organization.Study;
-import be.vsol.vsol6.session.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,11 +19,10 @@ import java.util.Vector;
 
 public class ApiHandler implements RequestHandler {
 
-    private final Session session;
+//    private final SessionOld sessionOld;
     private final API api;
 
-    public ApiHandler(Session session, API api) {
-        this.session = session;
+    public ApiHandler(API api) {
         this.api = api;
     }
 
@@ -234,7 +232,8 @@ public class ApiHandler implements RequestHandler {
     }
 
     private <E extends Record> HttpResponse getRows(Vector<E> records, int part) {
-        int limit = session.getConfig().server.rowLimit;
+//        int limit = sessionOld.getConfig().server.rowLimit;
+        int limit = 20;
 
         JSONObject jsonResponse = new JSONObject(); {
             JSONArray jsonRows = new JSONArray(); {

@@ -6,6 +6,7 @@ import be.vsol.vsol6.model.enums.Sex;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Vector;
 
 public class TestJson {
@@ -13,7 +14,8 @@ public class TestJson {
     public static void main(String[] args) {
 //        testPrimitives();
 //        testArrays();
-        testEnums();
+//        testEnums();
+        testFiles();
     }
 
     private static void testPrimitives() {
@@ -57,6 +59,16 @@ public class TestJson {
 
     }
 
+    private static void testFiles() {
+        JSONObject jsonObject = new JSONObject(); {
+            jsonObject.put("file", "C:/Sandbox");
+        }
+
+        Test test = Json.get(jsonObject, Test::new);
+
+        System.out.println(test.file);
+    }
+
     static class Person {
         @json String name;
         @json Sex sex;
@@ -75,6 +87,9 @@ public class TestJson {
         }
     }
 
+    private static class Test {
+        @json File file;
+    }
 
 
 //    private static class Car {

@@ -14,27 +14,34 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
 
-public class HttpServer implements Service {
+public class HttpServer implements Runnable {
 
-    private final String name;
-    private final int port;
-    private final RequestHandler requestHandler;
     private final Semaphore semaphore = new Semaphore(16);
+    private final String name;
+
+    private int port;
+    private RequestHandler requestHandler;
 
     private ServerSocket serverSocket;
 
-    public HttpServer(String name, int port, RequestHandler requestHandler) {
+    // Constructors
+
+    public HttpServer(String name) {
         this.name = name;
-        this.port = port;
-        this.requestHandler = requestHandler;
     }
 
-    @Override public void start() {
+    // Methods
+
+    public void start(int port, RequestHandler requestHandler) {
         stop();
+
+        this.port = port;
+        this.requestHandler = requestHandler;
+
         new Thread(this).start();
     }
 
-    @Override public void stop() {
+    public void stop() {
         if (serverSocket != null && !serverSocket.isClosed()) {
             try {
                 serverSocket.close();

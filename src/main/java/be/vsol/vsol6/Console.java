@@ -8,13 +8,10 @@ import java.util.Scanner;
 
 public class Console implements Runnable {
 
-    private final Scanner scanner;
-    private final Vsol6 vsol6;
+    private final Ctrl ctrl;
 
-    public Console(Vsol6 vsol6) {
-        this.scanner = new Scanner(System.in);
-        this.vsol6 = vsol6;
-
+    public Console(Ctrl ctrl) {
+        this.ctrl = ctrl;
     }
 
     public void start() {
@@ -23,6 +20,7 @@ public class Console implements Runnable {
 
     @Override public void run() {
         try {
+            Scanner scanner = new Scanner(System.in);
             while (scanner.hasNext()) {
                 String command = scanner.nextLine();
                 if (command == null) break;
@@ -40,42 +38,12 @@ public class Console implements Runnable {
 
     private void handle(String[] subs) {
         switch (subs[0]) {
-            case "start" -> start(subs);
-            case "exit" -> exit();
+            case "exit" -> ctrl.exit();
             case "mem" -> mem();
         }
     }
 
     // Handling Methods
-
-    private void start(String[] subs) {
-        if (subs.length > 1) {
-            switch (subs[1]) {
-                case "db" -> startDb();
-                case "gui" -> startGui();
-            }
-        }
-    }
-
-    private void startDb() {
-
-    }
-
-    private void startGui() {
-
-    }
-
-    private void exit() {
-        if (vsol6 == null) {
-            System.exit(0);
-        } else {
-            try {
-                vsol6.stop();
-            } catch (Exception e) {
-                Log.trace(e);
-            }
-        }
-    }
 
     private void mem() {
         Runtime runtime = Runtime.getRuntime();

@@ -1,8 +1,9 @@
 package be.vsol.database.connection;
 
-import be.vsol.database.structures.DbRecord;
-import be.vsol.database.structures.DbTable;
-import be.vsol.database.structures.RS;
+import be.vsol.database.model.Database;
+import be.vsol.database.model.DbRecord;
+import be.vsol.database.model.DbTable;
+import be.vsol.database.model.RS;
 import be.vsol.util.Log;
 
 import java.lang.reflect.Field;
@@ -13,19 +14,22 @@ import java.util.HashMap;
 
 public class MySQL extends DbDriver {
 
-    private Connection connection;
     private final String host, user, password;
     private final int port;
 
     public MySQL(String host, int port, String user, String password) {
+        super("mysql");
+
         this.host = host;
         this.port = port;
         this.user = user;
         this.password = password;
+    }
 
+    @Override public void start() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + user + ":" + password + "@" + host + ":" + port + "?autoReconnect=true");
+            connection = DriverManager.getConnection("jdbc:" + protocol + "://" + user + ":" + password + "@" + host + ":" + port + "?autoReconnect=true");
         } catch (SQLException | ClassNotFoundException e) {
             Log.trace(e);
         }
@@ -34,7 +38,7 @@ public class MySQL extends DbDriver {
     public Connection getConnection(String dbname) {
         boolean found = false;
 
-        RS rs = query(connection, "SHOW DATABASES");
+        RS rs = query(null, "SHOW DATABASES");
         while (rs.next()) {
             if (dbname.equals(rs.getString(0))) {
                 found = true;
@@ -43,23 +47,23 @@ public class MySQL extends DbDriver {
         } rs.close();
 
         if (!found) {
-            update(connection, "CREATE DATABASE " + dbname);
+            update(null, "CREATE DATABASE " + dbname);
         }
 
         try {
-            return DriverManager.getConnection("jdbc:mysql://" + user + ":" + password + "@" + host + ":" + port + "/" + dbname + "?autoReconnect=true");
+            return DriverManager.getConnection("jdbc:" + protocol + "://" + user + ":" + password + "@" + host + ":" + port + "/" + dbname + "?autoReconnect=true");
         } catch (SQLException e) {
             Log.trace(e);
             return null;
         }
     }
 
-    @Override public <E extends DbRecord> void matchStructure(Connection connection, DbTable<E> dbTable) {
+    @Override public <R extends DbRecord> void matchStructure(DbTable<R> dbTable) {
         Object object = dbTable.getSupplier().get();
 
-        if (exists(connection, "SHOW TABLES WHERE tables_in_" + dbTable.getDb().getName() + " = '" + dbTable.getName() + "'")) { // the table exists -> check
+        if (exists(dbTable.getDb(), "SHOW TABLES WHERE tables_in_" + dbTable.getDb().getName() + " = '" + dbTable.getName() + "'")) { // the table exists -> check
             HashMap<String, DbField> dbFields = new HashMap<>();
-            RS rs = query(connection, "SHOW FIELDS FROM " + dbTable.getName());
+            RS rs = query(dbTable.getDb(), "SHOW FIELDS FROM " + dbTable.getName());
             while (rs.next()) {
                 DbField dbField = new DbField(rs.getString("Field"), rs.getString("Type"), rs.getString("Null").equals("YES"), rs.getString("Key").equals("PRI"), rs.getString("Default"));
                 dbFields.put(dbField.getField(), dbField);
@@ -72,10 +76,10 @@ public class MySQL extends DbDriver {
                     String targetStructure = getFieldStructure(field, object);
 
                     if (!targetStructure.equals(dbStructure)) { // the field's signature is different
-                        update(connection, "ALTER TABLE " + dbTable.getName() + " CHANGE COLUMN " + field.getName() + " " + targetStructure);
+                        update(dbTable.getDb(), "ALTER TABLE " + dbTable.getName() + " CHANGE COLUMN " + field.getName() + " " + targetStructure);
                     }
                 } else {
-                    update(connection, "ALTER TABLE " + dbTable.getName() + " ADD COLUMN " + getFieldStructure(field, object));
+                    update(dbTable.getDb(), "ALTER TABLE " + dbTable.getName() + " ADD COLUMN " + getFieldStructure(field, object));
                 }
             }
         } else { // the table doesn't exist -> create
@@ -85,7 +89,7 @@ public class MySQL extends DbDriver {
                 structure += getFieldStructure(field, object);
             }
 
-            update(connection, "CREATE TABLE " + dbTable.getName() + " (" + structure + ")");
+            update(dbTable.getDb(), "CREATE TABLE " + dbTable.getName() + " (" + structure + ")");
         }
     }
 
