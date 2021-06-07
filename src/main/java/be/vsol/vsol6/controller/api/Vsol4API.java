@@ -1,14 +1,13 @@
 package be.vsol.vsol6.controller.api;
 
 import be.vsol.vsol4.model.*;
-import be.vsol.vsol6.Ctrl;
+import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
 import be.vsol.vsol6.model.organization.Study;
-import be.vsol.vsol4.Vsol4;
 
 import java.util.Vector;
 import java.util.function.Supplier;

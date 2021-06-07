@@ -10,7 +10,8 @@ public class FileSys {
 
     public static void create(File dir) {
         if (!dir.exists()) {
-            if (dir.mkdirs()) {
+            boolean success = dir.mkdirs();
+            if (success) {
                 Log.out("Created '" + dir.getAbsolutePath() + "'.");
             }
         }

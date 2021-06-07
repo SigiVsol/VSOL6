@@ -1,0 +1,15 @@
+4-BRIDGE
+--gui.active=false
+--server.port=8039
+--vsol4.host=[?]
+--vsol4.port=8080
+--db.active=false
+
+VSOL6-CLOUD
+--gui.active=false
+--vsol4.forward=true
+--vsol4.host=[?]
+--vsol4.port=8039
+--server.port=8900
+--db.active=false
+

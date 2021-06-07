@@ -54,10 +54,8 @@ public class Config {
     // Static Classes
 
     public static class app {
-        public enum Backend { vsol4, bridge, vsol6 }
         @json public File home;
-        @json public boolean debug;
-        @json public Backend backend;
+        @json public boolean debug, legacy;
     }
 
     public static class console {
@@ -78,7 +76,7 @@ public class Config {
     }
 
     public static class vsol4 {
-        @json public boolean active;
+        @json public boolean active, forward;
         @json public String host, username, password;
         @json public int port, timeout, lifespan;
     }

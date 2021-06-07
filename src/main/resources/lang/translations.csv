@@ -181,3 +181,6 @@ description;;;omschrijving;;
 copy_noun;;copy;kopie;;
 prepare_download;;your download is being prepared;uw download wordt voorbereid;;
 modify_report;;;bewerk rapport;;
+drag_a_series_here;;;sleep hier een serie;;
+enter_calibration_cm;;Enter the actual length of the calibration object, in cm;Voer de effectieve lengte in van het kalibratie-object, in cm;Entrez la taille effective de l'objet de calibrage, en cm;Geben sie die tatsächliche Länge ein des Kalibrierungsobjekts, in cm
+invalid_value;;;ongeldige waarde;Valeur invalide;Ungültiger Wert

@@ -332,7 +332,7 @@ class EntriesTable extends ExplorerTable {
                         this.getTdText(study.description, () => { /* TODO */ }).appendTo(tr);
                         this.getTdNumber(study.seriesCount, () => { /* TODO */ }).appendTo(tr);
 
-                        this.getTdButton("ok", "eye", () => { /* TODO */ }).appendTo(tr);
+                        this.getTdButton("ok", "eye", () => { app.explorer.openViewer(study.id) }).appendTo(tr);
                         this.getTdEmailButton().appendTo(tr);
                         this.getTdDownloadButton().appendTo(tr);
                         this.getTdEditButton().appendTo(tr);

@@ -9,12 +9,9 @@ import be.vsol.util.Lng;
 
 public class Setting extends DbRecord {
 
-    @db
-    private String systemId, userId, organizationId;
-    @db
-    private String key;
-    @db
-    private String value;
+    @db private String systemId, userId, organizationId;
+    @db private String key;
+    @db private String value;
 
     // Constructors
 

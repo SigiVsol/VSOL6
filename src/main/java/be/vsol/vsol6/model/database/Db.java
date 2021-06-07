@@ -16,6 +16,8 @@ public class Db {
     private final UserDb userDb;
     private final OrganizationDb organizationDb;
 
+    private boolean active = false;
+
     public Db(Config config) {
         driver = switch (config.db.type) {
             case sqlite -> new SQLite(new File(config.app.home, "data/databases"));
@@ -34,6 +36,12 @@ public class Db {
         systemDb.connect();
         userDb.connect();
         organizationDb.connect();
+
+        active = true;
+    }
+
+    public void stop() {
+        active = false;
     }
 
     // Getters
@@ -43,4 +51,7 @@ public class Db {
     public UserDb getUserDb() { return userDb; }
 
     public OrganizationDb getOrganizationDb() { return organizationDb; }
+
+    public boolean isActive() { return active; }
+
 }

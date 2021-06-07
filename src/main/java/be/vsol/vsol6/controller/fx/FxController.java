@@ -1,6 +1,6 @@
 package be.vsol.vsol6.controller.fx;
 
-import be.vsol.vsol6.Ctrl;
+import be.vsol.vsol6.controller.Ctrl;
 import javafx.scene.Node;
 
 public abstract class FxController<N extends Node> {

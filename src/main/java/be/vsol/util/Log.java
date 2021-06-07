@@ -16,10 +16,6 @@ public class Log {
 
     private static File logFile, errFile;
 
-    static {
-        init(new File("./logs"), null, false);
-    }
-
     public static void init(File dir, String filename, boolean debug) {
         Log.dir = dir;
         Log.filename = filename == null ? null : filename.replace(" ", "_");

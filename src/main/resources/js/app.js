@@ -7,6 +7,7 @@ class App {
         this._page = "";
         this._id = null;
         this._vsolBrowser = navigator.userAgent.includes("VSOL6");
+        this._internalCode = "";
 
         this._user = new User(Tools.readFromStorage("user.id", null));
         this._organization = new Organization(Tools.readFromStorage("organization.id", null));
@@ -115,6 +116,14 @@ class App {
         }
     }
 
+    autoStartDownload(url) {
+        let a = document.createElement("a");
+        a.setAttribute('href', url);
+        a.setAttribute('download', '');
+        a.setAttribute('target', '_blank');
+        a.click();
+    }
+
     // Getters
 
     get navbar() { return this._navbar; }
@@ -127,9 +136,11 @@ class App {
     get organization() { return this._organization; }
     get client() { return this._client; }
     get patient() { return this._patient; }
+    get internalCode() { return this._internalCode; }
 
     // Setters
 
+    set id(value) { this._id = value; }
     set user(value) { this._user = value; }
     set organization(value) { this._organization = value; }
     set client(value) { this._client = value; }

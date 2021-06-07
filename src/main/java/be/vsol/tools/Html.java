@@ -4,7 +4,6 @@ import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
-import be.vsol.vsol6.Vsol6;
 import be.vsol.vsol6.model.enums.Language;
 
 import java.io.BufferedReader;

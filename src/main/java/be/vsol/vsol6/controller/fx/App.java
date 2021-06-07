@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.fx;
 
+import be.vsol.fx.util.ImageIcon;
 import be.vsol.util.Icon;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,7 +17,7 @@ public class App extends FxController<StackPane> {
 
     @Override public void init() {
         lblVersion.setText(ctrl.getSig().getVersion());
-        imgLogo.setImage(Icon.getImage(true, "logo", 48));
+        imgLogo.setImage(ImageIcon.get(true, "logo", 48));
     }
 
     public void show(FxController<?> controller) {

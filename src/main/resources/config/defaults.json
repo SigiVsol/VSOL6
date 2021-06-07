@@ -2,7 +2,7 @@
 	"app":{
 		"home": "C:/VSOL6",
 		"debug": false,
-		"backend": "vsol4"
+		"legacy": false,
 	},
 	"console":{
 		"active": true
@@ -35,6 +35,7 @@
 	},
 	"vsol4":{
 		"active": true,
+		"forward": false,
 		"host": "localhost",
 		"port": 8080,
 		"username": "firstuser",

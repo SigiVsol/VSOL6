@@ -16,7 +16,7 @@ public class Icon {
     private static final HashMap<String, BufferedImage> bufferedImages = new HashMap<>();
     private static final HashMap<String, Png> pngs = new HashMap<>();
     private static final HashMap<String, byte[]> byteArrays = new HashMap<>();
-    private static final HashMap<String, Image> images = new HashMap<>();
+//
 
     public static BufferedImage getBufferedImage(boolean colored, String name, int size) {
         String code = getCode(colored, name, size);
@@ -57,19 +57,7 @@ public class Icon {
         }
     }
 
-    public static Image getImage(boolean colored, String name, int size) {
-        String code = getCode(colored, name, size);
-        if (images.containsKey(code)) {
-            return images.get(code);
-        } else {
-            BufferedImage bufferedImage = getBufferedImage(colored, name, size);
-            Image result = bufferedImage == null ? null : SwingFXUtils.toFXImage(bufferedImage, null);
-            images.put(code, result);
-            return result;
-        }
-    }
-
-    private static String getCode(boolean colored, String name, int size) {
+    public static String getCode(boolean colored, String name, int size) {
         return colored + "|" + name + "|" + size;
     }
 

@@ -3,6 +3,8 @@ package be.vsol.tools;
 import be.vsol.util.Int;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sig {
 
@@ -53,5 +55,14 @@ public class Sig {
     }
 
     public LocalDate getDate() { return date; }
+
+    public Map<String, String> getVariables() {
+        HashMap<String, String> result = new HashMap<>();
+
+        result.put("app.title", appTitle);
+        result.put("app.version", getVersion());
+
+        return result;
+    }
 
 }

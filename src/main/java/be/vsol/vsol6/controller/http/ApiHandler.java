@@ -19,7 +19,6 @@ import java.util.Vector;
 
 public class ApiHandler implements RequestHandler {
 
-//    private final SessionOld sessionOld;
     private final API api;
 
     public ApiHandler(API api) {

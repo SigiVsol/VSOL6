@@ -27,7 +27,7 @@ public class WebHandler implements RequestHandler {
         Language language = request.getLanguage();
         Map<String, String> parameters = request.getParameters();
 
-        if (path.matches("/(|client|clients|patient|patients|entries)")) {
+        if (path.matches("/(|client|clients|patient|patients|entries|viewer)")) {
             return getApp(language);
         } else if (path.matches(".*\\.html")) {
             return getHtml(path, language);

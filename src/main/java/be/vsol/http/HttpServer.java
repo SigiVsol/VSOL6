@@ -1,8 +1,7 @@
 package be.vsol.http;
 
-import be.vsol.tools.Service;
-import be.vsol.util.Log;
 import be.vsol.tools.Job;
+import be.vsol.util.Log;
 import be.vsol.util.Sema;
 
 import java.io.IOException;
@@ -96,8 +95,6 @@ public class HttpServer implements Runnable {
 
     public String getName() { return name; }
 
-    public boolean isRunning() {
-        return serverSocket != null && !serverSocket.isClosed();
-    }
+    public boolean isActive() { return serverSocket != null && !serverSocket.isClosed(); }
 
 }

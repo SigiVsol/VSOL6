@@ -173,6 +173,11 @@ class Explorer {
         app.show();
     }
 
+    openViewer(id) {
+        app.pushHistory("viewer", id);
+        app.viewer.show();
+    }
+
     backToClient() {
         if (app.page === "patient") {
             this.showClient(app.patient.client)

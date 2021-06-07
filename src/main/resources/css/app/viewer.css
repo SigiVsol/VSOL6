@@ -1,0 +1,318 @@
+:root {
+    --menuBarWidth: 260px;
+    --menuBarHeight: 90px;
+}
+
+#divViewerBar {
+    position: absolute;
+    z-index: +100;
+}
+
+#viewerBarTop {
+    position: absolute;
+}
+
+#viewerBarBottom {
+    position: absolute;
+}
+
+button.btnHide {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 15px;
+    max-height: 15px;
+    border-radius: 0 0 5px 5px;
+    border-width: 0 1px 1px 1px;
+    border-color: white;
+    padding: 0;
+}
+
+button.btnOrientation {
+    min-width: 50px;
+    min-height: 50px;
+    margin: 0;
+}
+
+button.btnMeasure {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+button.btnFullMeasure {
+    min-width: 85px;
+    min-height: 40px;
+}
+
+button.btnViewerBar {
+    width: 53px;
+    height: 53px;
+    margin-right: 7px;
+}
+
+button.btnViewerBarTab {
+    width: 60px;
+    height: 53px;
+    margin-right: 1px;
+    border-radius: 5px 0 0 5px;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+}
+
+button.btnViewerBarActiveTab {
+    background-color: var(--background);
+    border-color: white;
+    border-width: 1px 0 1px 1px;
+    border-style: solid;
+}
+
+button.btnViewerBarActiveTab:hover {
+    opacity: 1.0;
+    transition: 0s;
+}
+
+button.flexButton {
+    display: inline-flex;
+    align-items: center;
+}
+
+p.lblOrientation {
+    margin: 5px 5px 10px 5px;
+    cursor: pointer;
+    /*font-family: monospace;*/
+}
+
+p.lblInstructionsActive {
+    font-size: small;
+    color: lightgray;
+}
+
+p.lblInstructions {
+    font-size: small;
+    color: gray;
+}
+
+img.imgHide {
+    transform: translateY(-2px);
+}
+
+div.divMeasure {
+    display: none;
+    text-align: left;
+    padding: 10px;
+}
+
+label.lblAnnotation {
+    display: block;
+    color: lightgray;
+    font-size: small;
+    margin: 5px;
+    cursor: pointer;
+}
+
+canvas.thumbnailCanvas {
+    background-color: black;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+}
+
+#divMenuBar {
+    position: absolute;
+    background-color: var(--background);
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0 5px 5px 0;
+    text-align: center;
+    z-index: +99;
+}
+
+#menuBarTop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#divOrientations {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-style: solid;
+    border-color: white;
+    border-width: 1px 0 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: none;
+}
+
+#divMeasures {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-style: solid;
+    border-color: white;
+    border-width: 1px 0 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: none;
+}
+
+#gridDisplay {
+    display: grid;
+    background-color: var(--background);
+    grid-gap: 1px;
+}
+
+#touchDragger {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    width: 70px;
+    height: 70px;
+    background-color: gray;
+    filter: opacity(50%);
+    visibility: hidden;
+}
+
+#divSplit, #divDownload {
+    width: 200px;
+}
+
+@media only screen and (orientation: landscape) {
+
+    .portraitOnly { display: none; }
+
+    .landscapeOnly { }
+
+    #divMenuBar {
+        height: calc(100% - 20px);
+        width: var(--menuBarWidth);
+        top: 10px;
+        right: 10px;
+    }
+
+    #menuBarTop {
+        top: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #divViewerBar {
+        height: calc(100% - 20px);
+        top: 10px;
+        width: 61px;
+        right: calc(10px + var(--menuBarWidth));
+        text-align: right;
+    }
+
+    #viewerBarTop {
+        top: 0;
+        width: 100%;
+    }
+
+    #viewerBarBottom {
+        bottom: -2px;
+        width: 100%;
+    }
+
+    div.divStudy {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+        border-width: 1px;
+        border-style: solid;
+        width: calc(100% - 20px);
+        border-radius: 5px;
+    }
+
+    div.divThumbnails {
+        margin-top: 3px;
+    }
+
+    canvas.thumbnailCanvas {
+        margin: 0 1px 0 1px;
+    }
+
+    #divViewports {
+        top: 68px;
+    }
+
+}
+
+@media only screen and (orientation: portrait) {
+
+    .portraitOnly {  }
+
+    .landscapeOnly { display: none }
+
+    #navBar {
+        display: none;
+    }
+
+    #divContent {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    #divMenuBar {
+        height: var(--menuBarHeight);
+        width: calc(100% - 10px);
+        left: 5px;
+        bottom: 5px;
+    }
+
+    #menuBarTop {
+        left: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    #divViewerBar {
+        width: calc(100% - 10px);
+        left: 5px;
+        height: 56px;
+        bottom: calc(10px + var(--menuBarHeight));
+        text-align: left;
+    }
+
+    #viewerBarTop {
+        left: 0;
+        height: 100%;
+    }
+
+    #viewerBarBottom {
+        right: -2px;
+        height: 100%;
+        white-space: nowrap;
+    }
+
+    div.divStudy {
+        padding: 5px;
+        text-align: left;
+        display: inline-block;
+    }
+
+    div.divThumbnails {
+        border: solid 1px white;
+        padding: 2px 2px 0 2px;
+    }
+
+    canvas.thumbnailCanvas {
+        margin: 1px;
+    }
+
+    button.btnViewerBar {
+        margin-right: 0;
+    }
+
+    #divViewports {
+        width: 120px;
+        bottom: 165px;
+        left: 5px;
+    }
+
+}
