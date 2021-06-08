@@ -40,4 +40,8 @@ public class Uid {
         return "[0-9a-fA-F-]*";
     }
 
+    public static String listRegex() {
+        return "[0-9a-fA-F-]*(,[0-9a-fA-F-]*)*";
+    }
+
 }

@@ -12,8 +12,8 @@ import java.util.Map;
 public class ServerHandler implements RequestHandler {
 
     private final Config config;
-    private final ApiHandler apiHandler;
     private final WebHandler webHandler;
+    private final ApiHandler apiHandler;
 
     public ServerHandler(Config config, Map<String, String> variables, API api) {
         this.config = config;
@@ -34,7 +34,5 @@ public class ServerHandler implements RequestHandler {
             return webHandler.respond(request);
         }
     }
-
-
 
 }

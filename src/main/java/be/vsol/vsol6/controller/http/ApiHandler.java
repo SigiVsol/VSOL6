@@ -1,6 +1,7 @@
 package be.vsol.vsol6.controller.http;
 
 import be.vsol.http.HttpRequest;
+import be.vsol.http.HttpRequest.Method;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
@@ -31,30 +32,33 @@ public class ApiHandler implements RequestHandler {
         String path = request.getPath();
         HttpRequest.Method method = request.getMethod();
         String uid = Uid.regex();
+        String uidList = Uid.listRegex();
 
         // LOGIN
-        if (method == HttpRequest.Method.POST && path.matches("/api/authenticate")) return postAuthentication(request);
-        else if (method == HttpRequest.Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
+        if (method == Method.POST && path.matches("/api/authenticate")) return postAuthentication(request);
+        else if (method == Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
         // ORGANIZATIONS
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
+        else if (method == Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
         // CLIENTS
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
-        else if (method == HttpRequest.Method.PUT && path.matches("/api/organizations/" + uid + "/clients")) return putClient(request);
-        else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return deleteClient(request);
-        else if (method == HttpRequest.Method.POST && path.matches("/api/organizations/" + uid + "/clients")) return postClientsAction(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
+        else if (method == Method.PUT && path.matches("/api/organizations/" + uid + "/clients")) return putClient(request);
+        else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return deleteClient(request);
+        else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/clients")) return postClientsAction(request);
         // PATIENTS
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients")) return getPatients(request);
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid + "/patients")) return getPatientsOfClient(request);
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return getPatient(request);
-        else if (method == HttpRequest.Method.PUT && path.matches("/api/organizations/" + uid + "/patients")) return putPatient(request);
-        else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return deletePatient(request);
-        else if (method == HttpRequest.Method.POST && path.matches("/api/organizations/" + uid + "/patients")) return postPatientsAction(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients")) return getPatients(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid + "/patients")) return getPatientsOfClient(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return getPatient(request);
+        else if (method == Method.PUT && path.matches("/api/organizations/" + uid + "/patients")) return putPatient(request);
+        else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/patients/" + uid)) return deletePatient(request);
+        else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/patients")) return postPatientsAction(request);
         // STUDIES
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return getStudies(request);
-        else if (method == HttpRequest.Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/(studies|entries)")) return getStudiesOfPatient(request);
-        else if (method == HttpRequest.Method.DELETE && path.matches("/api/organizations/" + uid + "/(studies|entries)/" + uid)) return deleteStudy(request);
-        else if (method == HttpRequest.Method.POST && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return postStudiesAction(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return getEntries(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/patients/" + uid + "/(studies|entries)")) return getEntriesOfPatient(request);
+        else if (method == Method.DELETE && path.matches("/api/organizations/" + uid + "/(studies|entries)/" + uid)) return deleteEntry(request);
+        else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return postEntriesAction(request);
+        // VIEWER
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/studies/" + uidList)) return getStudies(request);
 
         else return HttpResponse.get404();
     }
@@ -169,24 +173,24 @@ public class ApiHandler implements RequestHandler {
         return getResponse(total);
     }
 
-    // Studies
+    // Entries
 
-    private HttpResponse getStudies(HttpRequest request) {
+    private HttpResponse getEntries(HttpRequest request) {
         Vector<Study> studies = api.getStudies(getSplit(request, 3), null, getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(studies, getPart(request));
     }
 
-    private HttpResponse getStudiesOfPatient(HttpRequest request) {
+    private HttpResponse getEntriesOfPatient(HttpRequest request) {
         Vector<Study> studies = api.getStudies(getSplit(request, 3), getSplit(request, 5), getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(studies, getPart(request));
     }
 
-    private HttpResponse deleteStudy(HttpRequest request) {
+    private HttpResponse deleteEntry(HttpRequest request) {
         boolean success = api.deleteStudy(getSplit(request, 3), getSplit(request, 5));
         return getResponse(success);
     }
 
-    private HttpResponse postStudiesAction(HttpRequest request) {
+    private HttpResponse postEntriesAction(HttpRequest request) {
         String action = request.getParameters().get("action");
         int total = 0;
 
@@ -194,6 +198,18 @@ public class ApiHandler implements RequestHandler {
             total = api.deleteStudies(getSplit(request, 3), getIds(request));
         }
         return getResponse(total);
+    }
+
+    // Viewer
+
+    private HttpResponse getStudies(HttpRequest request) {
+        String organizationId = getSplit(request, 3);
+        String idList = getSplit(request, 5);
+
+        System.out.println("org: " + organizationId);
+        System.out.println("ids: " + idList);
+
+        return HttpResponse.get404("TEST");
     }
 
     // Methods

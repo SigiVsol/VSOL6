@@ -107,7 +107,9 @@ class Viewer {
     }
 
     getStudies() {
-        $.get("app/viewer/getStudies?&id=" + app.id + "&organizationId=" + app.organization.id, json => {
+        $.get("api/organizations/" + app.organization.id + "/studies/" + app.id, json => {
+            console.log(json);
+
             if (json.code === app.internalCode || json.code === this.code) {
                 this.addStudies(json);
                 for (let study of this.studies) {
