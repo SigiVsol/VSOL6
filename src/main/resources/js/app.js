@@ -7,10 +7,11 @@ class App {
         this._page = "";
         this._id = null;
         this._vsolBrowser = navigator.userAgent.includes("VSOL6");
-        this._internalCode = "";
 
         this._user = new User(Tools.readFromStorage("user.id", null));
         this._organization = new Organization(Tools.readFromStorage("organization.id", null));
+        this._internalCode = Tools.readFromStorage("internalCode", null);
+
         this._client = new Client();
         this._patient = new Patient();
 
@@ -87,12 +88,26 @@ class App {
     _pushHistory(page, id, replace = false) {
         if (id === "") id = null;
 
+        let internalCode = 0;
+        if (page === "viewer" && id != null) {
+            let hash = 0;
+            for (let i = 0; i < id.length; i++) {
+                let character = id.charCodeAt(i);
+                hash = ((hash << 5) - hash) + character;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            internalCode = Math.abs(hash * 6 + 13654335 << 2);
+        }
+
         this._page = page;
         this._id = id;
+        this._internalCode = "" + internalCode;
+        Tools.saveInStorage("internalCode", internalCode, false);
 
         let data = {
             page: page,
-            id: id // TODO? add client/patient
+            id: id, // TODO? add client/patient
+            internalCode: internalCode
         }
         let title = "VSOL5";
 
@@ -110,9 +125,11 @@ class App {
         if (state == null) {
             this._page = "clients";
             this._id = null;
+            this._internalCode = null;
         } else {
             this._page = state.page;
             this._id = state.id;
+            this._internalCode = state.internalCode;
         }
     }
 

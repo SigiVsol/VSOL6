@@ -206,10 +206,25 @@ public class ApiHandler implements RequestHandler {
         String organizationId = getSplit(request, 3);
         String idList = getSplit(request, 5);
 
-        System.out.println("org: " + organizationId);
-        System.out.println("ids: " + idList);
+        JSONObject jsonReply = new JSONObject(); {
+            JSONArray jsonStudies = new JSONArray();
+            for (String id : idList.split(",", -1)) {
+                Study study = api.getStudy(organizationId, id);
+//                Vsol4Study vsol4Study = new Vsol4Study(token, vsolStudyId, true);
+//                JSONObject jsonStudy = getJsonStudy(vsol4Study);
+                jsonStudies.put(Json.get(study));
+            }
+            jsonReply.put("studies", jsonStudies);
+        }
+        jsonReply.put("code", "" + Security.getCode(idList));
 
-        return HttpResponse.get404("TEST");
+        return new HttpResponse(jsonReply);
+    }
+
+    private HttpResponse getSeries(HttpRequest request) {
+
+
+        return null;
     }
 
     // Methods

@@ -15,6 +15,7 @@ public class Study extends Record {
     @json @db private LocalDateTime dateTime;
     @json @db private int seriesCount;
     @json private Patient patient;
+    @json private String uid;
 
     // Constructors
 
@@ -28,12 +29,13 @@ public class Study extends Record {
         this.seriesCount = vsol4Study.getSeriesCount();
         this.patient = new Patient(vsol4Study.getPatient());
         this.patient.setClient(new Client(vsol4Study.getClient()));
+        this.uid = vsol4Study.getOrthancUuid();
     }
 
     // Methods
 
     public Vsol4Study getVsol4Study() {
-        return new Vsol4Study(id, description, dateTime, patient == null ? null : patient.getVsol4Patient(), seriesCount);
+        return new Vsol4Study(id, description, dateTime, patient == null ? null : patient.getVsol4Patient(), seriesCount, uid);
     }
 
     public String getClientString() {
@@ -77,6 +79,8 @@ public class Study extends Record {
 
     public Patient getPatient() { return patient; }
 
+    public String getUid() { return uid; }
+
     // Setters
 
     public void setDescription(String description) { this.description = description; }
@@ -86,5 +90,7 @@ public class Study extends Record {
     public void setSeriesCount(int seriesCount) { this.seriesCount = seriesCount; }
 
     public void setPatient(Patient patient) { this.patient = patient; }
+
+    public void setUid(String uid) { this.uid = uid; }
 
 }

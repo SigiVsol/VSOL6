@@ -1,24 +1,3 @@
-// const btnMeasureBack = $("#btnMeasureBack"), btnMeasureSelectAll = $("#btnMeasureSelectAll"), btnMeasureDelete = $("#btnMeasureDelete"), btnMeasureSettings = $("#btnMeasureSettings"), btnMeasureSave = $("#btnMeasureSave");
-// const btnLines = $("#btnLines"), btnCircles = $("#btnCircles"), btnDots = $("#btnDots"), btnAngles = $("#btnAngles");
-// const btnCobb = $("#btnCobb"), btnParallels = $("#btnParallels"), btnPerpendiculars = $("#btnPerpendiculars"), btnCalibration = $("#btnCalibration");
-// const btnVHS = $("#btnVHS"), btnCTR = $("#btnCTR"), btnTPA = $("#btnTPA"), btnTTA = $("#btnTTA"), btnDI = $("#btnDI"), btnVEZ = $("#btnVEZ"), btnNOA = $("#btnNOA");
-// const btnCalibrate1 = $("#btnCalibrate1"), btnCalibrate2 = $("#btnCalibrate2"), btnCalibrate5 = $("#btnCalibrate5"), btnCalibrateCustom = $("#btnCalibrateCustom"), btnCalibrateReset = $("#btnCalibrateReset");
-// const radMeasure = $(".radMeasure");
-//
-// const lblAngles1 = $("#lblAngles1"), lblAngles2 = $("#lblAngles2");
-// const lblCobb1 = $("#lblCobb1"), lblCobb2 = $("#lblCobb2");
-// const lblParallels1 = $("#lblParallels1"), lblParallels2 = $("#lblParallels2");
-// const lblPerpendiculars1 = $("#lblPerpendiculars1"), lblPerpendiculars2 = $("#lblPerpendiculars2");
-// const lblCalibration1 = $("#lblCalibration1"), lblCalibration2 = $("#lblCalibration2");
-// const lblVHS1 = $("#lblVHS1"), lblVHS2 = $("#lblVHS2"), lblVHS3 = $("#lblVHS3");
-// const lblCTR1 = $("#lblCTR1"), lblCTR2 = $("#lblCTR2"), lblCTR3 = $("#lblCTR3"), lblCTR4 = $("#lblCTR4");
-// const lblTPA1 = $("#lblTPA1"), lblTPA2 = $("#lblTPA2"), lblTPA3 = $("#lblTPA3");
-// const lblTTA1 = $("#lblTTA1"), lblTTA2 = $("#lblTTA2"), lblTTA3 = $("#lblTTA3");
-// const lblDI1 = $("#lblDI1"), lblDI2 = $("#lblDI2");
-// const lblVEZ1 = $("#lblVEZ1"), lblVEZ2 = $("#lblVEZ2");
-// const lblNOA1 = $("#lblNOA1"), lblNOA2 = $("#lblNOA2"), lblNOA3 = $("#lblNOA3"), lblNOA4 = $("#lblNOA4");
-
-
 const MEASURE_NONE = 0, MEASURE_LINES = 1, MEASURE_CIRCLES = 2, MEASURE_DOTS = 3, MEASURE_ANGLES = 4, MEASURE_COBB = 5, MEASURE_PARALLELS = 6, MEASURE_PERPENDICULARS = 7, MEASURE_CALIBRATION = 8, MEASURE_VHS = 9, MEASURE_CTR = 10, MEASURE_TPA = 11, MEASURE_TTA = 12, MEASURE_DI = 13, MEASURE_VEZ = 14, MEASURE_NOA = 15, MEASURE_SETTINGS = 16;
 
 const fontHeight = 18, mouseRange = 10, touchRange = 20;
@@ -35,6 +14,8 @@ class Measurer {
         this.selectionPoint = null;
         this.exporting = false;
         this.divsMeasures = [ $("#divMeasureNone"), $("#divMeasureLines"), $("#divMeasureCircles"), $("#divMeasureDots"), $("#divMeasureAngles"), $("#divMeasureCobb"), $("#divMeasureParallels"), $("#divMeasurePerpendiculars"), $("#divMeasureCalibration"), $("#divMeasureVHS"), $("#divMeasureCTR"), $("#divMeasureTPA"), $("#divMeasureTTA"), $("#divMeasureDI"), $("#divMeasureVEZ"), $("#divMeasureNOA"), $("#divMeasureSettings") ];
+
+        $(".radMeasure").click(() => app.viewer.drawImage(app.viewer.getViewport()));
     }
 
     setMeasure(measure) {
@@ -619,6 +600,41 @@ class Measurer {
 
         this.setMeasure(MEASURE_NONE);
         app.viewer.drawImage(app.viewer.getViewport());
+    }
+
+    // Events
+
+    deleteMeasure() {
+        const viewport = app.viewer.getViewport();
+        const instance = app.viewer.getInstance(viewport);
+
+        let reselect = null
+        for (let shape of instance.shapes) {
+            if (shape.selected) {
+                shape.deleted = true;
+                shape.updateLabels();
+            }
+            else reselect = shape;
+        }
+        if (reselect != null) {
+            reselect.selected = true;
+            if (reselect !== this.selectionShape) this.selectionShape = null;
+        } else {
+            this.selectionShape = null;
+        }
+
+        app.viewer.drawImage(viewport);
+    }
+
+    selectAll() {
+        const viewport = app.viewer.getViewport();
+        const instance = app.viewer.getInstance(viewport);
+
+        for (let shape of instance.shapes) {
+            shape.selected = true;
+        }
+
+        app.viewer.drawImage(viewport);
     }
 
 }

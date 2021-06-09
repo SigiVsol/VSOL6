@@ -200,7 +200,8 @@ public class Vsol4 implements Runnable {
 
         if (username != null) {
             httpRequest.getParameters().put("User", username);
-        } else if (token != null) {
+        }
+        if (token != null) {
             httpRequest.getParameters().put("Authorization", "Bearer%20" + token);
         }
 

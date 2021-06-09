@@ -32,38 +32,38 @@
             <div id="divMeasures"> <!-- display:none -->
                 <button class="btnHide" title="%{Close_submenu}"><img class="imgHide" src="icon/hide-arrow/16" alt=""></button>
                 <div id="divMeasureMain" style="padding: 5px 0 10px 0; border-color: white; border-style: dashed; border-width: 0 0 1px 0">
-                    <button id="btnMeasureBack" class="btnMeasure" title="%{Go_back}" disabled style="margin-right: 15px"><img src="icon/back/24" alt=""></button>
-                    <button id="btnMeasureSelectAll" class="btnMeasure" title="%{Select_all}" disabled><img src="icon/selectall/24" alt=""></button>
-                    <button id="btnMeasureDelete" class="btnMeasure" title="%{Delete_selected_measurements}" disabled><img src="icon/delete/24" alt=""></button>
-                    <button id="btnMeasureSettings" class="btnMeasure" title="Measuring_settings"><img src="icon/settings/24" alt=""></button>
+                    <button id="btnMeasureBack" class="btnMeasure" title="%{Go_back}" disabled style="margin-right: 15px" onclick="app.viewer.measurer.setMeasure(MEASURE_NONE)"><img src="icon/back/24" alt=""></button>
+                    <button id="btnMeasureSelectAll" class="btnMeasure" title="%{Select_all}" onclick="app.viewer.measurer.deleteMeasure()" disabled><img src="icon/selectall/24" alt=""></button>
+                    <button id="btnMeasureDelete" class="btnMeasure" title="%{Delete_selected_measurements}" onclick="app.viewer.measurer.selectAll()" disabled><img src="icon/delete/24" alt=""></button>
+                    <button id="btnMeasureSettings" class="btnMeasure" title="Measuring_settings" onclick="app.viewer.measurer.setMeasure(MEASURE_SETTINGS)"><img src="icon/settings/24" alt=""></button>
                 </div>
                 <div id="divMeasureNone" style="margin: 10px 0 10px 0">
                     <div>
-                        <button id="btnLines" class="btnMeasure" title="%{Lines}"><img src="icon/line/24" alt=""></button>
-                        <button id="btnCircles" class="btnMeasure" title="%{Circles}"><img src="icon/circle/24" alt=""></button>
-                        <button id="btnDots" class="btnMeasure" title="%{Dots}"><img src="icon/dots/24" alt=""></button>
-                        <button id="btnAngles" class="btnMeasure" title="%{Angles}"><img src="icon/angle/24" alt=""></button>
+                        <button id="btnLines" class="btnMeasure" title="%{Lines}" onclick="app.viewer.measurer.setMeasure(MEASURE_LINES)"><img src="icon/line/24" alt=""></button>
+                        <button id="btnCircles" class="btnMeasure" title="%{Circles}" onclick="app.viewer.measurer.setMeasure(MEASURE_CIRCLES)"><img src="icon/circle/24" alt=""></button>
+                        <button id="btnDots" class="btnMeasure" title="%{Dots}" onclick="app.viewer.measurer.setMeasure(MEASURE_DOTS)"><img src="icon/dots/24" alt=""></button>
+                        <button id="btnAngles" class="btnMeasure" title="%{Angles}" onclick="app.viewer.measurer.setMeasure(MEASURE_ANGLES)"><img src="icon/angle/24" alt=""></button>
                     </div>
                     <div style="margin-top: 5px">
-                        <button id="btnCobb" class="btnMeasure" title="%{Cobb_angles}"><img src="icon/cobb/24" alt=""></button>
-                        <button id="btnParallels" class="btnMeasure" title="%{Parallel_lines}"><img src="icon/parallel/24" alt=""></button>
-                        <button id="btnPerpendiculars" class="btnMeasure" title="%{Perpendicular_lines}"><img src="icon/perpendicular/24" alt=""></button>
-                        <button id="btnCalibration" class="btnMeasure" title="%{Calibration}"><img src="icon/calibration/24" alt=""></button>
+                        <button id="btnCobb" class="btnMeasure" title="%{Cobb_angles}" onclick="app.viewer.measurer.setMeasure(MEASURE_COBB)"><img src="icon/cobb/24" alt=""></button>
+                        <button id="btnParallels" class="btnMeasure" title="%{Parallel_lines}" onclick="app.viewer.measurer.setMeasure(MEASURE_PARALLELS)"><img src="icon/parallel/24" alt=""></button>
+                        <button id="btnPerpendiculars" class="btnMeasure" title="%{Perpendicular_lines}" onclick="app.viewer.measurer.setMeasure(MEASURE_PERPENDICULARS)"><img src="icon/perpendicular/24" alt=""></button>
+                        <button id="btnCalibration" class="btnMeasure" title="%{Calibration}" onclick="app.viewer.measurer.setMeasure(MEASURE_CALIBRATION)"><img src="icon/calibration/24" alt=""></button>
                     </div>
                     <div style="margin-top: 10px">
-                        <button id="btnVHS" class="btnFullMeasure" title="%{Vertebral_Heart_Score}">%{VHS}</button>
-                        <button id="btnCTR" class="btnFullMeasure" title="%{Cardiothoracic_Ratio}">%{CTR}</button>
+                        <button id="btnVHS" class="btnFullMeasure" title="%{Vertebral_Heart_Score}" onclick="app.viewer.measurer.setMeasure(MEASURE_VHS)">%{VHS}</button>
+                        <button id="btnCTR" class="btnFullMeasure" title="%{Cardiothoracic_Ratio}" onclick="app.viewer.measurer.setMeasure(MEASURE_CTR)">%{CTR}</button>
                     </div>
                     <div style="margin-top: 5px">
-                        <button id="btnTPA" class="btnFullMeasure" title="%{Tibial_Plateau_Angle}">%{TPA}</button>
-                        <button id="btnTTA" class="btnFullMeasure" title="%{Tibial_Tuberosity_Advancement}">%{TTA}</button>
+                        <button id="btnTPA" class="btnFullMeasure" title="%{Tibial_Plateau_Angle}" onclick="app.viewer.measurer.setMeasure(MEASURE_TPA)">%{TPA}</button>
+                        <button id="btnTTA" class="btnFullMeasure" title="%{Tibial_Tuberosity_Advancement}" onclick="app.viewer.measurer.setMeasure(MEASURE_TTA)">%{TTA}</button>
                     </div>
                     <div style="margin-top: 5px">
-                        <button id="btnDI" class="btnFullMeasure" title="%{Distractive_Index}">%{DI}</button>
-                        <button id="btnVEZ" class="btnFullMeasure" title="%{Vezzoni}">%{VEZ}</button>
+                        <button id="btnDI" class="btnFullMeasure" title="%{Distractive_Index}" onclick="app.viewer.measurer.setMeasure(MEASURE_DI)">%{DI}</button>
+                        <button id="btnVEZ" class="btnFullMeasure" title="%{Vezzoni}" onclick="app.viewer.measurer.setMeasure(MEASURE_VEZ)">%{VEZ}</button>
                     </div>
                     <div style="margin-top: 5px">
-                        <button id="btnNOA" class="btnFullMeasure" title="%{Norberg_Olsson_Angles}">%{NOA}</button>
+                        <button id="btnNOA" class="btnFullMeasure" title="%{Norberg_Olsson_Angles}" onclick="app.viewer.measurer.setMeasure(MEASURE_NOA)">%{NOA}</button>
                     </div>
                 </div>
 
@@ -124,13 +124,13 @@
                     <p class="lblInstructionsActive" id="lblCalibration1">1. %{Calib-1}.</p>
                     <p class="lblInstructions" id="lblCalibration2">2. %{Calib-2}.</p>
                     <div style="width: 100%; text-align: center">
-                        <button id="btnCalibrate1" class="btnMeasure">1 cm</button>
-                        <button id="btnCalibrate2" class="btnMeasure">2 cm</button>
-                        <button id="btnCalibrate5" class="btnMeasure">5 cm</button>
+                        <button id="btnCalibrate1" class="btnMeasure" onclick="app.viewer.measurer.calibrate(1)">1 cm</button>
+                        <button id="btnCalibrate2" class="btnMeasure" onclick="app.viewer.measurer.calibrate(2)">2 cm</button>
+                        <button id="btnCalibrate5" class="btnMeasure" onclick="app.viewer.measurer.calibrate(5)">5 cm</button>
                     </div>
                     <div style="margin-top: 5px; width: 100%; text-align: center">
-                        <button id="btnCalibrateCustom" class="btnMeasure">%{Custom}</button>
-                        <button id="btnCalibrateReset" class="btnMeasure">%{Reset}</button>
+                        <button id="btnCalibrateCustom" class="btnMeasure" onclick="app.viewer.measurer.calibrate(null)">%{Custom}</button>
+                        <button id="btnCalibrateReset" class="btnMeasure" onclick="app.viewer.measurer.resetCalibration()">%{Reset}</button>
                     </div>
                 </div>
                 <div id="divMeasureVHS" class="divMeasure">
@@ -177,7 +177,7 @@
                 </div>
 
                 <div id="divMeasureSave" style="padding: 10px; border-color: white; border-style: dashed; border-width: 1px 0 0 0">
-                    <button id="btnMeasureSave" class="green btnFullMeasure" title="%{Save_measurements}"><img src="icon/save/24" alt=""></button>
+                    <button id="btnMeasureSave" class="green btnFullMeasure" title="%{Save_measurements}"  onclick="app.viewer.measurer.saveMeasure()"><img src="icon/save/24" alt=""></button>
                 </div>
             </div>
         </div>
@@ -205,5 +205,23 @@
     <div id="divDisplay">
         <div id="gridDisplay"></div>
         <div id="touchDragger"></div> <!-- a see-through square to simulate touch dragging of thumbnails -->
+    </div>
+
+    <!-- Pop-up dialogs -->
+    <div id="divListviews" class="modal landscapeOnly" style="top: 10px"></div>  <!-- dynamically filled -->
+    <div id="divViewports" class="modal"></div> <!-- dynamically filled in -->
+    <div id="divSplit" class="modal" style="top: 300px">
+        <p class="lblModalTitle">Split study</p>
+        <button id="btnSplitFlagged" class="btnInModal btnFlagged" onclick="app.viewer.splitFlagged()">%{Flagged_series}* (<b class="lblCountFlagged">0</b>)</button>
+        <button id="btnSplitNonFlagged" class="btnInModal" onclick="app.viewer.splitNonFlagged()">%{Non_flagged_series} (<b class="lblCountUnflagged">0</b>)</button>
+        <button id="btnSplitBoth" class="btnInModal" onclick="app.viewer.splitBoth()">%{Both} (<b class="lblCountSeries">0</b>)</button>
+        <p style="font-size: x-small; margin: 15px 0 5px 0">*%{flag-explanation}.</p>
+    </div>
+    <div id="divDownload" class="modal" style="top: 357px">
+        <p class="lblModalTitle">Download series</p>
+        <button id="btnDownloadSelected" class="btnInModal" onclick="app.viewer.download(DOWNLOAD_SELECTED)">%{Selected_series} (<b class="lblCountSelected">0</b>)</button>
+        <button id="btnDownloadFlagged" class="btnInModal btnFlagged" onclick="app.viewer.download(DOWNLOAD_FLAGGED)">%{Flagged_series}* (<b class="lblCountFlagged">0</b>)</button>
+        <button id="btnDownloadAll" class="btnInModal" onclick="app.viewer.download(DOWNLOAD_ALL)">%{All} (<b class="lblCountSeries">0</b>)</button>
+        <p style="font-size: x-small; margin: 15px 0 5px 0">*%{flag-explanation}.</p>
     </div>
 </div>

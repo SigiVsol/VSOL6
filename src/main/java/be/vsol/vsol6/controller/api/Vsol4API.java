@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.api;
 
+import be.vsol.util.Log;
 import be.vsol.vsol4.model.*;
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
@@ -28,6 +29,9 @@ public class Vsol4API extends API {
         } else {
             Vsol4User vsol4User = ctrl.getVsol4().getUser(username);
             Vsol4Organization vsol4Organization = ctrl.getVsol4().getDefaultOrganization(username);
+
+            Log.debug("vsol4User: " + vsol4User);
+            Log.debug("vsol4Organization: " + vsol4Organization);
 
             return new UserOrg(new User(vsol4User), new Organization(vsol4Organization));
         }

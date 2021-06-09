@@ -108,45 +108,27 @@ class Viewer {
 
     getStudies() {
         $.get("api/organizations/" + app.organization.id + "/studies/" + app.id, json => {
-            console.log(json);
-
             if (json.code === app.internalCode || json.code === this.code) {
                 this.addStudies(json);
                 for (let study of this.studies) {
-                    this.getSeries(study);
+                    // this.getSeries(study);
                 }
             } else {
                 this.code = null;
-                // this.fillContent();
-                // this.fillNavBar();
                 app.pushHistory("clients", null);
                 app.show();
             }
         });
     }
 
-    getSeries(study) {
-        $.get("app/viewer/getSeries?studyId=" + study.id, json => {
-            this.addSeries(study, json);
-        });
-    }
-
     addStudies(json) {
         let newStudies = [];
 
-        let studyCounter = this.studies.length;
-        for (let jsonStudy of json["studies"]) {
-            let study = {
-                id: jsonStudy.id, // orthanc study id
-                vsol4Id: jsonStudy.vsol4Id, // orthanc study id
-                index: studyCounter,
-                description: jsonStudy.description,
-                name: jsonStudy.name,
-                date: jsonStudy.date,
-                color: this.studyColors[studyCounter++],
-                hidden: false,
-                series: []
-            };
+        for (let i = 0; i < this.studies.length; i++) {
+            let study = new Study();
+            study.loadJson(json.studies[i]);
+            study.index = i;
+            study.color = this.studyColors[i];
 
             newStudies.push(study);
             this.studies.push(study);
@@ -156,6 +138,12 @@ class Viewer {
 
         $("#lblLoading").css("display", "none"); // Loading done
         this.loading = false;
+    }
+
+    getSeries(study) {
+        $.get("app/viewer/getSeries?studyId=" + study.id, json => {
+            this.addSeries(study, json);
+        });
     }
 
     addSeries(study, json) {
@@ -438,8 +426,8 @@ class Viewer {
         let previousSerieIndex = serieIndex - 1;
 
         if (previousSerieIndex === -1) {
-            previousStudyIndex = (studyIndex + studies.length - 1) % studies.length;
-            previousSerieIndex = studies[previousStudyIndex].series.length - 1;
+            previousStudyIndex = (studyIndex + this.studies.length - 1) % this.studies.length;
+            previousSerieIndex = this.studies[previousStudyIndex].series.length - 1;
         }
 
         if (viewport.studyIndex === previousStudyIndex && viewport.serieIndex === previousSerieIndex) return;
@@ -692,7 +680,7 @@ class Viewer {
             };
 
             for (let serie of study.series) {
-                if (mode === DOWNLOAD_ALL || (mode === DOWNLOAD_FLAGGED && serie.flagged) || (mode === DOWNLOAD_SELECTED && isActive(study.index, serie.index))) {
+                if (mode === DOWNLOAD_ALL || (mode === DOWNLOAD_FLAGGED && serie.flagged) || (mode === DOWNLOAD_SELECTED && this.isActive(study.index, serie.index))) {
                     entry.series.push( { id: serie.id } );
                 }
             }
@@ -757,6 +745,27 @@ class Viewer {
         $.get("request/send?studyId=" + serie.study.id + "&serieId=" + serie.id, json => { // TODO
             Dialog.inform("Dicom file sent to " + json["DicomDestinationAET"] + ".");
         })
+    }
+
+    splitFlagged() {
+        this.setModal(MODAL_NONE);
+        Dialog.getString("%{Enter_description_for_flagged_series}.", "%{Flagged_series}", description => this.split(description, true));
+    }
+
+    splitNonFlagged() {
+        this.setModal(MODAL_NONE);
+        Dialog.getString("%{Enter_description_for_non_flagged_series}.", "%{Non_flagged_series}", description => this.split(description, true));
+    }
+
+    splitBoth() {
+        this.setModal(MODAL_NONE);
+
+        Dialog.getString("%{Enter_description_for_flagged_series}.", "%{Flagged_series}", description1 => {
+            Dialog.getString("%{Enter_description_for_non_flagged_series}.", "%{Non_flagged_series}", description2 => {
+                this.split(description1, true);
+                this.split(description2, false);
+            });
+        });
     }
 
     // menuBar
@@ -1183,7 +1192,7 @@ class Viewer {
 
     getDisplayWidth() {
         if (!this.landscape || (this.gridRows === 1 && this.gridCols === 1) ) {
-            return $("#divContent").width();
+            return $("#divViewer").width();
         } else {
             return this.getInnerWidth();
         }
@@ -1191,18 +1200,18 @@ class Viewer {
 
     getDisplayHeight() {
         if (this.landscape || (this.gridRows === 1 && this.gridCols === 1)) {
-            return $("#divContent").height();
+            return $("#divViewer").height();
         } else {
             return this.getInnerHeight();
         }
     }
 
     getInnerWidth() {
-        return $("#divContent").width() - (this.landscape ? ($("#divMenuBar").width() - 80) : 0);
+        return $("#divViewer").width() - (this.landscape ? ($("#divMenuBar").width() - 80) : 0);
     }
 
     getInnerHeight() {
-        return $("#divContent").height() - (this.landscape ? 0 : ($("#divMenuBar").height() - 73));
+        return $("#divViewer").height() - (this.landscape ? 0 : ($("#divMenuBar").height() - 73));
     }
 
     getViewport() {

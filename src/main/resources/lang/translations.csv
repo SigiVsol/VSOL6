@@ -142,8 +142,8 @@ send_study;;;studie versturen;envoyer un examen;Studie senden
 orientations;;;oriëntaties;orientations;Orientierungen
 measurements;;;metingen;mesures;Messungen
 flag-explanation;;flag or un-flag a series by clicking a selected thumbnail;(de)markeer een serie door te klikken op een geselecteerde miniatuur;marquer ou annuler le marquage d'une série en cliquant sur une miniature sélectionnée;Markieren oder deaktivieren Sie eine Serie, indem Sie auf ein ausgewähltes Miniaturbild klicken
-flagged_asterisk_series;;flagged* series;gemarkeerde* series;séries marquées*;Markierte* Serien
-non-flagged_series;;;niet-gemarkeerde series;séries non marquées;Nicht markierte serien
+flagged_series;;flagged series;gemarkeerde series;séries marquées;Markierte Serien
+non_flagged_series;;;niet-gemarkeerde series;séries non marquées;Nicht markierte serien
 both;;;beide;les deux;Beide
 selected_series;;;geselecteerde series;séries sélectionnées;Ausgewälte Serie(n)
 all;;;alles;tout;alle
@@ -184,3 +184,5 @@ modify_report;;;bewerk rapport;;
 drag_a_series_here;;;sleep hier een serie;;
 enter_calibration_cm;;Enter the actual length of the calibration object, in cm;Voer de effectieve lengte in van het kalibratie-object, in cm;Entrez la taille effective de l'objet de calibrage, en cm;Geben sie die tatsächliche Länge ein des Kalibrierungsobjekts, in cm
 invalid_value;;;ongeldige waarde;Valeur invalide;Ungültiger Wert
+enter_description_for_flagged_series;;Enter a description for the flagged series.;Geef een omschrijving in voor de gemarkeerde serie(s).;Entrez une description pour les séries marquées.;Geben Sie eine Beschreibung für die markierte Serien ein.
+enter_description_for_non_flagged_series;;Enter a description for the non-flagged series.;Geef een omschrijving in voor de niet gemarkeerde serie(s).;Entrez une description pour les séries non marquées.;Geben Sie eine Beschreibung für die nichet markierte Serien ein.

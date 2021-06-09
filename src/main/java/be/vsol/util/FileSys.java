@@ -68,4 +68,18 @@ public class FileSys {
         }
     }
 
+    // Copy
+
+    public static void copy(File source, File target) {
+        try {
+            if (source.isDirectory()) {
+                FileUtils.copyDirectory(source, target);
+            } else {
+                FileUtils.copyFile(source, target);
+            }
+        } catch (IOException e) {
+            Log.trace(e);
+        }
+    }
+
 }

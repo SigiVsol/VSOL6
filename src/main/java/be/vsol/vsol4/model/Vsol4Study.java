@@ -15,9 +15,10 @@ public class Vsol4Study extends Vsol4Entry {
         super("studies");
     }
 
-    public Vsol4Study(String id, String description, LocalDateTime date, Vsol4Patient patient, int seriesCount) {
+    public Vsol4Study(String id, String description, LocalDateTime date, Vsol4Patient patient, int seriesCount, String orthancUuid) {
         super("studies", id, description, date, patient);
         this.seriesCount = seriesCount;
+        this.orthancUuid = orthancUuid;
     }
 
     // Methods
