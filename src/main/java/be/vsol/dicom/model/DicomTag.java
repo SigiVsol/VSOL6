@@ -89,7 +89,11 @@ public enum DicomTag {
 
     PresentationLUTShape("2050,0020", VR.CodeString),
 
-    PixelData("7FE0,0010", VR.OB_or_OW)
+    PixelData("7FE0,0010", VR.OtherByteString),
+
+    Item("FFFE,E000", null),
+    ItemDelimitationItem("FFFE,E000", null),
+    SequenceDelimitationItem("FFFE,E0DD", null),
     ;
 
     private final String tag;
@@ -109,6 +113,15 @@ public enum DicomTag {
     public VR getVr() { return this.vr; }
 
     public boolean isMeta() { return tag.matches("0002,...."); }
+
+    public byte[] getBytes() {
+        String a = tag.substring(0, 2);
+        String b = tag.substring(2, 4);
+        String c = tag.substring(5, 7);
+        String d = tag.substring(7, 9);
+
+        return new byte[] { Bytes.toByte(b), Bytes.toByte(a), Bytes.toByte(d), Bytes.toByte(c) };
+    }
 
     // Static Methods
 

@@ -45,4 +45,48 @@ public class Bytes {
         return result;
     }
 
+    public static byte[] getByteArray(long number, int length) {
+        while (number < 0L) {
+            number = Lng.pow(256, length) + number;
+        }
+
+        byte[] result = new byte[length];
+
+        for (int i = length - 1; i >= 0; i--) {
+            result[i] = (byte) (number / Lng.pow(256, i));
+            number %= Lng.pow(256, i);
+        }
+
+        return result;
+    }
+
+    public static byte toByte(char hex) {
+        return switch (hex) {
+            case '1' -> (byte) 1;
+            case '2' -> (byte) 2;
+            case '3' -> (byte) 3;
+            case '4' -> (byte) 4;
+            case '5' -> (byte) 5;
+            case '6' -> (byte) 6;
+            case '7' -> (byte) 7;
+            case '8' -> (byte) 8;
+            case '9' -> (byte) 9;
+            case 'A', 'a' -> (byte) 10;
+            case 'B', 'b' -> (byte) 11;
+            case 'C', 'c' -> (byte) 12;
+            case 'D', 'd' -> (byte) 13;
+            case 'E', 'e' -> (byte) 14;
+            case 'F', 'f' -> (byte) 15;
+            default -> (byte) 0;
+        };
+    }
+
+    public static byte toByte(String hex) {
+        if (hex.length() == 0) hex = "00";
+        else if (hex.length() == 1) hex = "0" + hex;
+        else if (hex.length() > 2) hex = hex.substring(hex.length() - 2);
+
+        return (byte) (toByte(hex.charAt(0)) * 16 + toByte(hex.charAt(1)));
+    }
+
 }

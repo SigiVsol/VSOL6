@@ -16,6 +16,9 @@ import java.io.IOException;
 
 public class Jpg extends Img implements ContentType {
 
+    private String compressionMethod = "ISO_10918_1";
+    private double compressionRatio = 1.0;
+
     // Constructors
 
     public Jpg(byte[] bytes) {
@@ -34,13 +37,13 @@ public class Jpg extends Img implements ContentType {
         super(bufferedImage, formatName, scalingMethod, scalingMode, width, height);
     }
 
-    public Jpg(BufferedImage bufferedImage, float compressionQuality) {
+    public Jpg(BufferedImage bufferedImage, float compressionRatio) {
         super();
 
         ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
         JPEGImageWriteParam jpegParams = (JPEGImageWriteParam) writer.getDefaultWriteParam();
         jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        jpegParams.setCompressionQuality(compressionQuality);
+        jpegParams.setCompressionQuality(compressionRatio);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -60,5 +63,15 @@ public class Jpg extends Img implements ContentType {
     @Override public String getContentType() {
         return "image/jpeg";
     }
+
+    public double getCompressionRatio() { return compressionRatio; }
+
+    public String getCompressionMethod() { return compressionMethod; }
+
+    // Setter
+
+    public void setCompressionRatio(double compressionRatio) { this.compressionRatio = compressionRatio; }
+
+    public void setCompressionMethod(String compressionMethod) { this.compressionMethod = compressionMethod; }
 
 }

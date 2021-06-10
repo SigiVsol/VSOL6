@@ -29,13 +29,12 @@ public enum VR {
     ShortText("ST", 0, 1024, String.class),
     Time("TM", 0, 16, LocalTime.class),
     UniqueIdentifier("UI", 0, 64, String.class),
-    UnsignedLong("UL", 0, 4, Long.class),
+    UnsignedLong("UL", 4, 4, Long.class),
     Unknown("UN", 0, -1, Object.class),
-    UnsignedShort("US", 0, 2, Integer.class),
+    UnsignedShort("US", 2, 2, Integer.class),
     UnlimitedText("UT", 0, -1, String.class),
-
-    OB_or_OW("Ox", 0, -1, byte[].class),
-    Implicit("xx", 0, -1, byte[].class)
+//    OB_or_OW("Ox", 0, -1, byte[].class),
+//    Implicit("xx", 0, -1, byte[].class)
     ;
 
     private final String tag;
@@ -61,9 +60,12 @@ public enum VR {
 
     public Class<?> getClassType() { return classType; }
 
-    public int getMetaLength() {
-        if (this == OtherByteString || this == OtherFloatString || this == OtherWordString || this == Unknown || this == Sequence || this == UnlimitedText || this == Implicit) return 4;
-        else return 2;
+    public boolean isLongForm() {
+        return (this == OtherByteString || this == OtherFloatString || this == OtherWordString || this == Unknown || this == Sequence || this == UnlimitedText);
+    }
+
+    public boolean isFixedLength() {
+        return minLength == maxLength;
     }
 
     // Static Methods

@@ -20,4 +20,13 @@ public class Lng {
         }
     }
 
+    public static long pow(long base, int power) {
+        long result = 1;
+
+        for (int i = 0; i < power; i++)
+            result *= base;
+
+        return result;
+    }
+
 }

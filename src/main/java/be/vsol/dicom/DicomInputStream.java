@@ -2,6 +2,7 @@ package be.vsol.dicom;
 
 import be.vsol.dicom.model.DicomTag;
 import be.vsol.dicom.model.VR;
+import be.vsol.tools.Hex;
 import be.vsol.util.Bytes;
 import be.vsol.util.Log;
 
@@ -9,7 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class DicomInputStream extends ByteArrayInputStream {
+public class DicomInputStream extends ByteArrayInputStream implements Hex {
 
     public DicomInputStream(byte[] buf) {
         super(buf);
@@ -46,29 +47,31 @@ public class DicomInputStream extends ByteArrayInputStream {
 
         DicomAttribute result;
         DicomTag dicomTag = DicomTag.get(readNBytes(2), readNBytes(2));
+        if (dicomTag == null) return null;
 
         VR vr;
-        if (explicit) {
-            vr = VR.get(readNBytes(2));
-            if (vr.getMetaLength() == 4) readNBytes(2);
+        if (!explicit || dicomTag.getVr() == null) {
+            vr = null;
         } else {
-            vr = VR.Implicit;
+            vr = VR.get(readNBytes(2));
+            if (vr.isLongForm()) readNBytes(2);
         }
 
-        int vl = Bytes.getInt(readNBytes(vr.getMetaLength())); // VL = value length
+        int metaLength = (vr == null || vr.isLongForm()) ? 4 : 2; // how many bytes represent the length
+        int vl = Bytes.getInt(readNBytes(metaLength)); // VL = value length
 
-        if (vl == -1) { // undefined length: read until FFFE,E0DD
-            byte[] value;
+        if (vl < 0) { // undefined length: read until FFFE,E0DD
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+
             while (true) {
                 int a = read();
-                if (a == 254) { // FE
+                if (a == FE) {
                     int b = read();
-                    if (b == 255) { // FF
+                    if (b == FF) {
                         int c = read();
-                        if (c == 221) { // DD
+                        if (c == DD) {
                             int d = read();
-                            if (d == 224) { // E0
+                            if (d == E0) {
                                 break;
                             } else {
                                 out.write(a);
@@ -89,13 +92,13 @@ public class DicomInputStream extends ByteArrayInputStream {
                     out.write(a);
                 }
             }
-            value = out.toByteArray();
 
-            result = new DicomAttribute(dicomTag, value);
+            result = new DicomAttribute(dicomTag, vr, out.toByteArray());
             result.setUndefinedLength(true);
+        } else if (vl == 0) {
+            result = new DicomAttribute(dicomTag, vr, new byte[0]);
         } else {
-            byte[] value = readNBytes(vl);
-            result = new DicomAttribute(dicomTag, value);
+            result = new DicomAttribute(dicomTag, vr, readNBytes(vl));
         }
 
         return result;

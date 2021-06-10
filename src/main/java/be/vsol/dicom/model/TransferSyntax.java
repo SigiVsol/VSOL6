@@ -15,15 +15,15 @@ public enum TransferSyntax {
     MPEG_4AVC_H_264_BDCompatibleHighProfile_level4_1("1.2.840.10008.1.2.4.103"),
     ;
 
-    private final String code;
+    private final String uid;
 
-    TransferSyntax(String code) {
-        this.code = code;
+    TransferSyntax(String uid) {
+        this.uid = uid;
     }
 
     // Getters
 
-    public String getCode() { return code; }
+    public String getUid() { return uid; }
 
     public boolean isExplicit() {
         return this != ImplicitVREndian;
@@ -38,7 +38,7 @@ public enum TransferSyntax {
 
     public static TransferSyntax get(String code) {
         for (TransferSyntax transferSyntax : TransferSyntax.values()) {
-            if (transferSyntax.getCode().equals(code)) {
+            if (transferSyntax.getUid().equals(code)) {
                 return transferSyntax;
             }
         }
