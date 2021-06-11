@@ -5,6 +5,7 @@ import java.util.Vector;
 public class StudyInstance extends DicomInstance {
 
     private final Vector<SeriesInstance> series = new Vector<>();
+    private boolean mayHaveDeactivated = true;
 
     // Constructors
 
@@ -25,5 +26,11 @@ public class StudyInstance extends DicomInstance {
     // Getters
 
     public Vector<SeriesInstance> getSeries() { return series; }
+
+    public boolean isMayHaveDeactivated() { return mayHaveDeactivated; }
+
+    // Setters
+
+    public void setMayHaveDeactivated(boolean mayHaveDeactivated) { this.mayHaveDeactivated = mayHaveDeactivated; }
 
 }

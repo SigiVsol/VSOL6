@@ -1,6 +1,7 @@
 package be.vsol.dicom;
 
 import be.vsol.dicom.model.DicomTag;
+import be.vsol.dicom.model.DicomTag.Name;
 import be.vsol.dicom.model.VR;
 import be.vsol.tools.Hex;
 import be.vsol.util.Bytes;
@@ -44,7 +45,7 @@ public class DicomOutputStream extends ByteArrayOutputStream implements Hex {
         writeBytes(attribute.getValue());
 
         if (attribute.getLength() == -1) {
-            writeBytes(DicomTag.SequenceDelimitationItem.getBytes());
+            writeBytes(DicomTag.get(Name.SequenceDelimitationItem).getBytes());
             writeBytes(new byte[4]);
         }
     }

@@ -1,5 +1,6 @@
 package be.vsol.orthanc;
 
+import be.vsol.dicom.Dicom;
 import be.vsol.dicom.model.SOPInstance;
 import be.vsol.dicom.model.SeriesInstance;
 import be.vsol.dicom.model.StudyInstance;
@@ -31,19 +32,31 @@ public class Orthanc {
     public StudyInstance getStudyInstance(String studyID) {
         StudyInstance studyInstance = new StudyInstance(studyID);
 
-        HttpResponse response = getResponse("studies/" + studyID + "/series");
+        HttpResponse response = getResponse("studies/" + studyID + "/metadata?expand");
+        JSONObject jsonMeta = response.getBodyAsJSONObject();
+        if (jsonMeta.has("mayHaveDeactivated") || jsonMeta.has("rawImageId")) studyInstance.setMayHaveDeactivated(true);
+
+        response = getResponse("studies/" + studyID + "/series");
         JSONArray jsonSeries = response.getBodyAsJSONArray();
 
         for (JSONObject jsonSerie : Json.iterate(jsonSeries)) {
             String seriesID = Json.getOrDefault(jsonSerie, "ID", "");
             if (seriesID != null) {
-                SeriesInstance seriesInstance = new SeriesInstance(seriesID);
+                SeriesInstance seriesInstance = new SeriesInstance(seriesID, studyInstance);
                 JSONArray jsonInstances = Json.getOrDefault(jsonSerie, "Instances", new JSONArray());
                 for (int i = 0; i < jsonInstances.length(); i++) {
                     String instanceID = jsonInstances.getString(i);
                     if (instanceID != null) {
-                        SOPInstance sopInstance = new SOPInstance(instanceID);
+                        SOPInstance sopInstance = new SOPInstance(instanceID, seriesInstance);
                         seriesInstance.getInstances().add(sopInstance);
+
+                        if (studyInstance.isMayHaveDeactivated()) {
+                            response = getResponse("instances/" + instanceID + "/metadata?expand");
+                            jsonMeta = response.getBodyAsJSONObject();
+                            if (Json.getOrDefault(jsonMeta, "isDeactivated", "").equals("true")) {
+                                sopInstance.setActive(false);
+                            }
+                        }
                     }
                 }
                 studyInstance.getSeries().add(seriesInstance);
@@ -51,6 +64,28 @@ public class Orthanc {
         }
 
         return studyInstance;
+    }
+
+    public void loadDicomInto(SOPInstance sopInstance) {
+        HttpResponse response = getResponse("instances/" + sopInstance.getUid() + "/file");
+        sopInstance.setDicom(new Dicom(response.getBody()));
+    }
+
+    public void loadDicomsInto(SeriesInstance seriesInstance) {
+        for (SOPInstance sopInstance : seriesInstance.getInstances()) {
+            loadDicomInto(sopInstance);
+        }
+    }
+
+    public void loadDicomsInto(StudyInstance studyInstance) {
+        for (SeriesInstance seriesInstance : studyInstance.getSeries()) {
+            loadDicomsInto(seriesInstance);
+        }
+    }
+
+    public Dicom getDicom(String instanceID) {
+        HttpResponse response = getResponse("instances/" + instanceID + "/file");
+        return new Dicom(response.getBody());
     }
 
     private HttpResponse getResponse(String request) {

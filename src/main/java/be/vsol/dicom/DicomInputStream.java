@@ -47,7 +47,7 @@ public class DicomInputStream extends ByteArrayInputStream implements Hex {
 
         DicomAttribute result;
         DicomTag dicomTag = DicomTag.get(readNBytes(2), readNBytes(2));
-        if (dicomTag == null) return null;
+        if (dicomTag == null) return null; // 0000,0000
 
         VR vr;
         if (!explicit || dicomTag.getVr() == null) {

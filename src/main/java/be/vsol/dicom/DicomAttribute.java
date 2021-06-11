@@ -1,6 +1,7 @@
 package be.vsol.dicom;
 
 import be.vsol.dicom.model.DicomTag;
+import be.vsol.dicom.model.DicomTag.Name;
 import be.vsol.dicom.model.VR;
 import be.vsol.img.Jpg;
 import be.vsol.util.Bytes;
@@ -50,13 +51,13 @@ public class DicomAttribute {
     }
 
     public DicomAttribute(Jpg jpg) {
-        this.dicomTag = DicomTag.PixelData;
+        this.dicomTag = DicomTag.get(Name.PixelData);
         this.vr = VR.OtherByteString;
         this.undefinedLength = true;
 
         DicomOutputStream out = new DicomOutputStream();
-        out.writeAttribute(new DicomAttribute(DicomTag.Item, null, new byte[4]));
-        out.writeAttribute(new DicomAttribute(DicomTag.Item, null, jpg.getBytes()));
+        out.writeAttribute(new DicomAttribute(DicomTag.get(Name.Item), null, new byte[4]));
+        out.writeAttribute(new DicomAttribute(DicomTag.get(Name.Item), null, jpg.getBytes()));
 
         this.value = out.toByteArray();
     }

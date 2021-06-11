@@ -4,9 +4,11 @@ import be.vsol.dicom.Dicom;
 import be.vsol.dicom.DicomAttribute;
 import be.vsol.dicom.DicomOutputStream;
 import be.vsol.dicom.model.DicomTag;
-import be.vsol.dicom.model.VR;
+import be.vsol.dicom.model.DicomTag.Name;
 import be.vsol.img.Jpg;
+import be.vsol.util.Debug;
 import be.vsol.util.FileSys;
+import be.vsol.util.Resource;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,17 +19,19 @@ public class TestDicom {
     private static final String path = "C:/Sandbox/dicom";
 
     public static void main(String[] args) {
-//        readDicom();
+        readDicom();
 //        compareDicomTags();
 //        dicomAttributes();
 
 //        copyDicom();
 
-        createDicom();
+//        createDicom();
 
 //        outputStream();
 
 //        img();
+
+//        tag();
     }
 
     private static void readDicom() {
@@ -39,7 +43,7 @@ public class TestDicom {
         File copy = new File("C:/Sandbox/dicom/6-copy.dcm");
         FileSys.writeBytes(copy, dicom.getBytes());
 
-        DicomAttribute pixelData = dicom.getAttributes().get(DicomTag.PixelData);
+        DicomAttribute pixelData = dicom.getAttributes().get(Name.PixelData.getTag());
         Jpg jpg = pixelData.getValueAsJpg();
 
         File jpgFile = new File("C:/Sandbox/dicom/6.jpg");
@@ -52,24 +56,13 @@ public class TestDicom {
 
         Dicom dicom = new Dicom(file);
 
-        DicomAttribute pixelData = dicom.getAttributes().get(DicomTag.PixelData);
+        DicomAttribute pixelData = dicom.getAttributes().get(Name.PixelData.getTag());
         Jpg jpg = pixelData.getValueAsJpg();
 
         dicom.generateUIDs();
         dicom.putAttribute(new DicomAttribute(jpg));
 
         FileSys.writeBytes(copy, dicom.getBytes());
-    }
-
-    private static void compareDicomTags() {
-        DicomTag a = DicomTag.PixelData;
-        DicomTag b = DicomTag.AcquisitionDate;
-
-        TreeMap<DicomTag, String> set = new TreeMap<>();
-        set.put(a, "A");
-        set.put(b, "B");
-
-        System.out.println(set);
     }
 
     private static void createDicom() {
@@ -83,7 +76,7 @@ public class TestDicom {
     private static void outputStream() {
         DicomOutputStream out = new DicomOutputStream();
 
-        out.writeAttribute(new DicomAttribute(DicomTag.Item, null, new byte[4]));
+        out.writeAttribute(new DicomAttribute(DicomTag.get(Name.Item), null, new byte[4]));
 
         FileSys.writeBytes(new File("C:/Sandbox/dicom/stream"), out.toByteArray());
     }
@@ -91,12 +84,19 @@ public class TestDicom {
     private static void img() {
         File file = new File(path, "6.dcm");
         Dicom dicom = new Dicom(file);
-        Jpg jpg = dicom.getAttributes().get(DicomTag.PixelData).getValueAsJpg();
+        Jpg jpg = dicom.getAttributes().get(Name.PixelData.getTag()).getValueAsJpg();
         BufferedImage bufferedImage = jpg.getBufferedImage();
 
         System.out.println(bufferedImage.getWidth() + " x " + bufferedImage.getHeight());
 
         System.out.println(bufferedImage.getType() == BufferedImage.TYPE_BYTE_GRAY);
+    }
+
+    private static void tag() {
+        Debug.start("tags");
+        Debug.stop();
+
+//        System.out.println(DicomTag.map);
     }
 
 }

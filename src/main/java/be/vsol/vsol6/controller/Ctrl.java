@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller;
 
+import be.vsol.dicom.model.DicomTag;
 import be.vsol.http.HttpServer;
 import be.vsol.orthanc.Orthanc;
 import be.vsol.tools.Job;
