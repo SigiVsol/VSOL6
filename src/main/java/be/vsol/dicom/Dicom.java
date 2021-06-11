@@ -122,8 +122,27 @@ public class Dicom implements ByteArray, ContentType {
 
     public TreeMap<DicomTag, DicomAttribute> getAttributes() { return attributes; }
 
+    public int get(DicomTag dicomTag, int defaultValue) {
+        if (attributes.containsKey(dicomTag)) return attributes.get(dicomTag).getValueAsInt();
+        else return defaultValue;
+    }
+
     public TransferSyntax getTransferSyntax() {
         return TransferSyntax.get(attributes.get(DicomTag.TransferSyntaxUID).getValue());
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
