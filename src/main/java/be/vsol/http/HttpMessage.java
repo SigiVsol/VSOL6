@@ -9,6 +9,7 @@ import be.vsol.util.Log;
 import be.vsol.util.Int;
 import be.vsol.vsol6.model.enums.Language;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -124,6 +125,8 @@ public abstract class HttpMessage {
     public String getBodyAsString() { return body == null ? null : new String(body); }
 
     public JSONObject getBodyAsJSONObject() { return body == null ? null : new JSONObject(new String(body)); }
+
+    public JSONArray getBodyAsJSONArray() { return body == null ? null : new JSONArray(new String(body)); }
 
     public Png getBodyAsPng() { return body == null ? null : new Png(body); }
 

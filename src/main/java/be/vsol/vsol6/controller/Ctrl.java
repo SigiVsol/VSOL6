@@ -97,7 +97,7 @@ public class Ctrl {
     }
 
     private void startOrthanc(Config config) {
-
+        orthanc.start(config.orthanc.host, config.orthanc.port, config.orthanc.timeout);
     }
 
     private void startGui(Config config) {

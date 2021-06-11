@@ -1,6 +1,7 @@
 package be.vsol.vsol6.model.organization;
 
 import be.vsol.database.db;
+import be.vsol.dicom.model.StudyInstance;
 import be.vsol.tools.json;
 import be.vsol.vsol4.model.Vsol4Study;
 import be.vsol.vsol6.model.Record;
@@ -16,6 +17,7 @@ public class Study extends Record {
     @json @db private int seriesCount;
     @json private Patient patient;
     @json private String uid;
+//    private StudyInstance studyInstance;
 
     // Constructors
 

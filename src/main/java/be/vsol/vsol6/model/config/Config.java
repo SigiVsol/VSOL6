@@ -84,7 +84,7 @@ public class Config {
     public static class orthanc {
         @json public boolean active;
         @json public String host;
-        @json public int port;
+        @json public int port, timeout;
     }
 
     public static class db {

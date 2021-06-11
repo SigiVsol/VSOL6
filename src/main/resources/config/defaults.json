@@ -46,6 +46,7 @@
 	"orthanc":{
 		"active": true,
 		"host":"localhost",
-		"port":8800
+		"port":8800,
+		"timeout": 2500
 	}
 }
