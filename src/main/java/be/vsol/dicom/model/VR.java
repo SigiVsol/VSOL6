@@ -33,8 +33,6 @@ public enum VR {
     Unknown("UN", 0, -1, Object.class),
     UnsignedShort("US", 2, 2, Integer.class),
     UnlimitedText("UT", 0, -1, String.class),
-//    OB_or_OW("Ox", 0, -1, byte[].class),
-//    Implicit("xx", 0, -1, byte[].class)
     ;
 
     private final String tag;
@@ -79,7 +77,7 @@ public enum VR {
         for (VR VR : VR.values()) {
             if (VR.getTag().equals(vr)) return VR;
         }
-        return Unknown;
+        return null;
     }
 
 }
