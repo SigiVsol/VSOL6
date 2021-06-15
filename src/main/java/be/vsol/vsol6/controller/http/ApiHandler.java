@@ -218,6 +218,8 @@ public class ApiHandler implements RequestHandler {
         }
         jsonReply.put("code", "" + Security.getCode(idList));
 
+        System.out.println(jsonReply.toString(1));
+
         return new HttpResponse(jsonReply);
     }
 

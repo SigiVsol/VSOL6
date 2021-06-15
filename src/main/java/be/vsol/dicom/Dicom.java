@@ -99,10 +99,13 @@ public class Dicom implements ByteArray, ContentType {
         DicomOutputStream metaOut = new DicomOutputStream();
         DicomOutputStream dataOut = new DicomOutputStream();
         for (String tag : attributes.keySet()) {
-            if (DicomTag.get(tag).isMeta()) {
-                metaOut.writeAttribute(attributes.get(tag));
-            } else {
-                dataOut.writeAttribute(attributes.get(tag));
+            DicomTag dicomTag = DicomTag.get(tag);
+            if (dicomTag != null) {
+                if (dicomTag.isMeta()) {
+                    metaOut.writeAttribute(attributes.get(tag));
+                } else {
+                    dataOut.writeAttribute(attributes.get(tag));
+                }
             }
         }
 

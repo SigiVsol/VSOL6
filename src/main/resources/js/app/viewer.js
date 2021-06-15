@@ -111,7 +111,7 @@ class Viewer {
             if (json.code === app.internalCode || json.code === this.code) {
                 this.addStudies(json);
                 for (let study of this.studies) {
-                    // this.getSeries(study);
+                    this.getSeries(study);
                 }
             } else {
                 this.code = null;
@@ -124,7 +124,7 @@ class Viewer {
     addStudies(json) {
         let newStudies = [];
 
-        for (let i = 0; i < this.studies.length; i++) {
+        for (let i = 0; i < json.studies.length; i++) {
             let study = new Study();
             study.loadJson(json.studies[i]);
             study.index = i;
@@ -779,10 +779,12 @@ class Viewer {
         const menuBarTop = $("#menuBarTop");
 
         for (let study of newStudies) {
-            if (study.name !== this.previousName) {
+            let name = study.patient.name;
+
+            if (name !== this.previousName) {
                 let margin = this.previousName === "" ? "10px 0 10px 0" : "30px 0 10px 0";
-                this.previousName = study.name;
-                $("<p class='studyName landscapeOnly' style='margin: " + margin + "' onclick='hideStudyByName(" + study.index +  ")'>" + study.name + "</p>").appendTo(menuBarTop);
+                this.previousName = name;
+                $("<p class='studyName landscapeOnly' style='margin: " + margin + "' onclick='hideStudyByName(" + study.index +  ")'>" + name + "</p>").appendTo(menuBarTop);
             }
 
             let divStudy = $("<div class='divStudy' style='border-color: " + study.color + "'></div>").appendTo(menuBarTop);
@@ -792,11 +794,11 @@ class Viewer {
                 description = "";
             }
             if (description !== "") description += " &middot; ";
-            description += study.date;
+            description += Tools.formatDate(new Date(study.dateTime));
 
             $("<p class='studyDescription landscapeOnly' style='background-color: " + study.color + "' onclick='hideStudyByIndex(" + study.index + ")'>" + description + "</p>").appendTo(divStudy);
 
-            $("<div id='divThumbnails_" + study.id + "' class='divThumbnails divThumbnailsStudyIndex_" + study.index + " divThumbnailsStudyName_" + study.name.replace(" ", "") + "' style='border-color: " + study.color + "'></div>").appendTo(divStudy);
+            $("<div id='divThumbnails_" + study.id + "' class='divThumbnails divThumbnailsStudyIndex_" + study.index + " divThumbnailsStudyName_" + name.replace(" ", "") + "' style='border-color: " + study.color + "'></div>").appendTo(divStudy);
         }
     }
 

@@ -91,3 +91,6 @@ class Tools {
     }
 
 }
+
+// let testdate = new Date("2020-02-15T20:00:00");
+// console.log(Tools.formatDate(testdate));

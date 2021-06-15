@@ -1,6 +1,5 @@
 package be.vsol.vsol6.controller;
 
-import be.vsol.dicom.model.DicomTag;
 import be.vsol.http.HttpServer;
 import be.vsol.orthanc.Orthanc;
 import be.vsol.tools.Job;
@@ -13,10 +12,10 @@ import be.vsol.vsol6.controller.api.Vsol4API;
 import be.vsol.vsol6.controller.http.ServerHandler;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.Session;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.database.Db;
-import be.vsol.vsol6.model.Session;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
@@ -99,6 +98,18 @@ public class Ctrl {
 
     private void startOrthanc(Config config) {
         orthanc.start(config.orthanc.host, config.orthanc.port, config.orthanc.timeout);
+    }
+
+    private void startFujiDR() {
+
+    }
+
+    private void startGenerator() {
+
+    }
+
+    private void startDicomServer() {
+
     }
 
     private void startGui(Config config) {

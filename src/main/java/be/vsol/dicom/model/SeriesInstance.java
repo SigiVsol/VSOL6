@@ -2,16 +2,18 @@ package be.vsol.dicom.model;
 
 import java.util.Vector;
 
-public class SeriesInstance extends DicomInstance {
+public class SeriesInstance extends DicomInstance implements Comparable<SeriesInstance> {
 
     private final StudyInstance studyInstance;
+    private final int number;
     private final Vector<SOPInstance> instances = new Vector<>();
 
     // Constructors
 
-    public SeriesInstance(String uid, StudyInstance studyInstance) {
+    public SeriesInstance(String uid, StudyInstance studyInstance, int number) {
         super(uid);
         this.studyInstance = studyInstance;
+        this.number = number;
     }
 
     // Methods
@@ -22,6 +24,10 @@ public class SeriesInstance extends DicomInstance {
             result += "\n\t\t" + instance;
         }
         return result;
+    }
+
+    @Override public int compareTo(SeriesInstance other) {
+        return Integer.compare(number, other.getNumber());
     }
 
     // Getters
@@ -40,4 +46,5 @@ public class SeriesInstance extends DicomInstance {
 
     public StudyInstance getStudyInstance() { return studyInstance; }
 
+    public int getNumber() { return number; }
 }

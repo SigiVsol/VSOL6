@@ -1,5 +1,6 @@
 package be.vsol.dicom.model;
 
+import java.util.Collections;
 import java.util.Vector;
 
 public class StudyInstance extends DicomInstance {
@@ -21,6 +22,12 @@ public class StudyInstance extends DicomInstance {
             result += "\n\t" + seriesInstance;
         }
         return result;
+    }
+
+    // Methods
+
+    public void sortSeries() {
+        Collections.sort(series);
     }
 
     // Getters
