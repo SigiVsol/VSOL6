@@ -1,11 +1,16 @@
 package be.vsol.vsol6.controller.http;
 
+import be.vsol.dicom.Dicom;
+import be.vsol.dicom.model.SOPInstance;
+import be.vsol.dicom.model.SeriesInstance;
+import be.vsol.dicom.model.StudyInstance;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpRequest.Method;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
-import be.vsol.vsol6.controller.api.API;
+import be.vsol.vsol6.controller.backend.DataStorage;
+import be.vsol.vsol6.controller.backend.DicomStorage;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Record;
 import be.vsol.vsol6.model.UserOrg;
@@ -18,12 +23,14 @@ import org.json.JSONObject;
 
 import java.util.Vector;
 
-public class ApiHandler implements RequestHandler {
+public class API implements RequestHandler {
 
-    private final API api;
+    private final DataStorage dataStorage;
+    private final DicomStorage dicomStorage;
 
-    public ApiHandler(API api) {
-        this.api = api;
+    public API(DataStorage dataStorage, DicomStorage dicomStorage) {
+        this.dataStorage = dataStorage;
+        this.dicomStorage = dicomStorage;
     }
 
     @Override public HttpResponse respond(HttpRequest request) {
@@ -59,6 +66,7 @@ public class ApiHandler implements RequestHandler {
         else if (method == Method.POST && path.matches("/api/organizations/" + uid + "/(studies|entries)")) return postEntriesAction(request);
         // VIEWER
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/studies/" + uidList)) return getStudies(request);
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/studies/" + uid + "/series")) return getSeries(request);
 
         else return HttpResponse.get404();
     }
@@ -70,7 +78,7 @@ public class ApiHandler implements RequestHandler {
         String username = Json.getOrDefault(jsonRequest, "username", "");
         String password = Json.getOrDefault(jsonRequest, "password", "");
 
-        UserOrg userOrg = api.getUserOrg(username, password);
+        UserOrg userOrg = dataStorage.getUserOrg(username, password);
         return postLogin(userOrg, request.getLanguage());
     }
 
@@ -79,7 +87,7 @@ public class ApiHandler implements RequestHandler {
         String userId = Json.getOrDefault(jsonRequest, "userId", "");
         String organizationId = Json.getOrDefault(jsonRequest, "organizationId", "");
 
-        UserOrg userOrg = api.restoreUserOrg(userId, organizationId);
+        UserOrg userOrg = dataStorage.restoreUserOrg(userId, organizationId);
         return postLogin(userOrg, request.getLanguage());
     }
 
@@ -98,30 +106,30 @@ public class ApiHandler implements RequestHandler {
     // Organizations
 
     private HttpResponse getOrganizations(HttpRequest request) {
-        Vector<Organization> organizations = api.getOrganizations(getUsername(request), getFilter(request));
+        Vector<Organization> organizations = dataStorage.getOrganizations(getUsername(request), getFilter(request));
         return getRows(organizations, getPart(request));
     }
 
     // Clients
 
     private HttpResponse getClients(HttpRequest request) {
-        Vector<Client> clients = api.getClients(getSplit(request, 3), getFilter(request), getSortField(request), isSortAsc(request));
+        Vector<Client> clients = dataStorage.getClients(getSplit(request, 3), getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(clients, getPart(request));
     }
 
     private HttpResponse getClient(HttpRequest request) {
-        Client client = api.getClient(getSplit(request, 3), getSplit(request, 5));
+        Client client = dataStorage.getClient(getSplit(request, 3), getSplit(request, 5));
         return getResponse(client);
     }
 
     private HttpResponse putClient(HttpRequest request) {
         Client client = Json.get(request.getBodyAsJSONObject(), Client::new);
-        api.saveClient(getSplit(request, 3), client);
+        dataStorage.saveClient(getSplit(request, 3), client);
         return getResponse(client);
     }
 
     private HttpResponse deleteClient(HttpRequest request) {
-        boolean success = api.deleteClient(getSplit(request, 3), getSplit(request, 5));
+        boolean success = dataStorage.deleteClient(getSplit(request, 3), getSplit(request, 5));
         return getResponse(success);
     }
 
@@ -130,7 +138,7 @@ public class ApiHandler implements RequestHandler {
         int total = 0;
 
         if (action.equals("delete")) {
-            total = api.deleteClients(getSplit(request, 3), getIds(request));
+            total = dataStorage.deleteClients(getSplit(request, 3), getIds(request));
         }
         return getResponse(total);
     }
@@ -138,28 +146,28 @@ public class ApiHandler implements RequestHandler {
     // Patients
 
     private HttpResponse getPatients(HttpRequest request) {
-        Vector<Patient> patients = api.getPatients(getSplit(request, 3), null, getFilter(request), getSortField(request), isSortAsc(request));
+        Vector<Patient> patients = dataStorage.getPatients(getSplit(request, 3), null, getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(patients, getPart(request));
     }
 
     private HttpResponse getPatientsOfClient(HttpRequest request) {
-        Vector<Patient> patients = api.getPatients(getSplit(request, 3), getSplit(request, 5), getFilter(request), getSortField(request), isSortAsc(request));
+        Vector<Patient> patients = dataStorage.getPatients(getSplit(request, 3), getSplit(request, 5), getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(patients, getPart(request));
     }
 
     private HttpResponse getPatient(HttpRequest request) {
-        Patient patient = api.getPatient(getSplit(request, 3), getSplit(request, 5));
+        Patient patient = dataStorage.getPatient(getSplit(request, 3), getSplit(request, 5));
         return getResponse(patient);
     }
 
     private HttpResponse putPatient(HttpRequest request) {
         Patient patient = Json.get(request.getBodyAsJSONObject(), Patient::new);
-        api.savePatient(getSplit(request, 3), patient);
+        dataStorage.savePatient(getSplit(request, 3), patient);
         return getResponse(patient);
     }
 
     private HttpResponse deletePatient(HttpRequest request) {
-        boolean success = api.deletePatient(getSplit(request, 3), getSplit(request, 5));
+        boolean success = dataStorage.deletePatient(getSplit(request, 3), getSplit(request, 5));
         return getResponse(success);
     }
 
@@ -168,7 +176,7 @@ public class ApiHandler implements RequestHandler {
         int total = 0;
 
         if (action.equals("delete")) {
-            total = api.deletePatients(getSplit(request, 3), getIds(request));
+            total = dataStorage.deletePatients(getSplit(request, 3), getIds(request));
         }
         return getResponse(total);
     }
@@ -176,17 +184,17 @@ public class ApiHandler implements RequestHandler {
     // Entries
 
     private HttpResponse getEntries(HttpRequest request) {
-        Vector<Study> studies = api.getStudies(getSplit(request, 3), null, getFilter(request), getSortField(request), isSortAsc(request));
+        Vector<Study> studies = dataStorage.getStudies(getSplit(request, 3), null, getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(studies, getPart(request));
     }
 
     private HttpResponse getEntriesOfPatient(HttpRequest request) {
-        Vector<Study> studies = api.getStudies(getSplit(request, 3), getSplit(request, 5), getFilter(request), getSortField(request), isSortAsc(request));
+        Vector<Study> studies = dataStorage.getStudies(getSplit(request, 3), getSplit(request, 5), getFilter(request), getSortField(request), isSortAsc(request));
         return getRows(studies, getPart(request));
     }
 
     private HttpResponse deleteEntry(HttpRequest request) {
-        boolean success = api.deleteStudy(getSplit(request, 3), getSplit(request, 5));
+        boolean success = dataStorage.deleteStudy(getSplit(request, 3), getSplit(request, 5));
         return getResponse(success);
     }
 
@@ -195,7 +203,7 @@ public class ApiHandler implements RequestHandler {
         int total = 0;
 
         if (action.equals("delete")) {
-            total = api.deleteStudies(getSplit(request, 3), getIds(request));
+            total = dataStorage.deleteStudies(getSplit(request, 3), getIds(request));
         }
         return getResponse(total);
     }
@@ -209,24 +217,44 @@ public class ApiHandler implements RequestHandler {
         JSONObject jsonReply = new JSONObject(); {
             JSONArray jsonStudies = new JSONArray();
             for (String id : idList.split(",", -1)) {
-                Study study = api.getStudy(organizationId, id);
-//                Vsol4Study vsol4Study = new Vsol4Study(token, vsolStudyId, true);
-//                JSONObject jsonStudy = getJsonStudy(vsol4Study);
+                Study study = dataStorage.getStudy(organizationId, id);
                 jsonStudies.put(Json.get(study));
             }
             jsonReply.put("studies", jsonStudies);
         }
         jsonReply.put("code", "" + Security.getCode(idList));
 
-        System.out.println(jsonReply.toString(1));
-
         return new HttpResponse(jsonReply);
     }
 
     private HttpResponse getSeries(HttpRequest request) {
+        String organizationId = getSplit(request, 3);
+        String studyId = getSplit(request, 5);
+
+        JSONObject jsonReply = new JSONObject();
+        JSONArray jsonSeries = new JSONArray();
+
+        Study study = dataStorage.getStudy(organizationId, studyId);
+        if (study != null) {
+            StudyInstance studyInstance = dicomStorage.getStudyInstance(study.getUid());
+            if (studyInstance != null) {
 
 
-        return null;
+
+                Dicom dicom = dicomStorage.getFirstDicomOf(studyInstance);
+                if (dicom != null) {
+
+                    for (SeriesInstance seriesInstance : studyInstance.getSeries()) {
+
+                    }
+
+                    System.out.println(dicom.getJson().toString(1));
+                }
+            }
+        }
+
+        jsonReply.put("series", jsonSeries);
+        return new HttpResponse(jsonReply);
     }
 
     // Methods
@@ -298,6 +326,26 @@ public class ApiHandler implements RequestHandler {
         return new HttpResponse(result);
     }
 
-
+//    private JSONObject getJson(SeriesInstance seriesInstance, String plane) {
+//        JSONObject json = new JSONObject();
+//        json.put("id", seriesInstance.getUid());
+////        json.put("mainDicomTags", orthancSerie.getJsonObject().getJSONObject("MainDicomTags"));
+//
+//        if (plane.equals("C")) {
+//            json.put("framecount", orthancSerie.getInstances().getFirst().getHeight());
+//        } else if (plane.equals("S")) {
+//            json.put("framecount", orthancSerie.getInstances().getFirst().getWidth());
+//        } else {
+//            json.put("framecount", orthancSerie.getFrameCount());
+//        }
+//
+//        json.put("plane", plane);
+//
+//        return json;
+//    }
+//
+//    private JSONObject getJson(SOPInstance sopInstance) {
+//
+//    }
 
 }

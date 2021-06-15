@@ -17,6 +17,7 @@ public class Config {
     @json public vsol4 vsol4 = new vsol4();
     @json public orthanc orthanc = new orthanc();
     @json public db db = new db();
+    @json public bridge bridge = new bridge();
 
     /**
      * Constructor
@@ -34,7 +35,7 @@ public class Config {
 
                 for (int i = 1; i < subs.length; i++) {
                     object = field.get(this);
-                    field = field.get(this).getClass().getField(subs[i]);
+                    field = object.getClass().getField(subs[i]);
                 }
 
                 String value = overrides.get(key);
@@ -47,15 +48,19 @@ public class Config {
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.trace(e);
+            Log.err("Invalid parameter: " + e.getMessage());
         }
     }
 
     // Static Classes
 
     public static class app {
+        public enum DataStorage { vsol4 }
+        public enum DicomStorage { orthanc }
         @json public File home;
-        @json public boolean debug, legacy;
+        @json public boolean debug;
+        @json public DataStorage dataStorage;
+        @json public DicomStorage dicomStorage;
     }
 
     public static class console {
@@ -76,7 +81,7 @@ public class Config {
     }
 
     public static class vsol4 {
-        @json public boolean active, forward;
+        @json public boolean active;
         @json public String host, username, password;
         @json public int port, timeout, lifespan;
     }
@@ -93,6 +98,12 @@ public class Config {
         @json public boolean active;
         @json public String host, user, password;
         @json public int port;
+    }
+
+    public static class bridge {
+        @json public boolean active;
+        @json public String host;
+        @json public int port, timeout;
     }
 
 

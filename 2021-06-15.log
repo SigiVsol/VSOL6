@@ -1,0 +1,6 @@
+15:44:55 [ERR] java.lang.NoSuchFieldException: forward
+15:45:57 [ERR] java.lang.NoSuchFieldException: legacy
+15:46:10 [ERR] java.lang.NoSuchFieldException: legacy
+15:48:14 [ERR] java.lang.NoSuchFieldException: legacy
+15:50:03 [ERR] legacy
+15:50:44 [ERR] Invalid parameter: legacy

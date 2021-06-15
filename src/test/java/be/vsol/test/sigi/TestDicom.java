@@ -19,19 +19,15 @@ public class TestDicom {
     private static final String path = "C:/Sandbox/dicom";
 
     public static void main(String[] args) {
-        readDicom();
+//        readDicom();
 //        compareDicomTags();
 //        dicomAttributes();
-
 //        copyDicom();
-
 //        createDicom();
-
 //        outputStream();
-
 //        img();
-
 //        tag();
+        json();
     }
 
     private static void readDicom() {
@@ -97,6 +93,12 @@ public class TestDicom {
         Debug.stop();
 
 //        System.out.println(DicomTag.map);
+    }
+
+    private static void json() {
+        File file = new File(path, "6.dcm");
+        Dicom dicom = new Dicom(file);
+        System.out.println(dicom.getJson().toString(1));
     }
 
 }

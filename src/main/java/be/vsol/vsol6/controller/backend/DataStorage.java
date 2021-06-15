@@ -1,4 +1,4 @@
-package be.vsol.vsol6.controller.api;
+package be.vsol.vsol6.controller.backend;
 
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
@@ -10,13 +10,13 @@ import be.vsol.vsol6.model.organization.Study;
 
 import java.util.Vector;
 
-public abstract class API {
+public abstract class DataStorage {
 
     protected final Ctrl ctrl;
 
     // Constructors
 
-    public API(Ctrl ctrl) {
+    public DataStorage(Ctrl ctrl) {
         this.ctrl = ctrl;
     }
 
@@ -71,6 +71,5 @@ public abstract class API {
     public abstract boolean deleteStudy(String organizationId, String studyId);
 
     public abstract int deleteStudies(String organizationId, Vector<String> studyIds);
-
 
 }

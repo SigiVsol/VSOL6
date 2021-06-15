@@ -2,7 +2,8 @@
 	"app":{
 		"home": "C:/VSOL6",
 		"debug": false,
-		"legacy": false,
+		"dataStorage": "vsol4",
+		"dicomStorage": "orthanc",
 	},
 	"console":{
 		"active": true
@@ -35,7 +36,6 @@
 	},
 	"vsol4":{
 		"active": true,
-		"forward": false,
 		"host": "localhost",
 		"port": 8080,
 		"username": "firstuser",
@@ -48,5 +48,11 @@
 		"host":"localhost",
 		"port":8800,
 		"timeout": 2500
+	},
+	"bridge":{
+		"active": false,
+		"host": "localhost",
+		"port": 8039,
+		"timeout": 500
 	}
 }

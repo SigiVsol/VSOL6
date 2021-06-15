@@ -4,11 +4,13 @@ import be.vsol.dicom.model.DicomTag;
 import be.vsol.dicom.model.DicomTag.Name;
 import be.vsol.dicom.model.PhotometricInterpretation;
 import be.vsol.dicom.model.TransferSyntax;
+import be.vsol.dicom.model.VR;
 import be.vsol.dicom.util.DicomUidGenerator;
 import be.vsol.img.Jpg;
 import be.vsol.tools.ByteArray;
 import be.vsol.tools.ContentType;
 import be.vsol.util.FileSys;
+import org.json.JSONObject;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -133,6 +135,25 @@ public class Dicom implements ByteArray, ContentType {
 
     public TransferSyntax getTransferSyntax() {
         return TransferSyntax.get(attributes.get(Name.TransferSyntaxUID.getTag()).getValue());
+    }
+
+    public JSONObject getJson() {
+        JSONObject jsonResult = new JSONObject(); {
+            for (String tag : attributes.keySet()) {
+                DicomTag dicomTag = DicomTag.get(tag);
+                if (dicomTag != null) {
+                    String key = dicomTag.toString();
+                    DicomAttribute attribute = attributes.get(tag);
+
+                    switch (dicomTag.getVr().getClassType().getSimpleName()) {
+                        case "String" -> jsonResult.put(key, attribute.getValueAsString());
+                        case "Integer" -> jsonResult.put(key, attribute.getValueAsInt());
+                        case "Double" -> jsonResult.put(key, attribute.getValueAsDouble());
+                    }
+                }
+            }
+        }
+        return jsonResult;
     }
 
 }

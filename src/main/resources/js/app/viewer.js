@@ -141,7 +141,8 @@ class Viewer {
     }
 
     getSeries(study) {
-        $.get("app/viewer/getSeries?studyId=" + study.id, json => {
+        // $.get("app/viewer/getSeries?studyId=" + study.id, json => {
+        $.get("api/organizations/" + app.organization.id + "/studies/" + study.id + "/series", json => {
             this.addSeries(study, json);
         });
     }

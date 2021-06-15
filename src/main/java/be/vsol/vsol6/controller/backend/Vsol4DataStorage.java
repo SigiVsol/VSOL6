@@ -1,4 +1,4 @@
-package be.vsol.vsol6.controller.api;
+package be.vsol.vsol6.controller.backend;
 
 import be.vsol.util.Log;
 import be.vsol.vsol4.model.*;
@@ -13,11 +13,11 @@ import be.vsol.vsol6.model.organization.Study;
 import java.util.Vector;
 import java.util.function.Supplier;
 
-public class Vsol4API extends API {
+public class Vsol4DataStorage extends DataStorage {
 
     // Constructors
 
-    public Vsol4API(Ctrl ctrl) {
+    public Vsol4DataStorage(Ctrl ctrl) {
         super(ctrl);
     }
 
@@ -194,6 +194,10 @@ public class Vsol4API extends API {
     @Override public int deleteStudies(String organizationId, Vector<String> studyIds) {
         return deleteRecords(organizationId, studyIds, Vsol4Study::new);
     }
+
+    // Series
+
+
 
     // Methods
 

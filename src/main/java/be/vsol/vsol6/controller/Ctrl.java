@@ -7,8 +7,10 @@ import be.vsol.tools.Sig;
 import be.vsol.util.Log;
 import be.vsol.util.Resource;
 import be.vsol.vsol4.Vsol4;
-import be.vsol.vsol6.controller.api.API;
-import be.vsol.vsol6.controller.api.Vsol4API;
+import be.vsol.vsol6.controller.backend.DataStorage;
+import be.vsol.vsol6.controller.backend.DicomStorage;
+import be.vsol.vsol6.controller.backend.OrthancDicomStorage;
+import be.vsol.vsol6.controller.backend.Vsol4DataStorage;
 import be.vsol.vsol6.controller.http.ServerHandler;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
@@ -37,7 +39,8 @@ public class Ctrl {
     private final Vsol4 vsol4;
     private final Orthanc orthanc;
     private final HttpServer server;
-    private final API api;
+    private final DataStorage dataStorage;
+    private final DicomStorage dicomStorage;
 
     private Session systemSession, localSession;
 
@@ -62,7 +65,13 @@ public class Ctrl {
         this.vsol4 = new Vsol4();
         this.orthanc = new Orthanc();
 
-        this.api = appConfig.app.legacy ? new Vsol4API(this) : null;
+        this.dataStorage = switch (appConfig.app.dataStorage) {
+            case vsol4 -> new Vsol4DataStorage(this);
+        };
+
+        this.dicomStorage = switch (appConfig.app.dicomStorage) {
+            case orthanc -> new OrthancDicomStorage(this);
+        };
 
         if (gui != null && appConfig.gui.active) gui.showSplashScreen();
         new Job(() -> boot(appConfig));
@@ -75,7 +84,7 @@ public class Ctrl {
         systemSession = new Session(this, system);
 
         if (appConfig.server.active) startServer(systemSession.getConfig());
-        if (appConfig.vsol4.active && !appConfig.vsol4.forward) startVsol4(systemSession.getConfig());
+        if (appConfig.vsol4.active) startVsol4(systemSession.getConfig());
         if (appConfig.orthanc.active) startOrthanc(systemSession.getConfig());
         if (gui != null && appConfig.gui.active) startGui(systemSession.getConfig());
     }
@@ -89,7 +98,7 @@ public class Ctrl {
     }
 
     private void startServer(Config config) {
-        server.start(config.server.port, new ServerHandler(config, sig.getVariables(), api));
+        server.start(config.server.port, new ServerHandler(config, sig.getVariables(), dataStorage, dicomStorage));
     }
 
     private void startVsol4(Config config) {
@@ -116,8 +125,8 @@ public class Ctrl {
         if (gui == null) {
             Log.err("Can't show GUI. Not launched as a JavaFX application.");
         } else {
-            User user = api.getUser(config.gui.userId);
-            Organization organization = api.getOrganization(config.gui.organizationId);
+            User user = dataStorage.getUser(config.gui.userId);
+            Organization organization = dataStorage.getOrganization(config.gui.organizationId);
 
             localSession = new Session(this, system, user, organization);
             gui.start(config);

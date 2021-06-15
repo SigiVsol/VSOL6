@@ -17,7 +17,8 @@ public class Study extends Record {
     @json @db private int seriesCount;
     @json private Patient patient;
     @json private String uid;
-//    private StudyInstance studyInstance;
+
+    private StudyInstance studyInstance;
 
     // Constructors
 
@@ -83,6 +84,8 @@ public class Study extends Record {
 
     public String getUid() { return uid; }
 
+    public StudyInstance getStudyInstance() { return studyInstance; }
+
     // Setters
 
     public void setDescription(String description) { this.description = description; }
@@ -94,5 +97,7 @@ public class Study extends Record {
     public void setPatient(Patient patient) { this.patient = patient; }
 
     public void setUid(String uid) { this.uid = uid; }
+
+    public void setStudyInstance(StudyInstance studyInstance) { this.studyInstance = studyInstance; }
 
 }

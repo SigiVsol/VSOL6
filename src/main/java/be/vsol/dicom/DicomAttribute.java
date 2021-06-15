@@ -5,6 +5,7 @@ import be.vsol.dicom.model.DicomTag.Name;
 import be.vsol.dicom.model.VR;
 import be.vsol.img.Jpg;
 import be.vsol.util.Bytes;
+import be.vsol.util.Dbl;
 
 import java.nio.ByteBuffer;
 
@@ -68,6 +69,7 @@ public class DicomAttribute {
         return switch (dicomTag.getVr().getClassType().getSimpleName()) {
             case "String" -> getValueAsString();
             case "Integer" -> "" + getValueAsInt();
+            case "Double" -> "" + getValueAsDouble();
             default -> "[" + Bytes.getSizeString(getLength()) + "]";
         };
     }
@@ -78,6 +80,11 @@ public class DicomAttribute {
 
     public int getValueAsInt() {
         return Bytes.getInt(value);
+    }
+
+    public double getValueAsDouble() {
+        // TODO -> this will only work for VR DecimalString
+        return Dbl.parse(getValueAsString(), 0.0);
     }
 
     public Jpg getValueAsJpg() {
