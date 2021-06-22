@@ -1,3 +1,0 @@
-class Report extends Entry {
-
-}

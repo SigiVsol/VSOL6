@@ -1,5 +1,10 @@
-class Organization extends VsolRecord {
-    constructor(id = null, name = "", description = "") {
+import {VsolRecord} from "./VsolRecord.js";
+
+export class Organization extends VsolRecord {
+    private name : string;
+    private description : string;
+
+    constructor(id : string = null, name = "", description = "") {
         super(id);
         this.name = name;
         this.description = description;
@@ -11,8 +16,8 @@ class Organization extends VsolRecord {
         this.description = json.description;
     }
 
-
     toString() {
         return this.name;
     }
+
 }

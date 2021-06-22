@@ -13,4 +13,8 @@
       <module name="VSOL6" target="14" />
     </bytecodeTargetLevel>
   </component>
+  <component name="TypeScriptCompiler">
+    <option name="recompileOnChanges" value="true" />
+    <option name="typeScriptCompilerParams" value="--target ES6" />
+  </component>
 </project>

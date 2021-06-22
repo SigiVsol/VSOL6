@@ -33,7 +33,7 @@ public class WebHandler implements RequestHandler {
             return getHtml(path, language);
         } else if (path.matches(".*\\.js")) {
             return getJs(path, language);
-        } else if (path.matches(".*\\.css")) {
+        } else if (path.matches(".*\\.css(\\.map)?")) {
             return getCss(path);
         } else if (path.matches("/icon/.*")) {
             return getIcon(path, parameters);

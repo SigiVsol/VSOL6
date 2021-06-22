@@ -46,7 +46,7 @@ public class Html implements ContentType, ByteArray {
                         }
                     }
                     if (variables != null) {
-                        for (String key : Key.get(line, '$')) { // %{...} ; translations
+                        for (String key : Key.get(line, '$')) { // %{...} ; variables
                             line = line.replace(Key.make(key, '$'), variables.getOrDefault(key, key));
                         }
                     }

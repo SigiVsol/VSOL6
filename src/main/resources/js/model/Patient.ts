@@ -1,6 +1,24 @@
-class Patient extends VsolRecord {
-    constructor(id = null, client = new Client(), name = "", birthdate = "", chip = "", ueln = "", species = "",
-                breed = "", sire = "", damsire = "", neutered = false, sex = "X", color = "") {
+import {VsolRecord} from "./VsolRecord.js";
+import {Client} from "./Client.js";
+import {Sex} from "./Sex.js";
+
+export class Patient extends VsolRecord {
+
+    private readonly client : Client;
+    private name : string;
+    private birthdate : Date;
+    private chip : string;
+    private ueln : string;
+    private species : string;
+    private breed : string;
+    private sire : string;
+    private damsire : string;
+    private neutered : boolean;
+    private sex : Sex;
+    private color : string;
+
+    constructor(id : string = null, client = new Client(), name = "", birthdate = new Date(), chip = "", ueln = "", species = "",
+                breed = "", sire = "", damsire = "", neutered = false, sex = Sex.X, color = "") {
         super(id);
         this.client = client;
         this.name = name;
@@ -57,12 +75,28 @@ class Patient extends VsolRecord {
     }
 
     getSexString() {
-        if (this.sex === "M") return "♂";
-        else if (this.sex === "F") return "♀";
+        if (this.sex === Sex.M) return "♂";
+        else if (this.sex === Sex.F) return "♀";
         else return "?";
     }
 
     toString() {
         return this.name;
     }
+
+    // Getters
+
+    getClient() { return this.client; }
+    getName() { return this.name; }
+    getBirthdate() { return this.birthdate; }
+    getChip() { return this.chip; }
+    getUeln() { return this.ueln; }
+    getSpecies() { return this.species; }
+    getBreed() { return this.breed; }
+    getSire() { return this.sire; }
+    getDamsire() { return this.damsire; }
+    isNeutered() { return this.neutered; }
+    getSex() { return this.sex; }
+    getColor() { return this.color; }
+
 }

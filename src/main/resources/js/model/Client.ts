@@ -1,6 +1,22 @@
-class Client extends VsolRecord {
-    constructor(id = null, lastName = "", firstName = "", company = "", via = "", language = "en",
-                phone = "", email = "", street = "", postal = "", city = "", country = "", extraInfo = "") {
+import {VsolRecord} from "./VsolRecord.js";
+import {Language} from "./Language.js";
+
+export class Client extends VsolRecord {
+
+    private lastName : string;
+    private firstName : string;
+    private company : string;
+    private via : string;
+    private language : Language;
+    private phone : string;
+    private email : string;
+    private street : string;
+    private postal : string;
+    private city : string;
+    private country : string;
+    private extraInfo : string;
+
+    constructor(id : string = null, lastName : string = "", firstName = "", company = "", via = "", language = Language.en, phone = "", email = "", street = "", postal = "", city = "", country = "", extraInfo = "") {
         super(id);
 
         this.lastName = lastName;
@@ -54,5 +70,20 @@ class Client extends VsolRecord {
     toString() {
         return this.getName();
     }
+
+    // Getters
+
+    getLastName() { return this.lastName; }
+    getFirstName() { return this.firstName; }
+    getCompany() { return this.company; }
+    getVia() { return this.via; }
+    getLanguage() { return this.language; }
+    getPhone() { return this.phone; }
+    getEmail() { return this.email; }
+    getStreet() { return this.street; }
+    getPostal() { return this.postal; }
+    getCity() { return this.city; }
+    getCountry() { return this.country; }
+    getExtraInfo() { return this.extraInfo; }
 
 }
