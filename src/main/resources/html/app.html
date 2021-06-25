@@ -9,12 +9,24 @@
 </head>
 <body>
 
-    <h1>${app.title} ${app.version}</h1>
+    <div id="divBaseLayer">
+        <div id="divNavbar">@{app/navbar.html}</div>
+        <div id="divContent"> <!-- JS shows one of the following and hides the others -->
+            <div id="divLogin" class="div-base-content">@{app/login.html}</div>
+            <div id="divExplorer" class="div-base-content">@{app/explorer.html}</div>
+            <div id="divViewer" class="div-base-content">@{app/viewer.html}</div>
+        </div>
+    </div>
 
-    <!-- lib -->
+    <div id="divPopupLayer">
+        <div id="divPopupDialog"></div>
+        <div id="divPopupRecordDialog"></div>
+        <div id="divPopupClientFiche"></div>
+        <div id="divPopupPatientFiche"></div>
+    </div>
+
     <script type="text/javascript" src="lib/jquery"></script>
-    <!-- app -->
-    <script type="module" src="app.js"></script>
+    <script type="module" src="App.js"></script>
 
 </body>
 </html>
