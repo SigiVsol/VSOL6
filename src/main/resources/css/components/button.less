@@ -13,3 +13,93 @@ button {
 button:hover {
   background-color: @vsol;
 }
+button:disabled {
+  cursor: default;
+  opacity: 0.2;
+}
+button:disabled:hover {
+  background-color: black;
+}
+
+button.ok {
+  background-color: @ok;
+}
+button.ok:hover {
+  background-color: @ok-highlighted;
+}
+button.ok:hover:disabled {
+  background-color: @ok;
+}
+
+button.cancel {
+  background-color: @cancel;
+}
+button.cancel:hover {
+  background-color: @cancel-highlighted;
+}
+button.cancel:hover:disabled {
+  background-color: @cancel;
+}
+
+button.edit {
+  background-color: @edit;
+}
+button.edit:hover {
+  background-color: @edit-highlighted;
+}
+button.edit:hover:disabled {
+  background-color: @edit;
+}
+
+button.confirm {
+  background-color: @ok;
+  background-image: url("../icon/check/16");
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 100px;
+}
+button.confirm:hover {
+  background-color: @ok-highlighted;
+}
+button.confirm.save {
+  background-image: url("../icon/save/16");
+}
+
+button.close {
+  background-color: @cancel;
+  background-image: url("../icon/cancel/16");
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 100px;
+}
+button.close:hover {
+  background-color: @cancel-highlighted;
+}
+
+button.clients {
+  background-color: @clients;
+}
+button.clients:hover {
+  background-color: @clients-highlighted;
+}
+
+button.patients {
+  background-color: @patients;
+}
+button.patients:hover {
+  background-color: @patients-highlighted;
+}
+
+button.entries {
+  background-color: @entries;
+}
+button.entries:hover {
+  background-color: @entries-highlighted;
+}
+
+button.gray {
+  background-color: gray;
+}
+button.gray:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}

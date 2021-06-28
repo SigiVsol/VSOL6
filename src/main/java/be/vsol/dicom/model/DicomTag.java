@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class DicomTag {
 
-    private static String resource = "dicom/tags.csv";
     private static final HashMap<String, DicomTag> map = new HashMap<>();
 
     private final String tag;
@@ -56,12 +55,8 @@ public class DicomTag {
 
     // Static
 
-    public static void init(String resource) {
-        DicomTag.resource = resource;
-        loadMap();
-    }
-
     private static void loadMap() {
+        String resource = "dicom/tags.csv";
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resource.getInputStream(resource)));
 
         try {
@@ -120,7 +115,6 @@ public class DicomTag {
         SeriesTime("0008,0031"),
         AcquisitionTime("0008,0032"),
         ContentTime("0008,0033"),
-        SeriesDescription("0008,103E"),
         AccessionNumber("0008,0050"),
         Modality("0008,0060"),
         PresentationIntentType("0008,0068"),
@@ -128,6 +122,7 @@ public class DicomTag {
         InstitutionName("0008,0080"),
         ReferringPhysicianName("0008,0090"),
         StudyDescription("0008,1030"),
+        SeriesDescription("0008,103E"),
         ManufacturerModelName("0008,1090"),
 
         PatientName("0010,0010"),
