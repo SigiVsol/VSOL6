@@ -1,23 +1,18 @@
 import {App} from "../App.js";
+import {Dialog} from "../popup/Dialog.js";
 
 export class Navbar {
 
     private app : App;
 
-    private readonly btnBack = $("#btnBack");
-    private readonly btnHome = $("#btnHome");
-    private readonly btnLogout = $("#btnLogout");
-    private readonly btnOrganizations = $("#btnOrganizations");
-    private readonly btnSettings = $("#btnSettings");
-
     constructor(app : App) {
         this.app = app;
 
-        this.btnBack.click(() => history.back());
-        this.btnHome.click(() => this.home());
-        this.btnLogout.click(() => this.logout());
-        this.btnOrganizations.click(() => this.changeOrganization());
-        this.btnSettings.click(() => this.settings());
+        $("#btnBack").click(() => history.back());
+        $("#btnHome").click(() => this.home());
+        $("#btnLogout").click(() => this.logout());
+        $("#btnOrganizations").click(() => this.changeOrganization());
+        $("#btnSettings").click(() => this.settings());
     }
 
     private home() {
@@ -33,6 +28,7 @@ export class Navbar {
     }
 
     private settings() {
+
 
     }
 

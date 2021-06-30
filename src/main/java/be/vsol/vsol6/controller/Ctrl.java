@@ -21,6 +21,7 @@ import be.vsol.vsol6.model.database.Db;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class Ctrl {
         this.system = new LocalSystem();
         Config appConfig = new Config(jsonDefaults, params);
 
-        Log.init(appConfig.app.home, sig.getAppTitle(), appConfig.app.debug);
+        Log.init(new File(appConfig.app.home, "logs"), sig.getAppTitle(), appConfig.app.debug);
         Log.out("Starting " + sig + ".");
 
         this.console = new Console(this);

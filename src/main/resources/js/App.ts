@@ -19,7 +19,7 @@ export class App {
     private idList : string;
 
     constructor() {
-
+        this.login.show();
     }
 
     // Getters

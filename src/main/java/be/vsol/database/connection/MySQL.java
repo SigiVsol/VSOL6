@@ -1,6 +1,5 @@
 package be.vsol.database.connection;
 
-import be.vsol.database.model.Database;
 import be.vsol.database.model.DbRecord;
 import be.vsol.database.model.DbTable;
 import be.vsol.database.model.RS;
@@ -12,18 +11,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class MySQL extends DbDriver {
-
-    private final String host, user, password;
-    private final int port;
+public class MySQL extends ServiceBasedDbDriver {
 
     public MySQL(String host, int port, String user, String password) {
-        super("mysql");
-
-        this.host = host;
-        this.port = port;
-        this.user = user;
-        this.password = password;
+        super("mysql", host, port, user, password);
     }
 
     @Override public void start() {
