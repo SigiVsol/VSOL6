@@ -17,6 +17,5 @@ export class Navbar {
         this.app.getViewer().show();
     }
     settings() {
-        $("#divPopupLayer").css("display", "block");
     }
 }

@@ -1,5 +1,5 @@
 export class Dialog {
-    static ok() {
-        console.log("ok");
+    static inform(text : string) {
+        $("#divPopupLayer").css("display", "block");
     }
 }

@@ -29,7 +29,7 @@ export class Navbar {
 
     private settings() {
 
-        $("#divPopupLayer").css("display", "block");
+
     }
 
 }
