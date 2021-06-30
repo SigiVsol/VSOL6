@@ -7,8 +7,6 @@ public abstract class ServiceBasedDbDriver extends DbDriver {
     protected final String host, user, password;
     protected final int port;
 
-    protected Connection connection;
-
     public ServiceBasedDbDriver(String protocol, String host, int port, String user, String password) {
         super(protocol);
 
