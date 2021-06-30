@@ -10,42 +10,42 @@ import be.vsol.util.Lng;
 public class Setting extends DbRecord {
 
     @db private String systemId, userId, organizationId;
-    @db private String key;
+    @db private String settingName;
     @db private String value;
 
     // Constructors
 
     public Setting() { }
 
-    public Setting(String key, String value) {
-        this.key = key;
+    public Setting(String settingName, String value) {
+        this.settingName = settingName;
         this.value = value;
     }
 
-    public Setting(String key, boolean value) {
-        this(key, "" + value);
+    public Setting(String settingName, boolean value) {
+        this(settingName, "" + value);
     }
 
-    public Setting(String key, int value) {
-        this(key, "" + value);
+    public Setting(String settingName, int value) {
+        this(settingName, "" + value);
     }
 
-    public Setting(String key, long value) {
-        this(key, "" + value);
+    public Setting(String settingName, long value) {
+        this(settingName, "" + value);
     }
 
-    public Setting(String key, float value) {
-        this(key, "" + value);
+    public Setting(String settingName, float value) {
+        this(settingName, "" + value);
     }
 
-    public Setting(String key, double value) {
-        this(key, "" + value);
+    public Setting(String settingName, double value) {
+        this(settingName, "" + value);
     }
 
     // Methods
 
     @Override public String toString() {
-        return key + " -> " + value;
+        return settingName + " -> " + value;
     }
 
     public Boolean getValueAsBoolean() { return value == null ? null : Bool.parse(value, false); }
@@ -58,7 +58,7 @@ public class Setting extends DbRecord {
 
     // Getters
 
-    public String getKey() { return key; }
+    public String getKey() { return settingName; }
 
     public String getValue() { return value; }
 
@@ -70,7 +70,7 @@ public class Setting extends DbRecord {
 
     // Setters
 
-    public void setKey(String key) { this.key = key; }
+    public void setKey(String settingName) { this.settingName = settingName; }
 
     public void setValue(String value) { this.value = value; }
 
