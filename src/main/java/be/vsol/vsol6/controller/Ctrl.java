@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class Ctrl {
 
-    public static final Sig sig = new Sig("VSOL6", 0, 1, 2, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
+    public static final Sig sig = new Sig("VSOL6", 0, 1, 3, Sig.Publisher.SIGI_DEV, LocalDate.of(2021, Month.MAY, 15));
 
     private final JSONObject jsonDefaults;
     private final Map<String, String> params;
