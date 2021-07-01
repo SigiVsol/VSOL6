@@ -1,7 +1,5 @@
 package be.vsol.database.connection;
 
-import java.sql.Connection;
-
 public abstract class ServiceBasedDbDriver extends DbDriver {
 
     protected final String host, user, password;

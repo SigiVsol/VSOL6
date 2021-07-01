@@ -67,7 +67,7 @@ public class Session {
             String value = newSetting.getValue();
 
             DbTable<Setting> dbTable = ctrl.getDb().getSystemDb().getSettings();
-            Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND key = '" + key + "'");
+            Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND settingName = '" + key + "'");
             if (setting == null) {
                 setting = new Setting(key, value);
                 setting.setSystemId(system.getId());

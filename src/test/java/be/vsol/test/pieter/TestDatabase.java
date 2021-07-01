@@ -2,12 +2,9 @@ package be.vsol.test.pieter;
 
 import be.vsol.database.connection.MySQL;
 import be.vsol.database.connection.SQLite;
-import be.vsol.test.sigi.db.TestDb;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.database.SystemDb;
 import be.vsol.vsol6.model.database.UserDb;
-
-import java.io.File;
 
 public class TestDatabase {
 
@@ -22,11 +19,11 @@ public class TestDatabase {
             SystemDb systemDb = new SystemDb(driver);
             systemDb.connect();
 
-//            OrganizationDb organizationDb = new OrganizationDb(driver);
-//            organizationDb.connect();
-//
-//            UserDb userDb = new UserDb(driver);
-//            userDb.connect();
+            OrganizationDb organizationDb = new OrganizationDb(driver);
+            organizationDb.connect();
+
+            UserDb userDb = new UserDb(driver);
+            userDb.connect();
 
         }catch(Exception e){
             e.printStackTrace();
