@@ -50,6 +50,17 @@
     -fx-min-width: 100;
 }
 
+.button.name {
+    -fx-wrap-text: true;
+    -fx-min-height: 50;
+    -fx-min-width: 300;
+    -fx-max-height: 50;
+    -fx-max-width: 300;
+    -fx-padding: 5;
+    -fx-border-insets: 5;
+    -fx-background-insets: 5;
+}
+
 /* Labels */
 
 .label {
@@ -94,6 +105,11 @@
 
 .extraLargeText {
     -fx-font-size: x-large;
+}
+
+.boldTitle {
+    -fx-font-size: 48;
+    -fx-font-weight: bold;
 }
 
 .grayText {

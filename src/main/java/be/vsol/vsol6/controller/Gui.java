@@ -7,6 +7,8 @@ import be.vsol.vsol6.controller.fx.FxController;
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.controller.fx.Splash;
 import be.vsol.vsol6.controller.fx.app.Login;
+import be.vsol.vsol6.controller.fx.app.OrganizationSelection;
+import be.vsol.vsol6.controller.fx.app.UserSelection;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 import javafx.application.Platform;
@@ -25,6 +27,8 @@ public class Gui {
 
     private App app;
     private Login login;
+    private UserSelection userSelection;
+    private OrganizationSelection organizationSelection;
 
     // Constructors
 
@@ -49,6 +53,8 @@ public class Gui {
     public void start(Config config) {
         app = loadFxml("app");
         login = loadFxml("app/login");
+        userSelection = loadFxml("app/user_selection");
+        organizationSelection = loadFxml("app/organization_selection");
 
         primaryStage.setWidth(config.gui.width);
         primaryStage.setHeight(config.gui.height);
@@ -64,6 +70,10 @@ public class Gui {
 
         Platform.runLater(() -> {
             primaryStage.setScene(new Scene(app.getRoot()));
+//            app.getRoot().getChildren().add(userSelection.getRoot());
+//            userSelection.setNames();
+            app.getRoot().getChildren().add(organizationSelection.getRoot());
+            organizationSelection.setNames();
             splashStage.hide();
             primaryStage.show();
         });
