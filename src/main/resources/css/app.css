@@ -171,6 +171,26 @@ input:checked + span.switch:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+table {
+  width: 100%;
+}
+table tbody > :nth-child(odd) {
+  background-color: #323232;
+}
+table tbody > :nth-child(even) {
+  background-color: #393939;
+}
+table tbody tr {
+  height: 55px;
+  font-weight: bold;
+}
+table tbody tr td {
+  padding: 15px;
+}
+table tbody tr:hover {
+  background-color: #029ddf;
+  cursor: pointer;
+}
 #divBaseLayer {
   position: fixed;
   top: 0;
@@ -257,6 +277,34 @@ input:checked + span.switch:before {
 #divBaseLayer #divMain #divContent #divExplorer {
   text-align: center;
 }
+<<<<<<< master
+=======
+#divBaseLayer #divContent #divLogin .div-credentials {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#divBaseLayer #divContent #divLogin .div-credentials input {
+  margin-top: 5px;
+}
+#divBaseLayer #divContent #divLogin .div-label {
+  margin-top: 10px;
+}
+#divBaseLayer #divContent #divLogin p {
+  margin-top: 0;
+  font-family: monospace;
+  font-size: large;
+  color: #a7a7a7;
+}
+#divBaseLayer #divContent #divUserManager #btnAddUser {
+  float: right;
+  margin: 5px;
+}
+#divBaseLayer #divContent #divUserManager #btnEdit {
+  float: right;
+  margin-right: 3px;
+  margin-bottom: 5px;
+}
+>>>>>>> userManager & userFiche & addUser
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
@@ -290,7 +338,47 @@ input:checked + span.switch:before {
 #divPopupLayer #divPopupDialog .input-bar input {
   width: calc(100% - 10px);
 }
+<<<<<<< master
 #divPopupLayer #divPopupDialog .button-bar {
   margin-top: 20px;
+=======
+#divPopupLayer #divPopupAddUser {
+  background-color: black;
+  display: none;
+  width: 400px;
+  max-width: 90%;
+  border: solid 1px white;
+  border-radius: 5px;
+  margin-top: 100px;
+  padding: 5px;
+  text-align: left;
+}
+#divPopupLayer #divPopupAddUser .input-bar {
+  width: calc(100% - 10px);
+}
+#divPopupLayer #divPopupAddUser .input-bar input[type=radio] {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+#divPopupLayer #divPopupAddUser .button-bar {
+  margin-top: 10px;
+}
+#divPopupLayer #divPopupUserFiche {
+  background-color: black;
+  display: none;
+  width: 400px;
+  max-width: 90%;
+  border: solid 1px white;
+  border-radius: 5px;
+  margin-top: 100px;
+  padding: 5px;
+  text-align: left;
+}
+#divPopupLayer #divPopupUserFiche .button-bar {
+  margin-top: 10px;
+}
+#divPopupLayer #divPopupUserFiche .input-bar {
+  width: calc(100% - 10px);
+>>>>>>> userManager & userFiche & addUser
 }
 /*# sourceMappingURL=app.css.map */

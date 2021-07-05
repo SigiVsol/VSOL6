@@ -1,0 +1,30 @@
+@import "../variables/colors";
+
+table {
+  width: 100%;
+
+  tbody {
+    >:nth-child(odd) {
+      background-color: @table-odd-rows;
+    }
+
+    >:nth-child(even) {
+      background-color: @table-even-rows;
+    }
+
+    tr {
+      height: 55px;
+
+      font-weight: bold;
+
+      td {
+        padding: 15px;
+      }
+    }
+
+    tr:hover {
+      background-color: @vsol;
+      cursor: pointer;
+    }
+  }
+}
