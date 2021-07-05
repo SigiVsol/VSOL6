@@ -2,6 +2,7 @@ import {Content} from "./Content.js";
 import {App} from "../App.js";
 import {Client} from "../model/Client.js";
 import {Patient} from "../model/Patient.js";
+import {Dialog} from "../popup/Dialog.js";
 
 export class Explorer extends Content {
 
@@ -9,7 +10,7 @@ export class Explorer extends Content {
         super(app, "divExplorer");
 
         $("#tglClients").click(() => {
-            this.app.setTab(null);
+            this.app.setTab("clients");
             this.app.pushHistory();
         });
 
@@ -23,6 +24,30 @@ export class Explorer extends Content {
             this.app.pushHistory();
         });
 
+        $("#btnTestInform").click(() => {
+            Dialog.inform("Information.");
+        });
+
+        $("#btnTestConfirm").click(() => {
+            Dialog.confirm("Are you sure?", () => {
+                console.log("I am sure");
+            }, () => {
+                console.log("I am not sure");
+            });
+        });
+
+        $("#btnTestGetString").click(() => {
+            Dialog.getString("What's your name?", "", (result) => {
+                console.log("Your name is " + result + ".");
+            });
+        });
+
+        $("#btnTestGetNumber").click(() => {
+            Dialog.getNumber("What's your birth year?", 2021, (result) => {
+
+                console.log("Your age is " + (2021 - result) + ".");
+            });
+        });
     }
 
     public fill() : void {

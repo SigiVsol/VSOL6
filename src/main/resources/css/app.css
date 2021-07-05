@@ -269,9 +269,9 @@ input:checked + span.switch:before {
   text-align: center;
   display: none;
 }
-#divPopupLayer #divPopupDialog {
+#divPopupLayer .div-popup {
   background-color: black;
-  display: inline-block;
+  display: none;
   width: 400px;
   max-width: 90%;
   border: solid 1px white;
@@ -280,10 +280,17 @@ input:checked + span.switch:before {
   padding: 5px;
   text-align: left;
 }
-#divPopupLayer #divPopupDialog .button-bar {
-  margin-top: 10px;
+#divPopupLayer #divPopupDialog p {
+  margin: 0;
 }
 #divPopupLayer #divPopupDialog .input-bar {
+  margin-top: 10px;
+  display: none;
+}
+#divPopupLayer #divPopupDialog .input-bar input {
   width: calc(100% - 10px);
+}
+#divPopupLayer #divPopupDialog .button-bar {
+  margin-top: 20px;
 }
 /*# sourceMappingURL=app.css.map */
