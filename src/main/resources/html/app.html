@@ -10,11 +10,14 @@
 <body>
 
     <div id="divBaseLayer">
-        <div id="divNavbar">@{app/navbar.html}</div>
-        <div id="divContent"> <!-- JS shows one of the following and hides the others -->
-            <div id="divLogin" class="div-base-content">@{app/login.html}</div>
-            <div id="divExplorer" class="div-base-content">@{app/explorer.html}</div>
-            <div id="divViewer" class="div-base-content">@{app/viewer.html}</div>
+        <div id="divLogin">@{app/login.html}</div>
+        <div id="divMain">
+            <div id="divNavbar">@{app/navbar.html}</div>
+            <div id="divContent">
+                <div id="divExplorer" class="div-base-content">@{app/explorer.html}</div>
+                <div id="divViewer" class="div-base-content">@{app/viewer.html}</div>
+                <div id="divSettings" class="div-base-content">@{app/settings.html}</div>
+            </div>
         </div>
     </div>
 

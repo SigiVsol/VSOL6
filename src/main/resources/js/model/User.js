@@ -7,12 +7,8 @@ export class User extends VsolRecord {
         this.lastName = lastName;
         this.email = email;
     }
-    loadJson(json) {
-        this.id = json.id;
-        this.username = json.username;
-        this.firstName = json.firstName;
-        this.lastName = json.lastName;
-        this.email = json.email;
+    static from(src) {
+        return src == null ? null : new User(src.id, src.username, src.firstName, src.lastName, src.email);
     }
     // Getters
     getUsername() { return this.username; }

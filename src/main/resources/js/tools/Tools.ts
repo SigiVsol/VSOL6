@@ -1,5 +1,5 @@
 export class Tools {
-    static readFromStorage(key : string, defaultValue : string = null) {
+    public static readFromStorage(key : string, defaultValue : string = null) {
         let result = sessionStorage.getItem(key);
         if (result == null) result = localStorage.getItem(key);
 
@@ -7,7 +7,7 @@ export class Tools {
         else return result;
     }
 
-    static saveInStorage(key, value, local) {
+    public static saveInStorage(key, value, local) {
         if (local) {
             localStorage.setItem(key, value);
         } else {
@@ -15,12 +15,20 @@ export class Tools {
         }
     }
 
-    static clearStorage(key) {
+    public static clearStorage(key) {
         localStorage.removeItem(key);
         sessionStorage.removeItem(key);
     }
 
-    static getUrlParameters() {
+    public static getUrlPage() {
+        return window.location.pathname.substring(1);
+    }
+
+    public static getUrlParameter(key) {
+        return this.getUrlParameters()[key];
+    }
+
+    private static getUrlParameters() {
         let search = window.location.search.substring(1);
         let split = search.split('&');
         let map = {};
@@ -34,12 +42,7 @@ export class Tools {
         return map;
     }
 
-    static getUrlParameter(key) {
-        return this.getUrlParameters()[key];
-    }
-
-
-    static matches(filter = "") {
+    public static matches(filter = "") {
         if (filter.trim() === "") return true;
 
         filter = filter.toLowerCase();
@@ -63,4 +66,20 @@ export class Tools {
 
         return true;
     }
+
+    public static getParameterString(map : Map<string, string>) : string {
+        let result = "";
+
+        map.forEach((value, key) => {
+            result += result == "" ? "?" : "&";
+            result += key + "=" + value;
+        });
+
+        return result;
+    }
+
+    public static isFromVsol6App() {
+        return navigator.userAgent.includes("VSOL6");
+    }
+
 }

@@ -3,18 +3,18 @@ import {Language} from "./Language.js";
 
 export class Client extends VsolRecord {
 
-    private lastName : string;
-    private firstName : string;
-    private company : string;
-    private via : string;
-    private language : Language;
-    private phone : string;
-    private email : string;
-    private street : string;
-    private postal : string;
-    private city : string;
-    private country : string;
-    private extraInfo : string;
+    private readonly lastName : string;
+    private readonly firstName : string;
+    private readonly company : string;
+    private readonly via : string;
+    private readonly language : Language;
+    private readonly phone : string;
+    private readonly email : string;
+    private readonly street : string;
+    private readonly postal : string;
+    private readonly city : string;
+    private readonly country : string;
+    private readonly extraInfo : string;
 
     constructor(id : string = null, lastName : string = "", firstName = "", company = "", via = "", language = Language.en, phone = "", email = "", street = "", postal = "", city = "", country = "", extraInfo = "") {
         super(id);
@@ -33,20 +33,8 @@ export class Client extends VsolRecord {
         this.extraInfo = extraInfo;
     }
 
-    loadJson(json) {
-        this.id = json.id;
-        this.lastName = json.lastName;
-        this.firstName = json.firstName;
-        this.company = json.company;
-        this.via = json.via;
-        this.language = json.language;
-        this.phone = json.phone;
-        this.email = json.email;
-        this.street = json.street;
-        this.postal = json.postal;
-        this.city = json.city;
-        this.country = json.country;
-        this.extraInfo = json.extraInfo;
+    public static from(src : any) {
+        return src == null ? null : new Client(src.id, src.lastName, src.firstName, src.company, src.via, src.language, src.phone, src.email, src.street, src.postal, src.city, src.country, src.extraInfo);
     }
 
     getName() {

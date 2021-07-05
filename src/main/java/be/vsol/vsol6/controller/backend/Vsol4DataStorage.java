@@ -30,8 +30,8 @@ public class Vsol4DataStorage extends DataStorage {
             Vsol4User vsol4User = ctrl.getVsol4().getUser(username);
             Vsol4Organization vsol4Organization = ctrl.getVsol4().getDefaultOrganization(username);
 
-            Log.debug("vsol4User: " + vsol4User);
-            Log.debug("vsol4Organization: " + vsol4Organization);
+            Log.debug("vsol4User: " + vsol4User.getId());
+            Log.debug("vsol4Organization: " + vsol4Organization.getId());
 
             return new UserOrg(new User(vsol4User), new Organization(vsol4Organization));
         }

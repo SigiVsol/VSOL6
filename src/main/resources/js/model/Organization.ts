@@ -1,23 +1,26 @@
 import {VsolRecord} from "./VsolRecord.js";
 
 export class Organization extends VsolRecord {
-    private name : string;
-    private description : string;
+    private readonly name : string;
+    private readonly description : string;
 
-    constructor(id : string = null, name = "", description = "") {
+    public constructor(id : string = null, name = "", description = "") {
         super(id);
         this.name = name;
         this.description = description;
     }
 
-    loadJson(json) {
-        this.id = json.id;
-        this.name = json.name;
-        this.description = json.description;
+    public static from(src : any) {
+        return src == null ? null : new Organization(src.id, src.name, src.description);
     }
 
-    toString() {
+    public toString() {
         return this.name;
     }
+
+    // Getters
+
+    public getName() { return this.name; }
+    public getDescription() { return this.description; }
 
 }
