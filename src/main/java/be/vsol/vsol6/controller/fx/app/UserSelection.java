@@ -26,7 +26,9 @@ public class UserSelection extends FxController<VBox> {
 
         for (String user : users) {
             Button button = new Button(user);
-            button.setId("user_");
+            button.setId("user_" + user);
+            button.setOnAction(actionEvent -> this.onClickUser(button.getId()));
+
             button.getStyleClass().add("name");
             button.getStyleClass().add("extraLargeText");
             nameFP.getChildren().add(button);
@@ -35,5 +37,10 @@ public class UserSelection extends FxController<VBox> {
 
     @FXML private void back() {
 
+    }
+
+    private void onClickUser(String userId)
+    {
+        System.out.println(userId);
     }
 }

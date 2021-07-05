@@ -70,10 +70,10 @@ public class Gui {
 
         Platform.runLater(() -> {
             primaryStage.setScene(new Scene(app.getRoot()));
-//            app.getRoot().getChildren().add(userSelection.getRoot());
-//            userSelection.setNames();
-            app.getRoot().getChildren().add(organizationSelection.getRoot());
-            organizationSelection.setNames();
+            app.getRoot().getChildren().add(userSelection.getRoot());
+            userSelection.setNames();
+//            app.getRoot().getChildren().add(organizationSelection.getRoot());
+//            organizationSelection.setNames();
             splashStage.hide();
             primaryStage.show();
         });

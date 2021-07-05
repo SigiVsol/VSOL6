@@ -18,10 +18,17 @@ public class OrganizationSelection extends FxController<VBox> {
 
         for (String organization : organizations) {
             Button button = new Button(organization);
-            button.setId("organization_");
+            button.setId("organization_" + organization);
+            button.setOnAction(actionEvent -> this.onClickOrganization(button.getId()));
+
             button.getStyleClass().add("name");
             button.getStyleClass().add("extraLargeText");
             nameFP.getChildren().add(button);
         }
+    }
+
+    private void onClickOrganization(String organizationId)
+    {
+        System.out.println(organizationId);
     }
 }
