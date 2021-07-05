@@ -356,9 +356,18 @@ table tbody tr:hover {
 #divPopupLayer #divPopupAddUser .input-bar {
   width: calc(100% - 10px);
 }
+#divPopupLayer #divPopupAddUser .input-bar div {
+  margin-bottom: 5px;
+}
+#divPopupLayer #divPopupAddUser .input-bar input[type=text] {
+  width: 100%;
+  margin-bottom: 10px;
+}
 #divPopupLayer #divPopupAddUser .input-bar input[type=radio] {
   vertical-align: middle;
-  margin-right: 10px;
+}
+#divPopupLayer #divPopupAddUser .input-bar label {
+  cursor: pointer;
 }
 #divPopupLayer #divPopupAddUser .button-bar {
   margin-top: 10px;
