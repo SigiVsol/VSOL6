@@ -5,12 +5,13 @@ export class Organization extends VsolRecord {
         this.name = name;
         this.description = description;
     }
-    loadJson(json) {
-        this.id = json.id;
-        this.name = json.name;
-        this.description = json.description;
+    static from(src) {
+        return src == null ? null : new Organization(src.id, src.name, src.description);
     }
     toString() {
         return this.name;
     }
+    // Getters
+    getName() { return this.name; }
+    getDescription() { return this.description; }
 }

@@ -16,20 +16,8 @@ export class Client extends VsolRecord {
         this.country = country;
         this.extraInfo = extraInfo;
     }
-    loadJson(json) {
-        this.id = json.id;
-        this.lastName = json.lastName;
-        this.firstName = json.firstName;
-        this.company = json.company;
-        this.via = json.via;
-        this.language = json.language;
-        this.phone = json.phone;
-        this.email = json.email;
-        this.street = json.street;
-        this.postal = json.postal;
-        this.city = json.city;
-        this.country = json.country;
-        this.extraInfo = json.extraInfo;
+    static from(src) {
+        return src == null ? null : new Client(src.id, src.lastName, src.firstName, src.company, src.via, src.language, src.phone, src.email, src.street, src.postal, src.city, src.country, src.extraInfo);
     }
     getName() {
         return (this.lastName + " " + this.firstName).trim();

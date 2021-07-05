@@ -1,5 +1,6 @@
 export class Content {
-    constructor(divId) {
+    constructor(app, divId) {
+        this.app = app;
         this.divId = divId;
     }
     show() {

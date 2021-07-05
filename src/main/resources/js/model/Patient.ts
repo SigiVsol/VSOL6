@@ -5,20 +5,19 @@ import {Sex} from "./Sex.js";
 export class Patient extends VsolRecord {
 
     private readonly client : Client;
-    private name : string;
-    private birthdate : Date;
-    private chip : string;
-    private ueln : string;
-    private species : string;
-    private breed : string;
-    private sire : string;
-    private damsire : string;
-    private neutered : boolean;
-    private sex : Sex;
-    private color : string;
+    private readonly name : string;
+    private readonly birthdate : Date;
+    private readonly chip : string;
+    private readonly ueln : string;
+    private readonly species : string;
+    private readonly breed : string;
+    private readonly sire : string;
+    private readonly damsire : string;
+    private readonly neutered : boolean;
+    private readonly sex : Sex;
+    private readonly color : string;
 
-    constructor(id : string = null, client = new Client(), name = "", birthdate = new Date(), chip = "", ueln = "", species = "",
-                breed = "", sire = "", damsire = "", neutered = false, sex = Sex.X, color = "") {
+    constructor(id : string = null, client = new Client(), name = "", birthdate = new Date(), chip = "", ueln = "", species = "", breed = "", sire = "", damsire = "", neutered = false, sex = Sex.X, color = "") {
         super(id);
         this.client = client;
         this.name = name;
@@ -34,20 +33,8 @@ export class Patient extends VsolRecord {
         this.color = color;
     }
 
-    loadJson(json) {
-        this.id = json.id;
-        this.client.loadJson(json.client);
-        this.name = json.name;
-        this.birthdate = json.birthdate;
-        this.chip = json.chip;
-        this.ueln = json.ueln;
-        this.species = json.species;
-        this.breed = json.breed;
-        this.sire = json.sire;
-        this.damsire = json.damsire;
-        this.neutered = json.neutered;
-        this.sex = json.sex;
-        this.color = json.color;
+    public static from(src : any) {
+        return src == null ? null : new Patient(src.id, Client.from(src.client), src.name, src.birthdate, src.chip, src.ueln, src.species, src.breed, src.sire, src.damsire, src.neutered, src.sex, src.color);
     }
 
     getOrigin() {

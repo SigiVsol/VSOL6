@@ -1,10 +1,10 @@
 import {VsolRecord} from "./VsolRecord.js";
 
 export class User extends VsolRecord {
-    private username : String;
-    private firstName : String;
-    private lastName : String;
-    private email : String;
+    private readonly username : string;
+    private readonly firstName : string;
+    private readonly lastName : string;
+    private readonly email : string;
 
     constructor(id : string = null, username = "", firstName = "", lastName = "", email = "") {
         super(id);
@@ -14,12 +14,8 @@ export class User extends VsolRecord {
         this.email = email;
     }
 
-    loadJson(json) {
-        this.id = json.id;
-        this.username = json.username;
-        this.firstName = json.firstName;
-        this.lastName = json.lastName;
-        this.email = json.email;
+    public static from(src : any) : User {
+        return src == null ? null : new User(src.id, src.username, src.firstName, src.lastName, src.email);
     }
 
     // Getters

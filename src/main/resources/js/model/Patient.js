@@ -17,20 +17,8 @@ export class Patient extends VsolRecord {
         this.sex = sex;
         this.color = color;
     }
-    loadJson(json) {
-        this.id = json.id;
-        this.client.loadJson(json.client);
-        this.name = json.name;
-        this.birthdate = json.birthdate;
-        this.chip = json.chip;
-        this.ueln = json.ueln;
-        this.species = json.species;
-        this.breed = json.breed;
-        this.sire = json.sire;
-        this.damsire = json.damsire;
-        this.neutered = json.neutered;
-        this.sex = json.sex;
-        this.color = json.color;
+    static from(src) {
+        return src == null ? null : new Patient(src.id, Client.from(src.client), src.name, src.birthdate, src.chip, src.ueln, src.species, src.breed, src.sire, src.damsire, src.neutered, src.sex, src.color);
     }
     getOrigin() {
         if (this.sire.trim() === "" && this.damsire.trim() === "") {

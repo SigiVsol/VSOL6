@@ -1,9 +1,12 @@
 import {App} from "../App.js";
-import {Dialog} from "../popup/Dialog.js";
+import {Tools} from "../tools/Tools.js";
 
 export class Navbar {
 
     private app : App;
+
+    private readonly lblUsername = $("#lblUsername");
+    private readonly lblOrganization = $("#lblOrganization");
 
     constructor(app : App) {
         this.app = app;
@@ -15,21 +18,38 @@ export class Navbar {
         $("#btnSettings").click(() => this.settings());
     }
 
+    public fill() : void {
+        this.lblUsername.text(this.app.getUser().getUsername());
+        this.lblOrganization.text(this.app.getOrganization().getName());
+    }
+
     private home() {
-        this.app.getLogin().show();
+        this.app.setPage("explorer");
+        this.app.setClient(null);
+        this.app.setPatient(null);
+        this.app.pushHistory();
     }
 
     private logout() {
-        this.app.getExplorer().show();
+        // TODO are you sure?
+
+        Tools.clearStorage("userId");
+        Tools.clearStorage("organizationId");
+
+        this.app.setUser(null);
+        this.app.setOrganization(null);
+        this.app.fill();
     }
 
     private changeOrganization() {
-        this.app.getViewer().show();
+
     }
 
     private settings() {
-
-
+        this.app.setPage("settings");
+        this.app.setClient(null);
+        this.app.setPatient(null);
+        this.app.pushHistory();
     }
 
 }
