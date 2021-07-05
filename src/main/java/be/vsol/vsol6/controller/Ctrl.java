@@ -165,6 +165,10 @@ public class Ctrl {
 
     public LocalSystem getSystem() { return system; }
 
+    public DataStorage getDataStorage() { return dataStorage; }
+
+    public DicomStorage getDicomStorage() { return dicomStorage; }
+
     // Setters
 
     public void setLocalSession(Session localSession) { this.localSession = localSession; }
