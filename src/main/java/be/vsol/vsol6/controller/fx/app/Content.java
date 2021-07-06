@@ -1,4 +1,4 @@
-package be.vsol.vsol6.controller.fx;
+package be.vsol.vsol6.controller.fx.app;
 
 import be.vsol.fx.util.ImageIcon;
 import be.vsol.util.Icon;
@@ -24,6 +24,10 @@ public class Content extends FxController<StackPane> {
 
     public void show(FxController<?> controller) {
         Platform.runLater(() -> borderPane.setCenter(controller.getRoot()));
+    }
+
+    public void start() {
+        show(ctrl.getGui().getExplorer());
     }
 
     @FXML private void back() {
