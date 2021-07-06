@@ -11,7 +11,6 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
@@ -75,7 +74,7 @@ public class Dialog extends FxController<DialogPane> {
 
     @FXML private void ok() {
         System.out.println("ok");
-        cancel();
+
     }
 
     @FXML private void keyPressed(KeyEvent keyEvent) {

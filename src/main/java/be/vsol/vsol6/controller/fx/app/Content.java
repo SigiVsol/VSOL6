@@ -1,9 +1,7 @@
 package be.vsol.vsol6.controller.fx.app;
 
 import be.vsol.fx.util.ImageIcon;
-import be.vsol.util.Icon;
 import be.vsol.vsol6.controller.fx.FxController;
-import be.vsol.vsol6.controller.fx.app.Explorer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

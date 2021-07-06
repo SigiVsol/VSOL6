@@ -9,13 +9,10 @@ import be.vsol.vsol6.controller.fx.app.Content;
 import be.vsol.vsol6.controller.fx.app.Dialog;
 import be.vsol.vsol6.controller.fx.app.Explorer;
 import be.vsol.vsol6.controller.fx.Login;
-import be.vsol.vsol6.controller.fx.login.OrganizationSelection;
-import be.vsol.vsol6.controller.fx.login.UserSelection;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -31,8 +28,6 @@ public class Gui {
     private App app;
     private Content content;
     private Login login;
-    private UserSelection userSelection;
-    private OrganizationSelection organizationSelection;
     private Explorer explorer;
     private Dialog dialog;
 
@@ -92,22 +87,12 @@ public class Gui {
         return login;
     }
 
-    public UserSelection getUserSelection() {
-        return userSelection;
-    }
-
-    public OrganizationSelection getOrganizationSelection() {
-        return organizationSelection;
-    }
-
     public Dialog getDialog() { return  dialog;}
 
     private void loadFXMLs() {
         app = loadFxml("app");
         content = loadFxml("app/content");
         login = loadFxml("login");
-        userSelection = loadFxml("app/user_selection");
-        organizationSelection = loadFxml("app/organization_selection");
         explorer = new Explorer(ctrl, "www.sporza.be");
         dialog = loadFxml("app/dialog");
     }
