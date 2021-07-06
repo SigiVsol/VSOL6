@@ -2,16 +2,20 @@
     <button id="btnAddUser" class="ok"><img src="icon/adduser/16"> %{Add_user}</button>
 </div>
 <div>
-    <table id="table-users">
+    <table>
         <thead id="thead-users">
         <tr>
-            <th>%{Username}</th>
-            <th>%{Role}</th>
-            <th>
+            <th class="tdUserName">%{Username}</th>
+            <th class="tdRole">%{Role}</th>
+            <th class="tdButtons">
                 <button id="btnEdit" class="edit" disabled><img src="icon/edit/16"></button>
             </th>
         </tr>
         </thead>
+    </table>
+</div>
+<div class="div-table-scroll">
+    <table>
         <tbody id="tbody-users"></tbody>
     </table>
 </div>

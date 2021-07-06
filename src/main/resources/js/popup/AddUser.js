@@ -4,8 +4,17 @@ export class AddUser {
         $("#divPopupLayer").css("display", "block");
         $(".div-popup").css("display", "none");
         $("#divPopupAddUser").css("display", "inline-block");
-        $("#txtEmail").val("").select();
         $("#rdUser").prop("checked", true);
+        const email = $("#txtEmail");
+        email.val("").select();
+        email.on("keyup", event => {
+            if (event.key === "Enter") {
+                this.addUser();
+            }
+            else if (event.key === "Escape") {
+                this.close();
+            }
+        });
         $("#divPopupAddUser .confirm").click(() => AddUser.addUser());
         $("#divPopupAddUser .close").click(() => AddUser.close());
     }

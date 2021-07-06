@@ -174,18 +174,6 @@ input:checked + span.switch:before {
 table {
   width: 100%;
 }
-table thead,
-table tbody tr {
-  display: table;
-  width: 100%;
-}
-table tbody {
-  display: block;
-  height: 90vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-collapse: collapse;
-}
 table tbody > :nth-child(odd) {
   background-color: #323232;
 }
@@ -198,11 +186,24 @@ table tbody tr {
 }
 table tbody tr td {
   padding-left: 5px;
-  border: 1px solid black;
+  padding-right: 5px;
 }
 table tbody tr:hover {
   color: #029ddf;
   cursor: pointer;
+}
+.div-table-scroll {
+  overflow-y: auto;
+  height: 90vh;
+}
+.tdUserName {
+  width: 45%;
+}
+.tdRole {
+  width: 30%;
+}
+.tdButtons button {
+  float: right;
 }
 #divBaseLayer {
   position: fixed;
@@ -296,7 +297,7 @@ table tbody tr:hover {
 }
 #divBaseLayer #divMain #divContent #divUserManager #btnEdit {
   float: right;
-  margin-right: 3px;
+  margin-right: 5px;
   margin-bottom: 5px;
 }
 #divPopupLayer {

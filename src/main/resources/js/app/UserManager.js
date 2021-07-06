@@ -7,7 +7,7 @@ export class UserManager extends Content {
         this.users = [];
         $("#btnAddUser").click(() => this.addUser());
         $("#btnEdit").click(() => this.editUsers());
-        for (let i = 1; i <= 30; i++)
+        for (let i = 1; i <= 17; i++)
             this.users.push(new User(i.toString(), "user_" + i));
         this.fill();
     }
@@ -17,7 +17,7 @@ export class UserManager extends Content {
             let tr = $("<tr></tr>");
             let tdUserName = "<td class='tdUserName'>" + user.getUsername() + "</td>";
             let tdRole = "<td class='tdRole'>" + "user" + "</td>";
-            let tdButtons = "<td class='tdButtons'>" + "<button class=\"edit\" ><img src=\"icon/edit/16\"></button>" + "</td>";
+            let tdButtons = "<td class='tdButtons'>" + "<button class='edit' ><img src='icon/edit/16'></button>" + "</td>";
             tr.append(tdUserName).append(tdRole).append(tdButtons);
             tr.click(() => console.log(user.getUsername()));
             $("#tbody-users").append(tr);
@@ -27,7 +27,10 @@ export class UserManager extends Content {
         $("#tbody-users").empty();
     }
     addUser() {
-        AddUser.show((email, role) => console.log(email, role));
+        AddUser.show((email, role) => {
+            this.users.push(new User(null, String(email)));
+            this.fill();
+        });
     }
     editUsers() {
     }
