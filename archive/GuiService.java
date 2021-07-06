@@ -6,7 +6,7 @@
 //import be.vsol.vsol6.controller.fx.FxController;
 //import be.vsol.vsol6.controller.fx.Splash;
 //import be.vsol.vsol6.controller.fx.app.Explorer;
-//import be.vsol.vsol6.controller.fx.app.Login;
+//import be.vsol.vsol6.controller.fx.Login;
 //import be.vsol.vsol6.controller.fx.app.Settings;
 //import be.vsol.vsol6.model.config.Config;
 //import be.vsol.vsol6.model.config.Setting;

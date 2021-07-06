@@ -4,15 +4,18 @@ import be.vsol.fx.util.ImageIcon;
 import be.vsol.util.*;
 import be.vsol.vsol6.controller.fx.App;
 import be.vsol.vsol6.controller.fx.FxController;
-import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.controller.fx.Splash;
-import be.vsol.vsol6.controller.fx.app.Login;
-import be.vsol.vsol6.controller.fx.app.OrganizationSelection;
-import be.vsol.vsol6.controller.fx.app.UserSelection;
+import be.vsol.vsol6.controller.fx.app.Content;
+import be.vsol.vsol6.controller.fx.app.Dialog;
+import be.vsol.vsol6.controller.fx.app.Explorer;
+import be.vsol.vsol6.controller.fx.Login;
+import be.vsol.vsol6.controller.fx.login.OrganizationSelection;
+import be.vsol.vsol6.controller.fx.login.UserSelection;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,9 +29,12 @@ public class Gui {
     private final Stage splashStage, primaryStage;
 
     private App app;
+    private Content content;
     private Login login;
     private UserSelection userSelection;
     private OrganizationSelection organizationSelection;
+    private Explorer explorer;
+    private Dialog dialog;
 
     // Constructors
 
@@ -51,10 +57,7 @@ public class Gui {
     }
 
     public void start(Config config) {
-        app = loadFxml("app");
-        login = loadFxml("app/login");
-        userSelection = loadFxml("app/user_selection");
-        organizationSelection = loadFxml("app/organization_selection");
+        loadFXMLs();
 
         primaryStage.setWidth(config.gui.width);
         primaryStage.setHeight(config.gui.height);
@@ -70,13 +73,43 @@ public class Gui {
 
         Platform.runLater(() -> {
             primaryStage.setScene(new Scene(app.getRoot()));
-            app.getRoot().getChildren().add(userSelection.getRoot());
-            userSelection.setNames();
-//            app.getRoot().getChildren().add(organizationSelection.getRoot());
-//            organizationSelection.setNames();
             splashStage.hide();
             primaryStage.show();
         });
+
+        app.start();
+    }
+
+    public App getApp() { return app; }
+
+    public Explorer getExplorer() { return explorer; }
+
+    public Content getContent() {
+        return content;
+    }
+
+    public Login getLogin() {
+        return login;
+    }
+
+    public UserSelection getUserSelection() {
+        return userSelection;
+    }
+
+    public OrganizationSelection getOrganizationSelection() {
+        return organizationSelection;
+    }
+
+    public Dialog getDialog() { return  dialog;}
+
+    private void loadFXMLs() {
+        app = loadFxml("app");
+        content = loadFxml("app/content");
+        login = loadFxml("login");
+        userSelection = loadFxml("app/user_selection");
+        organizationSelection = loadFxml("app/organization_selection");
+        explorer = new Explorer(ctrl, "www.sporza.be");
+        dialog = loadFxml("app/dialog");
     }
 
     private void saveSetting(Setting setting) {
@@ -106,6 +139,4 @@ public class Gui {
             return null;
         }
     }
-
-
 }

@@ -53,9 +53,9 @@
 .button.name {
     -fx-wrap-text: true;
     -fx-min-height: 50;
-    -fx-min-width: 300;
+    -fx-min-width: 230;
     -fx-max-height: 50;
-    -fx-max-width: 300;
+    -fx-max-width: 230;
     -fx-padding: 5;
     -fx-border-insets: 5;
     -fx-background-insets: 5;
@@ -122,3 +122,13 @@
     -fx-border-width: 0 0 0 1;
     -fx-border-color: gray;
 }
+
+.dialog {
+    -fx-background-color: black;
+    -fx-border-color:  white;
+    -fx-border-style: solid;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-padding: 5px;
+}
+

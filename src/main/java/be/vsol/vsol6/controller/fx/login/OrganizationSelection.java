@@ -1,5 +1,6 @@
-package be.vsol.vsol6.controller.fx.app;
+package be.vsol.vsol6.controller.fx.login;
 
+import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.controller.fx.FxController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,5 +31,6 @@ public class OrganizationSelection extends FxController<VBox> {
     private void onClickOrganization(String organizationId)
     {
         System.out.println(organizationId);
+
     }
 }

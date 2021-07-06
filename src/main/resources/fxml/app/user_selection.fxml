@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.UserSelection">
+<VBox alignment="TOP_CENTER" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.login.UserSelection">
    <children>
       <Label fx:id="organization" styleClass="boldTitle" text="Veterinary Solutions" textAlignment="CENTER" />
       <Label text="Select an user" textAlignment="CENTER">
@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
          <VBox.margin>
-            <Insets top="25.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </Button>
    </children>

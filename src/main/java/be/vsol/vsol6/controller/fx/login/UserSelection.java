@@ -1,4 +1,4 @@
-package be.vsol.vsol6.controller.fx.app;
+package be.vsol.vsol6.controller.fx.login;
 
 import be.vsol.util.Log;
 import be.vsol.vsol6.controller.fx.FxController;
@@ -36,11 +36,11 @@ public class UserSelection extends FxController<VBox> {
     }
 
     @FXML private void back() {
-
+        //ctrl.getGui().setOrganizationSelection();
     }
 
     private void onClickUser(String userId)
     {
-        System.out.println(userId);
+        //ctrl.getGui().setLogin();
     }
 }

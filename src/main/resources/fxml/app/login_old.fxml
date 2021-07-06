@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="331.0" prefWidth="440.0" spacing="5.0" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.Login">
+<VBox alignment="TOP_CENTER" prefHeight="331.0" prefWidth="440.0" spacing="5.0" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.Login">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>

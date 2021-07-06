@@ -128,7 +128,6 @@ public class Ctrl {
         } else {
             User user = dataStorage.getUser(config.gui.userId);
             Organization organization = dataStorage.getOrganization(config.gui.organizationId);
-
             localSession = new Session(this, system, user, organization);
             gui.start(config);
         }

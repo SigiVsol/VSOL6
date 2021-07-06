@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.OrganizationSelection">
+<VBox alignment="TOP_CENTER" styleClass="background" stylesheets="@/fx.css/app.fx.css" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.login.OrganizationSelection">
    <children>
       <Label text="Select an organization" textAlignment="CENTER">
          <VBox.margin>
