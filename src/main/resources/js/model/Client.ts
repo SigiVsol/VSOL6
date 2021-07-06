@@ -37,6 +37,14 @@ export class Client extends VsolRecord {
         return src == null ? null : new Client(src.id, src.lastName, src.firstName, src.company, src.via, src.language, src.phone, src.email, src.street, src.postal, src.city, src.country, src.extraInfo);
     }
 
+    public static fromRows(rows) {
+        let result : Client[] = [];
+        for (let row of rows) {
+            result.push(Client.from(row));
+        }
+        return result;
+    }
+
     getName() {
         return (this.lastName + " " + this.firstName).trim();
     }

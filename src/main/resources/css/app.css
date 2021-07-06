@@ -18,6 +18,9 @@ img {
 ::placeholder {
   color: #d4d4d4;
 }
+.pointer {
+  cursor: pointer;
+}
 button {
   border: none;
   border-radius: 5px;
@@ -254,8 +257,16 @@ input:checked + span.switch:before {
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer {
-  text-align: center;
+#divBaseLayer #divMain #divContent #divExplorer div {
+  margin: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-fiche {
+  margin: 20px;
+  border: solid thin white;
+  border-radius: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table td {
+  border: solid thin white;
 }
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);

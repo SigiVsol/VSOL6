@@ -37,6 +37,14 @@ export class Patient extends VsolRecord {
         return src == null ? null : new Patient(src.id, Client.from(src.client), src.name, src.birthdate, src.chip, src.ueln, src.species, src.breed, src.sire, src.damsire, src.neutered, src.sex, src.color);
     }
 
+    public static fromRows(rows) {
+        let result : Patient[] = [];
+        for (let row of rows) {
+            result.push(Patient.from(row));
+        }
+        return result;
+    }
+
     getOrigin() {
         if (this.sire.trim() === "" && this.damsire.trim() === "") {
             return "";
@@ -73,17 +81,17 @@ export class Patient extends VsolRecord {
 
     // Getters
 
-    getClient() { return this.client; }
-    getName() { return this.name; }
-    getBirthdate() { return this.birthdate; }
-    getChip() { return this.chip; }
-    getUeln() { return this.ueln; }
-    getSpecies() { return this.species; }
-    getBreed() { return this.breed; }
-    getSire() { return this.sire; }
-    getDamsire() { return this.damsire; }
-    isNeutered() { return this.neutered; }
-    getSex() { return this.sex; }
-    getColor() { return this.color; }
+    public getClient() { return this.client; }
+    public getName() { return this.name; }
+    public getBirthdate() { return this.birthdate; }
+    public getChip() { return this.chip; }
+    public getUeln() { return this.ueln; }
+    public getSpecies() { return this.species; }
+    public getBreed() { return this.breed; }
+    public getSire() { return this.sire; }
+    public getDamsire() { return this.damsire; }
+    public isNeutered() { return this.neutered; }
+    public getSex() { return this.sex; }
+    public getColor() { return this.color; }
 
 }
