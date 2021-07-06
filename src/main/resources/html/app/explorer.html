@@ -1,15 +1,23 @@
-<h1>EXPLORER</h1>
-
-<button id="tglClients">%{Clients}</button>
-<button id="tglPatients">%{Patients}</button>
-<button id="tglStudies">%{Studies}</button>
-
-<br>
-<br>
+<div>
+    <button class="btn-add-client ok"><img src="icon/add/16"> Add client</button>
+    <button class="btn-add-patient ok"><img src="icon/add/16"> Add patient</button>
+    <button class="btn-add-study ok"><img src="icon/add/16"> Add study</button>
+</div>
 
 <div>
-    <button id="btnTestInform">Test Inform</button>
-    <button id="btnTestConfirm">Test Confirm</button>
-    <button id="btnTestGetString">Test GetString</button>
-    <button id="btnTestGetNumber">Test GetNumber</button>
+    <button class="tgl-clients">%{Clients}</button>
+    <button class="tgl-patients">%{Patients}</button>
+    <button class="tgl-studies">%{Studies}</button>
 </div>
+
+<div class="div-explorer-fiche">@{app/explorer-fiche.html}</div>
+
+<div>
+    <button class="btn-clear">Clear</button>
+    <label><input class="txt-filter" type="text" placeholder="filter"></label>
+    <button class="btn-search">Search</button>
+    <span><b class="lbl-num-rows">0</b> result(s)</span>
+</div>
+
+<div id="divExplorerTable" class="div-explorer-table">@{app/explorer-table.html}</div>
+
