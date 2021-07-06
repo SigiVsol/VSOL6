@@ -1,36 +1,33 @@
 import {Content} from "./Content.js";
 import {User} from "../model/User.js";
 import {App} from "../App.js";
-import {UserFiche} from "../popup/UserFiche.js";
 import {AddUser} from "../popup/AddUser.js";
 
 export class UserManager extends Content {
-    private app: App;
     private users: User[] = [];
 
     constructor(app: App) {
-        super("divUserManager");
-        this.app = app;
+        super(app, "divUserManager");
 
         $("#btnAddUser").click(() => this.addUser());
         $("#btnEdit").click(() => this.editUsers());
 
-        for (let i = 1; i <= 10; i++)
+        for (let i = 1; i <= 30; i++)
             this.users.push(new User(i.toString(), "user_" + i));
 
-        this.fillTable();
+        this.fill();
     }
 
-    fillTable() {
+    fill() {
         this.clear();
 
         for (let user of this.users) {
             let tr = $("<tr></tr>");
-            let tdUserName = "<td>" + user.getUsername() + "</td>";
-            let tdRole = "<td>" + "" + "</td>"
-            let tdOther = "<td>" + "" + "</td>"
-            tr.append(tdUserName).append(tdRole).append(tdOther);
-            tr.click(() => UserFiche.show(user));
+            let tdUserName = "<td class='tdUserName'>" + user.getUsername() + "</td>";
+            let tdRole = "<td class='tdRole'>" + "user" + "</td>"
+            let tdButtons = "<td class='tdButtons'>" + "<button class=\"edit\" ><img src=\"icon/edit/16\"></button>" + "</td>"
+            tr.append(tdUserName).append(tdRole).append(tdButtons);
+            tr.click(() => console.log(user.getUsername()));
             $("#tbody-users").append(tr);
         }
     }
@@ -40,7 +37,7 @@ export class UserManager extends Content {
     }
 
     addUser() {
-        AddUser.show();
+        AddUser.show((email, role) => console.log(email, role));
     }
 
     editUsers() {

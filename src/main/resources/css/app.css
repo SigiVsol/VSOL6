@@ -174,6 +174,18 @@ input:checked + span.switch:before {
 table {
   width: 100%;
 }
+table thead,
+table tbody tr {
+  display: table;
+  width: 100%;
+}
+table tbody {
+  display: block;
+  height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-collapse: collapse;
+}
 table tbody > :nth-child(odd) {
   background-color: #323232;
 }
@@ -185,10 +197,11 @@ table tbody tr {
   font-weight: bold;
 }
 table tbody tr td {
-  padding: 15px;
+  padding-left: 5px;
+  border: 1px solid black;
 }
 table tbody tr:hover {
-  background-color: #029ddf;
+  color: #029ddf;
   cursor: pointer;
 }
 #divBaseLayer {
@@ -277,34 +290,15 @@ table tbody tr:hover {
 #divBaseLayer #divMain #divContent #divExplorer {
   text-align: center;
 }
-<<<<<<< master
-=======
-#divBaseLayer #divContent #divLogin .div-credentials {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-#divBaseLayer #divContent #divLogin .div-credentials input {
-  margin-top: 5px;
-}
-#divBaseLayer #divContent #divLogin .div-label {
-  margin-top: 10px;
-}
-#divBaseLayer #divContent #divLogin p {
-  margin-top: 0;
-  font-family: monospace;
-  font-size: large;
-  color: #a7a7a7;
-}
-#divBaseLayer #divContent #divUserManager #btnAddUser {
+#divBaseLayer #divMain #divContent #divUserManager #btnAddUser {
   float: right;
   margin: 5px;
 }
-#divBaseLayer #divContent #divUserManager #btnEdit {
+#divBaseLayer #divMain #divContent #divUserManager #btnEdit {
   float: right;
   margin-right: 3px;
   margin-bottom: 5px;
 }
->>>>>>> userManager & userFiche & addUser
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
@@ -338,10 +332,9 @@ table tbody tr:hover {
 #divPopupLayer #divPopupDialog .input-bar input {
   width: calc(100% - 10px);
 }
-<<<<<<< master
 #divPopupLayer #divPopupDialog .button-bar {
   margin-top: 20px;
-=======
+}
 #divPopupLayer #divPopupAddUser {
   background-color: black;
   display: none;
@@ -359,7 +352,7 @@ table tbody tr:hover {
 #divPopupLayer #divPopupAddUser .input-bar div {
   margin-bottom: 5px;
 }
-#divPopupLayer #divPopupAddUser .input-bar input[type=text] {
+#divPopupLayer #divPopupAddUser .input-bar input[type=email] {
   width: 100%;
   margin-bottom: 10px;
 }
@@ -371,23 +364,5 @@ table tbody tr:hover {
 }
 #divPopupLayer #divPopupAddUser .button-bar {
   margin-top: 10px;
-}
-#divPopupLayer #divPopupUserFiche {
-  background-color: black;
-  display: none;
-  width: 400px;
-  max-width: 90%;
-  border: solid 1px white;
-  border-radius: 5px;
-  margin-top: 100px;
-  padding: 5px;
-  text-align: left;
-}
-#divPopupLayer #divPopupUserFiche .button-bar {
-  margin-top: 10px;
-}
-#divPopupLayer #divPopupUserFiche .input-bar {
-  width: calc(100% - 10px);
->>>>>>> userManager & userFiche & addUser
 }
 /*# sourceMappingURL=app.css.map */
