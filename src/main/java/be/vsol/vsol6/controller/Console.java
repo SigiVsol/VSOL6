@@ -3,8 +3,11 @@ package be.vsol.vsol6.controller;
 import be.vsol.util.Bytes;
 import be.vsol.util.Log;
 import be.vsol.vsol6.controller.Ctrl;
+import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.User;
 
 import java.util.Scanner;
+import java.util.Vector;
 
 public class Console implements Runnable {
 
@@ -40,6 +43,16 @@ public class Console implements Runnable {
         switch (subs[0]) {
             case "exit" -> ctrl.exit();
             case "mem" -> mem();
+            case "test" -> {
+                Vector<Organization> organizations = ctrl.getDataStorage().getOrganizations("");
+                Organization first = organizations.firstElement();
+
+                Vector<User> users = ctrl.getDataStorage().getUsers(first.getId(), "");
+                for (User user : users) {
+                    System.out.println(user.getFirstName());
+                }
+
+            }
         }
     }
 

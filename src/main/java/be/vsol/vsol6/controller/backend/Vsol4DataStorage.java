@@ -51,7 +51,8 @@ public class Vsol4DataStorage extends DataStorage {
     // Users
 
     @Override public Vector<User> getUsers(String organizationId, String filter) {
-        Vector<Vsol4User> vsol4Users = ctrl.getVsol4().getAll(organizationId, filter, Vsol4User::new);
+
+        Vector<Vsol4User> vsol4Users = ctrl.getVsol4().getUsers(organizationId);
 
         Vector<User> users = new Vector<>();
         for (Vsol4User vsol4User : vsol4Users) {
