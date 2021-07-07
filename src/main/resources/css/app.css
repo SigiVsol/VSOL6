@@ -18,6 +18,9 @@ img {
 ::placeholder {
   color: #d4d4d4;
 }
+.pointer {
+  cursor: pointer;
+}
 button {
   border: none;
   border-radius: 5px;
@@ -254,8 +257,16 @@ input:checked + span.switch:before {
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer {
-  text-align: center;
+#divBaseLayer #divMain #divContent #divExplorer div {
+  margin: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-fiche {
+  margin: 20px;
+  border: solid thin white;
+  border-radius: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table td {
+  border: solid thin white;
 }
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);
@@ -269,9 +280,9 @@ input:checked + span.switch:before {
   text-align: center;
   display: none;
 }
-#divPopupLayer #divPopupDialog {
+#divPopupLayer .div-popup {
   background-color: black;
-  display: inline-block;
+  display: none;
   width: 400px;
   max-width: 90%;
   border: solid 1px white;
@@ -280,10 +291,17 @@ input:checked + span.switch:before {
   padding: 5px;
   text-align: left;
 }
-#divPopupLayer #divPopupDialog .button-bar {
-  margin-top: 10px;
+#divPopupLayer #divPopupDialog p {
+  margin: 0;
 }
 #divPopupLayer #divPopupDialog .input-bar {
+  margin-top: 10px;
+  display: none;
+}
+#divPopupLayer #divPopupDialog .input-bar input {
   width: calc(100% - 10px);
+}
+#divPopupLayer #divPopupDialog .button-bar {
+  margin-top: 20px;
 }
 /*# sourceMappingURL=app.css.map */

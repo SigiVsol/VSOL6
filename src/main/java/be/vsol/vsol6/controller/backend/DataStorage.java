@@ -28,9 +28,13 @@ public abstract class DataStorage {
 
     // Users
 
+    public abstract Vector<User> getUsers(String organizationId, String filter);
+
     public abstract User getUser(String userId);
 
     // Organizations
+
+    public abstract Vector<Organization> getOrganizations(String filter);
 
     public abstract Vector<Organization> getOrganizations(String username, String filter);
 

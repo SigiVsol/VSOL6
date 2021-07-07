@@ -1,3 +1,7 @@
 # Project exclude paths
 /target/
 /logs/
+
+app/browser/Default/History Provider Cache
+
+app/browser/Default/TransportSecurity

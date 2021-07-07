@@ -1,21 +1,20 @@
 @import "../variables/colors";
 
 #divPopupDialog {
-  background-color: black;
-  display: inline-block;
-  width: 400px;
-  max-width: 90%;
-  border: solid 1px white;
-  border-radius: 5px;
-  margin-top: 100px;
-  padding: 5px;
-  text-align: left;
-
-  .button-bar {
-    margin-top: 10px;
+  p {
+    margin: 0;
   }
 
   .input-bar {
-    width: calc(100% - 10px);
+    margin-top: 10px;
+    display: none;
+
+    input {
+      width: calc(100% - 10px);
+    }
+  }
+
+  .button-bar {
+    margin-top: 20px;
   }
 }
