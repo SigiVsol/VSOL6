@@ -1,48 +1,44 @@
 package be.vsol.vsol6.controller.fx;
 
-import be.vsol.fx.util.ImageIcon;
-import be.vsol.util.Icon;
+import be.vsol.vsol6.controller.fx.app.Content;
+import be.vsol.vsol6.model.Session;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 public class App extends FxController<StackPane> {
 
-    @FXML private ImageView imgLogo;
-    @FXML private Label lblVersion;
-    @FXML private BorderPane borderPane;
-
     @Override public void init() {
-        lblVersion.setText(ctrl.getSig().getVersion());
-        imgLogo.setImage(ImageIcon.get(true, "logo", 48));
-    }
-
-    public void show(FxController<?> controller) {
-        Platform.runLater(() -> borderPane.setCenter(controller.getRoot()));
-    }
-
-    @FXML private void back() {
 
     }
 
-    @FXML public void home() {
-//        gui.getExplorer().loadUrl("http://localhost:8100");
-//        show(gui.getExplorer());
+    public void startLogin() {
+        Session session = ctrl.getLocalSession();
+
+        Login login = ctrl.getGui().getLogin();
+
+        if(session.getOrganization() == null)
+        {
+            login.setupOrganizationSelection();
+            Platform.runLater(() -> {
+                this.getRoot().getChildren().add(login.getRoot());
+            });
+        }else if(session.getUser() == null)
+        {
+            login.setSelectedOrganization(session.getOrganization().toString());
+            login.setupUserSelection();
+            Platform.runLater(() -> {
+                this.getRoot().getChildren().add(login.getRoot());
+            });
+        }else{
+            startContent();
+        }
     }
 
-    @FXML private void logout() {
-//        show(gui.getLogin());
+    public void startContent() {
+        Content content = ctrl.getGui().getContent();
+        Platform.runLater(() -> {
+            this.getRoot().getChildren().add(content.getRoot());
+            content.start();
+        });
     }
-
-    @FXML private void organizations() {
-
-    }
-
-    @FXML private void settings() {
-//        show(gui.getSettings());
-    }
-
 }

@@ -18,6 +18,9 @@ img {
 ::placeholder {
   color: #d4d4d4;
 }
+.pointer {
+  cursor: pointer;
+}
 button {
   border: none;
   border-radius: 5px;
@@ -288,8 +291,16 @@ table tbody tr:hover {
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer {
-  text-align: center;
+#divBaseLayer #divMain #divContent #divExplorer div {
+  margin: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-fiche {
+  margin: 20px;
+  border: solid thin white;
+  border-radius: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table td {
+  border: solid thin white;
 }
 #divBaseLayer #divMain #divContent #divUserManager #btnAddUser {
   float: right;

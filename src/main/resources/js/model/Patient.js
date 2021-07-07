@@ -20,6 +20,13 @@ export class Patient extends VsolRecord {
     static from(src) {
         return src == null ? null : new Patient(src.id, Client.from(src.client), src.name, src.birthdate, src.chip, src.ueln, src.species, src.breed, src.sire, src.damsire, src.neutered, src.sex, src.color);
     }
+    static fromRows(rows) {
+        let result = [];
+        for (let row of rows) {
+            result.push(Patient.from(row));
+        }
+        return result;
+    }
     getOrigin() {
         if (this.sire.trim() === "" && this.damsire.trim() === "") {
             return "";

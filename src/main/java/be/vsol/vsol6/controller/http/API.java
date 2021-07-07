@@ -46,6 +46,8 @@ public class API implements RequestHandler {
         else if (method == Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
         // ORGANIZATIONS
         else if (method == Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
+//        // USERS
+//        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/users")) return getUsers(request);
         // CLIENTS
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
