@@ -14,37 +14,43 @@ public class Content extends FxController<StackPane> {
     @FXML private ImageView imgLogo;
     @FXML private Label lblVersion;
     @FXML private BorderPane borderPane;
+    private String userId;
+    private String organizationId;
 
     @Override public void init() {
         lblVersion.setText(ctrl.getSig().getVersion());
         imgLogo.setImage(ImageIcon.get(true, "logo", 48));
     }
 
-    public void show(FxController<?> controller) {
+    public void start(String userId, String organizationId) {
+        this.userId = userId;
+        this.organizationId = organizationId;
+        BrowserView browserView = ctrl.getGui().getBrowserView();
+        browserView.loadUrl("localhost:8100?userId=" + userId + "&organizationId=" + organizationId);
+        show(browserView);
+    }
+
+    private void show(FxController<?> controller) {
         Platform.runLater(() -> borderPane.setCenter(controller.getRoot()));
     }
 
-    public void start() {
-        show(ctrl.getGui().getExplorer());
-    }
-
     @FXML private void back() {
-
+        show(ctrl.getGui().getBrowserView());
     }
 
     @FXML public void home() {
-        ctrl.getGui().getExplorer().loadUrl("www.google.be");
+        show(ctrl.getGui().getBrowserView());
     }
 
     @FXML private void logout() {
-        ctrl.getGui().getExplorer().loadUrl("www.netflix.com");
+        show(ctrl.getGui().getAqs());
     }
 
     @FXML private void organizations() {
-        ctrl.getGui().getExplorer().loadUrl("www.hbvl.be");
+        show(ctrl.getGui().getBrowserView());
     }
 
     @FXML private void settings() {
-        ctrl.getGui().getExplorer().loadUrl("www.youtube.com");
+        show(ctrl.getGui().getBrowserView());
     }
 }

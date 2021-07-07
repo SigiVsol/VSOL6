@@ -5,9 +5,10 @@ import be.vsol.util.*;
 import be.vsol.vsol6.controller.fx.App;
 import be.vsol.vsol6.controller.fx.FxController;
 import be.vsol.vsol6.controller.fx.Splash;
+import be.vsol.vsol6.controller.fx.app.AQS;
 import be.vsol.vsol6.controller.fx.app.Content;
 import be.vsol.vsol6.controller.fx.app.Dialog;
-import be.vsol.vsol6.controller.fx.app.Explorer;
+import be.vsol.vsol6.controller.fx.app.BrowserView;
 import be.vsol.vsol6.controller.fx.Login;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
@@ -28,8 +29,9 @@ public class Gui {
     private App app;
     private Content content;
     private Login login;
-    private Explorer explorer;
+    private BrowserView browserView;
     private Dialog dialog;
+    private AQS aqs;
 
     // Constructors
 
@@ -77,7 +79,7 @@ public class Gui {
 
     public App getApp() { return app; }
 
-    public Explorer getExplorer() { return explorer; }
+    public BrowserView getBrowserView() { return browserView; }
 
     public Content getContent() {
         return content;
@@ -87,14 +89,17 @@ public class Gui {
         return login;
     }
 
-    public Dialog getDialog() { return  dialog;}
+    public Dialog getDialog() { return dialog; }
+
+    public AQS getAqs() { return aqs; }
 
     private void loadFXMLs() {
         app = loadFxml("app");
         content = loadFxml("app/content");
         login = loadFxml("login");
-        explorer = new Explorer(ctrl, "www.sporza.be");
+        browserView = new BrowserView(ctrl,null);
         dialog = loadFxml("app/dialog");
+        aqs = loadFxml("app/aqs");
     }
 
     private void saveSetting(Setting setting) {

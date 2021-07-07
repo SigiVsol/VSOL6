@@ -110,6 +110,7 @@
 .boldTitle {
     -fx-font-size: 48;
     -fx-font-weight: bold;
+    -fx-text-fill: white;
 }
 
 .grayText {

@@ -58,8 +58,7 @@ public class Login extends FxController<VBox> {
         Vector<User> users = ctrl.getDataStorage().getUsers(organizationId, "");
 
         for (User user : users) {
-            System.out.println(user.getFirstName());
-            Button button = new Button(user.getId());
+            Button button = new Button(user.getUsername());
             button.setId(user.getId());
             button.setOnAction(actionEvent -> this.onClickUser(user.getUsername(), user.getId(), organizationId));
 
@@ -69,17 +68,17 @@ public class Login extends FxController<VBox> {
         }
     }
 
-    private void loginUser(String userName, String userId, String password) {
+    private void loginUser(String userName, String userId, String password, String organizationId) {
         System.out.println("User " + userName + " wants to login with password: " + password);
         //TODO: check if login is correct
-        ctrl.getGui().getApp().startContent();
+        ctrl.getGui().getApp().startContent(userId,organizationId);
     }
 
     private void onClickUser(String userName, String userId, String organizationId)
     {
         Dialog dialog = ctrl.getGui().getDialog();
         String question = "Welcome " + userName + ", what's your password?";
-        dialog.setupPasswordQuestion(question, result -> loginUser(userName, userId, result));
+        dialog.setupPasswordQuestion(question, result -> loginUser(userName, userId, result, organizationId));
         dialog.show();
     }
 

@@ -7,18 +7,17 @@ import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
 import com.teamdev.jxbrowser.engine.ProprietaryFeature;
 import com.teamdev.jxbrowser.engine.RenderingMode;
-import com.teamdev.jxbrowser.view.javafx.BrowserView;
 import sun.misc.Unsafe;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 
-public class Explorer extends FxController<BrowserView> {
+public class BrowserView extends FxController<com.teamdev.jxbrowser.view.javafx.BrowserView> {
 
     private final Browser browser;
 
-    public Explorer(Ctrl ctrl, String url) {
+    public BrowserView(Ctrl ctrl, String url) {
 
         System.setProperty("jxbrowser.license.key", "1BNDIEOFAYZEE9HQYY5M5ESGI6GCWTNOGK6CZWMWN94GQFFG96AB10J8YJC2KNKP5ZONEW"); // license
         disableWarning();
@@ -31,7 +30,7 @@ public class Explorer extends FxController<BrowserView> {
                 .build());
 
         browser = engine.newBrowser();
-        super.load(ctrl, BrowserView.newInstance(browser));
+        super.load(ctrl, com.teamdev.jxbrowser.view.javafx.BrowserView.newInstance(browser));
 
         if (url != null) loadUrl(url);
     }

@@ -31,13 +31,14 @@ public class Dialog extends FxController<DialogPane> {
     @Override public void init() {}
 
     public void show() {
-            Platform.runLater(() -> {
+        Platform.runLater(() -> {
             ObservableList<Node> nodes = ctrl.getGui().getApp().getRoot().getChildren();
             for(Node n : nodes)
             {
                 n.setDisable(true);
             }
-            nodes.add(this.getRoot());});
+            nodes.add(this.getRoot());
+        });
     }
 
     public void setupQuestion(String question){

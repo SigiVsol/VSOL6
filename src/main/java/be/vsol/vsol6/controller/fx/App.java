@@ -19,27 +19,27 @@ public class App extends FxController<StackPane> {
 
         if(session.getOrganization() == null)
         {
-            login.setupOrganizationSelection();
             Platform.runLater(() -> {
+                login.setupOrganizationSelection();
                 this.getRoot().getChildren().add(login.getRoot());
             });
         }else if(session.getUser() == null)
         {
-            Organization organization = session.getOrganization();
-            login.setupUserSelection(organization.getName(), organization.getId());
             Platform.runLater(() -> {
+                Organization organization = session.getOrganization();
+                login.setupUserSelection(organization.getName(), organization.getId());
                 this.getRoot().getChildren().add(login.getRoot());
             });
         }else{
-            startContent();
+            startContent(session.getUser().getId(), session.getOrganization().getId());
         }
     }
 
-    public void startContent() {
+    public void startContent(String userId, String organizationId) {
         Content content = ctrl.getGui().getContent();
         Platform.runLater(() -> {
             this.getRoot().getChildren().add(content.getRoot());
-            content.start();
+            content.start(userId, organizationId);
         });
     }
 }
