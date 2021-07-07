@@ -18,6 +18,14 @@ export class User extends VsolRecord {
         return src == null ? null : new User(src.id, src.username, src.firstName, src.lastName, src.email);
     }
 
+    public static fromRows(rows) {
+        let result : User[] = [];
+        for (let row of rows) {
+            result.push(User.from(row));
+        }
+        return result;
+    }
+
     // Getters
 
     getUsername() { return this.username; }

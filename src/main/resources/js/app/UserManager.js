@@ -1,37 +1,36 @@
-import { Content } from "./Content.js";
 import { User } from "../model/User.js";
 import { AddUser } from "../popup/AddUser.js";
-export class UserManager extends Content {
+import { API } from "../tools/API.js";
+export class UserManager {
     constructor(app) {
-        super(app, "divUserManager");
-        this.users = [];
-        $("#btnAddUser").click(() => this.addUser());
-        $("#btnEdit").click(() => this.editUsers());
-        for (let i = 1; i <= 17; i++)
-            this.users.push(new User(i.toString(), "user_" + i));
-        this.fill();
+        this.app = app;
+        $(".btn-add-user").click(() => this.addUser());
     }
     fill() {
-        this.clear();
-        for (let user of this.users) {
-            let tr = $("<tr></tr>");
-            let tdUserName = "<td class='tdUserName'>" + user.getUsername() + "</td>";
-            let tdRole = "<td class='tdRole'>" + "user" + "</td>";
-            let tdButtons = "<td class='tdButtons'>" + "<button class='edit' ><img src='icon/edit/16'></button>" + "</td>";
-            tr.append(tdUserName).append(tdRole).append(tdButtons);
-            tr.click(() => console.log(user.getUsername()));
-            $("#tbody-users").append(tr);
-        }
-    }
-    clear() {
-        $("#tbody-users").empty();
+        let tbody = $("<tbody></tbody>");
+        let urlUsers = "/api/organizations/" + this.app.getOrganization().getId() + "/users";
+        API.getJson(urlUsers, json => {
+            for (let user of User.fromRows(json.rows)) {
+                let tr = $("<tr></tr>");
+                $("<td><label><input type='checkbox'></label>").appendTo(tr);
+                $("<td>" + user.getUsername() + "</td>").appendTo(tr);
+                $("<td>" + user.getEmail() + "</td>").appendTo(tr);
+                $("<td>" + "" + "</td>").appendTo(tr);
+                $("<td>" + this.getUserActionButtons() + "</td>").appendTo(tr);
+                tr.appendTo(tbody);
+            }
+            $("#divSettings .table-users tbody").replaceWith(tbody);
+        });
     }
     addUser() {
         AddUser.show((email, role) => {
-            this.users.push(new User(null, String(email)));
             this.fill();
         });
     }
-    editUsers() {
+    getUserActionButtons() {
+        let result = "";
+        result += "<button class='edit'><img src='icon/edit/16'></button>";
+        result += "<button class='cancel'><img src='icon/delete/16'></button>";
+        return result;
     }
 }

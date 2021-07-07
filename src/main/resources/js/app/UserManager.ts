@@ -1,49 +1,48 @@
-import {Content} from "./Content.js";
 import {User} from "../model/User.js";
 import {App} from "../App.js";
 import {AddUser} from "../popup/AddUser.js";
+import {API} from "../tools/API.js";
 
-export class UserManager extends Content {
-    private users: User[] = [];
+export class UserManager {
+    private app: App;
 
     constructor(app: App) {
-        super(app, "divUserManager");
+        this.app = app;
 
-        $("#btnAddUser").click(() => this.addUser());
-        $("#btnEdit").click(() => this.editUsers());
-
-        for (let i = 1; i <= 17; i++)
-            this.users.push(new User(i.toString(), "user_" + i));
-
-        this.fill();
+        $(".btn-add-user").click(() => this.addUser());
     }
 
     fill() {
-        this.clear();
+        let tbody = $("<tbody></tbody>");
+        let urlUsers = "/api/organizations/" + this.app.getOrganization().getId() + "/users";
 
-        for (let user of this.users) {
-            let tr = $("<tr></tr>");
-            let tdUserName = "<td class='tdUserName'>" + user.getUsername() + "</td>";
-            let tdRole = "<td class='tdRole'>" + "user" + "</td>"
-            let tdButtons = "<td class='tdButtons'>" + "<button class='edit' ><img src='icon/edit/16'></button>" + "</td>"
-            tr.append(tdUserName).append(tdRole).append(tdButtons);
-            tr.click(() => console.log(user.getUsername()));
-            $("#tbody-users").append(tr);
-        }
-    }
+        API.getJson(urlUsers, json => {
+            for (let user of User.fromRows(json.rows)) {
+                let tr = $("<tr></tr>");
 
-    clear() {
-        $("#tbody-users").empty();
+                $("<td><label><input type='checkbox'></label>").appendTo(tr);
+                $("<td>" + user.getUsername() + "</td>").appendTo(tr);
+                $("<td>" + user.getEmail() + "</td>").appendTo(tr);
+                $("<td>" + "" + "</td>").appendTo(tr);
+                $("<td>" + this.getUserActionButtons() + "</td>").appendTo(tr);
+
+                tr.appendTo(tbody);
+            }
+            $("#divSettings .table-users tbody").replaceWith(tbody);
+        });
     }
 
     addUser() {
         AddUser.show((email, role) => {
-            this.users.push(new User(null, String(email)));
+
             this.fill();
         });
     }
 
-    editUsers() {
-
+    private getUserActionButtons(): string {
+        let result = "";
+        result += "<button class='edit'><img src='icon/edit/16'></button>";
+        result += "<button class='cancel'><img src='icon/delete/16'></button>";
+        return result;
     }
 }

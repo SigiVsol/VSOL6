@@ -191,23 +191,6 @@ table tbody tr td {
   padding-left: 5px;
   padding-right: 5px;
 }
-table tbody tr:hover {
-  color: #029ddf;
-  cursor: pointer;
-}
-.div-table-scroll {
-  overflow-y: auto;
-  height: 90vh;
-}
-.tdUserName {
-  width: 45%;
-}
-.tdRole {
-  width: 30%;
-}
-.tdButtons button {
-  float: right;
-}
 #divBaseLayer {
   position: fixed;
   top: 0;
@@ -301,15 +284,6 @@ table tbody tr:hover {
 }
 #divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table td {
   border: solid thin white;
-}
-#divBaseLayer #divMain #divContent #divUserManager #btnAddUser {
-  float: right;
-  margin: 5px;
-}
-#divBaseLayer #divMain #divContent #divUserManager #btnEdit {
-  float: right;
-  margin-right: 5px;
-  margin-bottom: 5px;
 }
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);
