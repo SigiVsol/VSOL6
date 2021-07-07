@@ -13,6 +13,7 @@ import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.backend.DicomStorage;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Record;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
 import be.vsol.vsol6.model.enums.Language;
 import be.vsol.vsol6.model.organization.Client;
@@ -46,8 +47,8 @@ public class API implements RequestHandler {
         else if (method == Method.POST && path.matches("/api/restoreLogin")) return postRestoreLogin(request);
         // ORGANIZATIONS
         else if (method == Method.GET && path.matches("/api/organizations")) return getOrganizations(request);
-//        // USERS
-//        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/users")) return getUsers(request);
+        // USERS
+        else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/users")) return getUsers(request);
         // CLIENTS
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients")) return getClients(request);
         else if (method == Method.GET && path.matches("/api/organizations/" + uid + "/clients/" + uid)) return getClient(request);
@@ -110,6 +111,13 @@ public class API implements RequestHandler {
     private HttpResponse getOrganizations(HttpRequest request) {
         Vector<Organization> organizations = dataStorage.getOrganizations(getUsername(request), getFilter(request));
         return getRows(organizations, getPart(request));
+    }
+
+    // Users
+
+    private HttpResponse getUsers(HttpRequest request) {
+        Vector<User> users = dataStorage.getUsers(getSplit(request, 3), getFilter(request));
+        return getRows(users, getPart(request));
     }
 
     // Clients
