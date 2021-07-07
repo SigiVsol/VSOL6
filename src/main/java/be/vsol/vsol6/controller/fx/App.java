@@ -11,7 +11,7 @@ public class App extends FxController<StackPane> {
 
     }
 
-    public void start() {
+    public void startLogin() {
         Session session = ctrl.getLocalSession();
 
         Login login = ctrl.getGui().getLogin();
@@ -30,11 +30,15 @@ public class App extends FxController<StackPane> {
                 this.getRoot().getChildren().add(login.getRoot());
             });
         }else{
-            Content content = ctrl.getGui().getContent();
-            Platform.runLater(() -> {
-                this.getRoot().getChildren().add(content.getRoot());
-                content.start();
-            });
+            startContent();
         }
+    }
+
+    public void startContent() {
+        Content content = ctrl.getGui().getContent();
+        Platform.runLater(() -> {
+            this.getRoot().getChildren().add(content.getRoot());
+            content.start();
+        });
     }
 }

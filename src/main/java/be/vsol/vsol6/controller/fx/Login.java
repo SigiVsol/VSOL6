@@ -23,8 +23,6 @@ public class Login extends FxController<VBox> {
         imgLogo.setImage(ImageIcon.get(true, "logo", 128));
     }
 
-
-
     @FXML private void back() {
         setupOrganizationSelection();
     }
@@ -69,20 +67,24 @@ public class Login extends FxController<VBox> {
         }
     }
 
+    public void loginUser(String password) {
+        System.out.println("User " + selectedUser + " wants to login with password: " + password);
+        //TODO: check if login is correct
+        ctrl.getGui().getApp().startContent();
+    }
+
     private void onClickUser(String userId)
     {
-        System.out.println(userId);
         selectedUser = userId;
         Dialog dialog = ctrl.getGui().getDialog();
-        dialog.setupPasswordQuestion("Welcome " + userId + ", what's your password?");
+        String question = "Welcome " + userId + ", what's your password?";
+        dialog.setupPasswordQuestion(question, result -> loginUser(result));
         dialog.show();
     }
 
     private void onClickOrganization(String organizationId)
     {
-        System.out.println(organizationId);
         selectedOrganization = organizationId;
         setupUserSelection();
     }
-
 }

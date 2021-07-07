@@ -22,26 +22,33 @@ public class Dialog extends FxController<DialogPane> {
     @FXML private TextField txt;
     @FXML private PasswordField txtPassword;
     @FXML private VBox vboxFields;
+    private StringCallback stringCallback;
+    private IntegerCallback integerCallback;
+    private DoubleCallback doubleCallback;
+    private enum DialogType { NormalQuestion, TextQuestion, IntegerQuestion, DoubleQuestion, PasswordQuestion }
+    private DialogType activeDialogType;
 
     @Override public void init() {}
 
     public void show() {
-        Platform.runLater(() -> {
+            Platform.runLater(() -> {
             ObservableList<Node> nodes = ctrl.getGui().getApp().getRoot().getChildren();
             for(Node n : nodes)
             {
                 n.setDisable(true);
             }
-            //Group group = new Group(this.getRoot());
             nodes.add(this.getRoot());});
     }
 
     public void setupQuestion(String question){
+        activeDialogType = DialogType.NormalQuestion;
         vboxFields.getChildren().clear();
         lblQuestion.setText(question);
     }
 
-    public void setupPasswordQuestion(String question){
+    public void setupPasswordQuestion(String question, StringCallback callback)  {
+        activeDialogType = DialogType.PasswordQuestion;
+        stringCallback = callback;
         vboxFields.getChildren().clear();
         vboxFields.getChildren().add(txtPassword);
         lblQuestion.setText(question);
@@ -49,6 +56,7 @@ public class Dialog extends FxController<DialogPane> {
     }
 
     public void setupDoubleQuestion(String question, double number) {
+        activeDialogType = DialogType.DoubleQuestion;
         vboxFields.getChildren().clear();
         vboxFields.getChildren().add(txtDouble);
         lblQuestion.setText(question);
@@ -57,6 +65,7 @@ public class Dialog extends FxController<DialogPane> {
     }
 
     public void setupIntegerQuestion(String question, Integer number) {
+        activeDialogType = DialogType.IntegerQuestion;
         vboxFields.getChildren().clear();
         vboxFields.getChildren().add(txtInteger);
         lblQuestion.setText(question);
@@ -64,7 +73,9 @@ public class Dialog extends FxController<DialogPane> {
         txtInteger.selectAll();
     }
 
-    public void setupTxtQuestion(String question, String text) {
+    public void setupTxtQuestion(String question, String text,  StringCallback callback) {
+        activeDialogType = DialogType.TextQuestion;
+        stringCallback = callback;
         vboxFields.getChildren().clear();
         vboxFields.getChildren().add(txt);
         lblQuestion.setText(question);
@@ -73,8 +84,30 @@ public class Dialog extends FxController<DialogPane> {
     }
 
     @FXML private void ok() {
-        System.out.println("ok");
+        switch (activeDialogType) {
+            case TextQuestion:
+                stringCallback.invoke(txt.getText());
+                break;
+            case PasswordQuestion:
+                stringCallback.invoke(txtPassword.getText());
+                break;
+            case IntegerQuestion:
+                integerCallback.invoke(txtInteger.getValue());
+                break;
+            case DoubleQuestion:
+                doubleCallback.invoke(txtDouble.getValue());
+                break;
+            default:
+                cancel();
+        }
+        cancel();
+    }
 
+    @FXML private void cancel() {
+        stringCallback = null;
+        integerCallback = null;
+        doubleCallback = null;
+        hide();
     }
 
     @FXML private void keyPressed(KeyEvent keyEvent) {
@@ -90,15 +123,25 @@ public class Dialog extends FxController<DialogPane> {
         }
     }
 
-    @FXML private void cancel() {
-        System.out.println("cancel");
+    @FXML private void hide() {
         Platform.runLater(() -> {
             ObservableList<Node> nodes = ctrl.getGui().getApp().getRoot().getChildren();
             for (Node n : nodes) {
                 n.setDisable(false);
             }
-            //Group group = new Group(this.getRoot());
             nodes.remove(this.getRoot());
         });
+    }
+
+    public interface StringCallback {
+        void invoke(String str);
+    }
+
+    public interface IntegerCallback {
+        void invoke(Integer integer);
+    }
+
+    public interface DoubleCallback {
+        void invoke(Double dbl);
     }
 }

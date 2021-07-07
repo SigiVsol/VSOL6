@@ -72,7 +72,7 @@ public class Gui {
             primaryStage.show();
         });
 
-        app.start();
+        app.startLogin();
     }
 
     public App getApp() { return app; }

@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.vsol.vsol6.controller.fx.app.Dialog">
    <children>
       <HBox alignment="TOP_CENTER">
@@ -36,7 +35,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </VBox>
-                  <HBox alignment="TOP_CENTER" fillHeight="false" spacing="5.0">
+                  <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="5.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#ok">
                            <graphic>
