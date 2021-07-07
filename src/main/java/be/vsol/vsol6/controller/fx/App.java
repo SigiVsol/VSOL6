@@ -1,6 +1,7 @@
 package be.vsol.vsol6.controller.fx;
 
 import be.vsol.vsol6.controller.fx.app.Content;
+import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Session;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
@@ -24,8 +25,8 @@ public class App extends FxController<StackPane> {
             });
         }else if(session.getUser() == null)
         {
-            login.setSelectedOrganization(session.getOrganization().toString());
-            login.setupUserSelection();
+            Organization organization = session.getOrganization();
+            login.setupUserSelection(organization.getName(), organization.getId());
             Platform.runLater(() -> {
                 this.getRoot().getChildren().add(login.getRoot());
             });

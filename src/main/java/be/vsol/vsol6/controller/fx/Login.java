@@ -2,12 +2,17 @@ package be.vsol.vsol6.controller.fx;
 
 import be.vsol.fx.util.ImageIcon;
 import be.vsol.vsol6.controller.fx.app.Dialog;
+import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.Session;
+import be.vsol.vsol6.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+
+import java.util.Vector;
 
 public class Login extends FxController<VBox> {
 
@@ -16,8 +21,6 @@ public class Login extends FxController<VBox> {
     @FXML private FlowPane fpList;
     @FXML private Button btnBack;
     @FXML private ImageView imgLogo;
-    private String selectedOrganization;
-    private String selectedUser;
 
     @Override public void init() {
         imgLogo.setImage(ImageIcon.get(true, "logo", 128));
@@ -27,20 +30,18 @@ public class Login extends FxController<VBox> {
         setupOrganizationSelection();
     }
 
-    public void setSelectedOrganization(String organization) { selectedOrganization = organization;}
-
     public void setupOrganizationSelection() {
         btnBack.setVisible(false);
         fpList.getChildren().clear();
         lblTitle.setText("Welcome");
         lblDescription.setText("Select an organization");
 
-        String[] organizations = {"Verterinary Solutions 1", "Verterinary Solutions 2"};
+        Vector<Organization> organizations = ctrl.getDataStorage().getOrganizations("");
 
-        for (String organization : organizations) {
-            Button button = new Button(organization);
-            button.setId(organization);
-            button.setOnAction(actionEvent -> this.onClickOrganization(button.getId()));
+        for (Organization organization : organizations) {
+            Button button = new Button(organization.getName());
+            button.setId(organization.getId());
+            button.setOnAction(actionEvent -> this.onClickOrganization(organization.getName(),organization.getId()));
 
             button.getStyleClass().add("name");
             button.getStyleClass().add("extraLargeText");
@@ -48,18 +49,19 @@ public class Login extends FxController<VBox> {
         }
     }
 
-    public void setupUserSelection() {
+    public void setupUserSelection(String organizationName, String organizationId) {
         btnBack.setVisible(true);
         fpList.getChildren().clear();
-        lblTitle.setText(selectedOrganization);
+        lblTitle.setText(organizationName);
         lblDescription.setText("Select a user");
 
-        String[] users = {"Pieter", "Sigi", "Juriën", "Alexander", "Jan", "Gilbert", "David",};
+        Vector<User> users = ctrl.getDataStorage().getUsers(organizationId, "");
 
-        for (String user : users) {
-            Button button = new Button(user);
-            button.setId(user);
-            button.setOnAction(actionEvent -> this.onClickUser(button.getId()));
+        for (User user : users) {
+            System.out.println(user.getFirstName());
+            Button button = new Button(user.getId());
+            button.setId(user.getId());
+            button.setOnAction(actionEvent -> this.onClickUser(user.getUsername(), user.getId(), organizationId));
 
             button.getStyleClass().add("name");
             button.getStyleClass().add("extraLargeText");
@@ -67,24 +69,21 @@ public class Login extends FxController<VBox> {
         }
     }
 
-    public void loginUser(String password) {
-        System.out.println("User " + selectedUser + " wants to login with password: " + password);
+    private void loginUser(String userName, String userId, String password) {
+        System.out.println("User " + userName + " wants to login with password: " + password);
         //TODO: check if login is correct
         ctrl.getGui().getApp().startContent();
     }
 
-    private void onClickUser(String userId)
+    private void onClickUser(String userName, String userId, String organizationId)
     {
-        selectedUser = userId;
         Dialog dialog = ctrl.getGui().getDialog();
-        String question = "Welcome " + userId + ", what's your password?";
-        dialog.setupPasswordQuestion(question, result -> loginUser(result));
+        String question = "Welcome " + userName + ", what's your password?";
+        dialog.setupPasswordQuestion(question, result -> loginUser(userName, userId, result));
         dialog.show();
     }
 
-    private void onClickOrganization(String organizationId)
-    {
-        selectedOrganization = organizationId;
-        setupUserSelection();
+    private void onClickOrganization(String organizationName, String organizationId) {
+        setupUserSelection(organizationName,organizationId);
     }
 }
