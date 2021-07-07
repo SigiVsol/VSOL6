@@ -13,7 +13,7 @@ public class App extends FxController<StackPane> {
     }
 
     public void startLogin() {
-        Session session = ctrl.getLocalSession();
+        Session session = ctrl.getGui().getLocalSession();
 
         Login login = ctrl.getGui().getLogin();
 

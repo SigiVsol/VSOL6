@@ -70,16 +70,14 @@ public class Login extends FxController<VBox> {
 
     private void loginUser(String userName, String userId, String password, String organizationId) {
         System.out.println("User " + userName + " wants to login with password: " + password);
-        //TODO: check if login is correct
+        //TODO: check if login is correct, else print error message and show users again
         ctrl.getGui().getApp().startContent(userId,organizationId);
     }
 
     private void onClickUser(String userName, String userId, String organizationId)
     {
-        Dialog dialog = ctrl.getGui().getDialog();
         String question = "Welcome " + userName + ", what's your password?";
-        dialog.setupPasswordQuestion(question, result -> loginUser(userName, userId, result, organizationId));
-        dialog.show();
+        ctrl.getGui().getDialog().getPassword(question, result -> loginUser(userName, userId, result, organizationId));
     }
 
     private void onClickOrganization(String organizationName, String organizationId) {

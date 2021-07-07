@@ -43,7 +43,7 @@ public class Ctrl {
     private final DataStorage dataStorage;
     private final DicomStorage dicomStorage;
 
-    private Session systemSession, localSession;
+    private Session systemSession;
 
     /**
      * Default constructor
@@ -126,9 +126,6 @@ public class Ctrl {
         if (gui == null) {
             Log.err("Can't show GUI. Not launched as a JavaFX application.");
         } else {
-            User user = dataStorage.getUser(config.gui.userId);
-            Organization organization = dataStorage.getOrganization(config.gui.organizationId);
-            localSession = new Session(this, system, user, organization);
             gui.start(config);
         }
     }
@@ -158,8 +155,6 @@ public class Ctrl {
 
     public Orthanc getOrthanc() { return orthanc; }
 
-    public Session getLocalSession() { return localSession; }
-
     public Session getSystemSession() { return systemSession; }
 
     public LocalSystem getSystem() { return system; }
@@ -168,8 +163,6 @@ public class Ctrl {
 
     public DicomStorage getDicomStorage() { return dicomStorage; }
 
-    // Setters
 
-    public void setLocalSession(Session localSession) { this.localSession = localSession; }
 
 }

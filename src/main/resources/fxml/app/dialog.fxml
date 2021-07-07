@@ -29,7 +29,7 @@
                         <DTextField fx:id="txtDouble" />
                         <PasswordField fx:id="txtPassword" promptText="password/pin" style="-fx-min-width: 205;" />
                         <ITextField fx:id="txtInteger" />
-                        <TextField fx:id="txt" text="text" />
+                        <TextField fx:id="txtString" text="text" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -50,7 +50,7 @@
                               <String fx:value="wide" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#cancel">
+                        <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

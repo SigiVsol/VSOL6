@@ -2,6 +2,7 @@ package be.vsol.vsol6.controller;
 
 import be.vsol.fx.util.ImageIcon;
 import be.vsol.util.*;
+import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.fx.App;
 import be.vsol.vsol6.controller.fx.FxController;
 import be.vsol.vsol6.controller.fx.Splash;
@@ -10,6 +11,9 @@ import be.vsol.vsol6.controller.fx.app.Content;
 import be.vsol.vsol6.controller.fx.app.Dialog;
 import be.vsol.vsol6.controller.fx.app.BrowserView;
 import be.vsol.vsol6.controller.fx.Login;
+import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.Session;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 import javafx.application.Platform;
@@ -32,6 +36,8 @@ public class Gui {
     private BrowserView browserView;
     private Dialog dialog;
     private AQS aqs;
+
+    private Session localSession;
 
     // Constructors
 
@@ -74,6 +80,10 @@ public class Gui {
             primaryStage.show();
         });
 
+        DataStorage dataStorage = ctrl.getDataStorage();
+        User user = dataStorage.getUser(config.gui.userId);
+        Organization organization = dataStorage.getOrganization(config.gui.organizationId);
+        localSession = new Session(ctrl, ctrl.getSystem(), user, organization);
         app.startLogin();
     }
 
@@ -92,6 +102,10 @@ public class Gui {
     public Dialog getDialog() { return dialog; }
 
     public AQS getAqs() { return aqs; }
+
+    public Session getLocalSession() { return localSession; }
+
+    public void setLocalSession(Session localSession) { this.localSession = localSession; }
 
     private void loadFXMLs() {
         app = loadFxml("app");
