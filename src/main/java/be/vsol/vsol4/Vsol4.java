@@ -56,6 +56,20 @@ public class Vsol4 implements Runnable {
         return Json.get(getContent(response), Vsol4User::new);
     }
 
+    public Vector<Vsol4User> getUsers(String organizationId) {
+        Vector<Vsol4User> result = new Vector<>();
+
+        HttpResponse response = getResponse(organizationId, null, "users");
+
+        for (JSONObject jsonOrganizationUserAlias : Json.iterate(getContentArray(response))) {
+            Vsol4User vsol4User = new Vsol4User();
+            Json.load(vsol4User, jsonOrganizationUserAlias.getJSONObject("user"));
+            result.add(vsol4User);
+        }
+
+        return result;
+    }
+
     public Vector<Vsol4Organization> getOrganizations(String username, String filter) {
         Vector<Vsol4Organization> result = new Vector<>();
 
