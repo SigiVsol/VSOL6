@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.fx.app;
 
+import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.controller.fx.FxController;
 import com.teamdev.jxbrowser.browser.Browser;
 import com.teamdev.jxbrowser.engine.Engine;
@@ -19,7 +20,7 @@ public class Explorer extends FxController<BrowserView> {
 //        this(gui, null);
 //    }
 
-    public Explorer(String url) {
+    public Explorer(Ctrl ctrl, String url) {
 //        this.gui = gui;
 
         System.setProperty("jxbrowser.license.key", "1BNDIEOFAYZEE9HQYY5M5ESGI6GCWTNOGK6CZWMWN94GQFFG96AB10J8YJC2KNKP5ZONEW"); // license
@@ -33,7 +34,7 @@ public class Explorer extends FxController<BrowserView> {
                 .build());
 
         browser = engine.newBrowser();
-//        setRoot(BrowserView.newInstance(browser));
+        super.load(ctrl, BrowserView.newInstance(browser));
 
         if (url != null) loadUrl(url);
     }
