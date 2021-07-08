@@ -28,6 +28,10 @@ export class Study extends VsolRecord {
         return result;
     }
 
+    public toString() : string {
+        return this.description;
+    }
+
     // Getters
 
     public getPatient() { return this.patient; }

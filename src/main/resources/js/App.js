@@ -16,6 +16,8 @@ export class App {
         this.settings = new Settings(this);
         $(window).on('load', () => this.login.restore()); // this will try to restore User and Organization (from cookie / URL), and call fill() either way
         $(window).on('popstate', e => this.popHistory(e.originalEvent["state"])); // Back button behaviour
+        $(window).on('load', () => this.resize()); // call resize the first time
+        $(window).on('resize', () => this.resize()); // call resize every time the window is resized
     }
     fill() {
         if (this.user == null || this.organization == null) {
@@ -105,6 +107,11 @@ export class App {
             this.client = Client.from(json);
             this.fill();
         });
+    }
+    resize() {
+        console.log("resize");
+        console.log($(window).width());
+        console.log($(window).height());
     }
     // Getters
     getTab() { return this.tab; }

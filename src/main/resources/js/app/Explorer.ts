@@ -1,6 +1,9 @@
 import {Content} from "./Content.js";
 import {App} from "../App.js";
 import {ExplorerTable} from "./ExplorerTable.js";
+import {Client} from "../model/Client.js";
+import {Patient} from "../model/Patient.js";
+import {Study} from "../model/Study.js";
 
 export class Explorer extends Content {
 
@@ -46,6 +49,18 @@ export class Explorer extends Content {
     private clearFilter() {
         $("#divExplorer .txt-filter").val("").select();
         this.fill();
+    }
+
+    public openClient(client : Client) : void {
+        console.log("TODO: open client " + client.toString()); // TODO
+    }
+
+    public openPatient(patient : Patient) : void {
+        console.log("TODO: open patient " + patient.toString()); // TODO
+    }
+
+    public openStudy(study : Study) : void {
+        console.log("TODO: open study " + study.toString()); // TODO
     }
 
     // Getters

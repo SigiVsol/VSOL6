@@ -216,11 +216,6 @@ input:checked + span.switch:before {
   border-width: 0 0 0 1px;
   border-color: gray;
 }
-@media only screen and (max-width: 750px) {
-  #divBaseLayer #divMain #divNavbar {
-    width: 0;
-  }
-}
 #divBaseLayer #divMain #divNavbar #imgLogo {
   margin-top: 5px;
 }
@@ -248,11 +243,6 @@ input:checked + span.switch:before {
   right: calc(75px + 1px);
   bottom: 0;
   left: 0;
-}
-@media only screen and (max-width: 750px) {
-  #divBaseLayer #divMain #divContent {
-    right: 0;
-  }
 }
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
