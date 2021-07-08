@@ -31,15 +31,15 @@ public class App extends FxController<StackPane> {
                 this.getRoot().getChildren().add(login.getRoot());
             });
         }else{
-            startContent(session.getUser().getId(), session.getOrganization().getId());
+            afterLogin();
         }
     }
 
-    public void startContent(String userId, String organizationId) {
+    public void afterLogin() {
         Content content = ctrl.getGui().getContent();
         Platform.runLater(() -> {
             this.getRoot().getChildren().add(content.getRoot());
-            content.start(userId, organizationId);
+            content.start();
         });
     }
 }

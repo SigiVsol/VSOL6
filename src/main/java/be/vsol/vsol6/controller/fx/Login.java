@@ -1,6 +1,7 @@
 package be.vsol.vsol6.controller.fx;
 
 import be.vsol.fx.util.ImageIcon;
+import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.fx.app.Dialog;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Session;
@@ -68,12 +69,6 @@ public class Login extends FxController<VBox> {
         }
     }
 
-    private void loginUser(String userName, String userId, String password, String organizationId) {
-        System.out.println("User " + userName + " wants to login with password: " + password);
-        //TODO: check if login is correct, else print error message and show users again
-        ctrl.getGui().getApp().startContent(userId,organizationId);
-    }
-
     private void onClickUser(String userName, String userId, String organizationId)
     {
         String question = "Welcome " + userName + ", what's your password?";
@@ -82,5 +77,19 @@ public class Login extends FxController<VBox> {
 
     private void onClickOrganization(String organizationName, String organizationId) {
         setupUserSelection(organizationName,organizationId);
+    }
+
+    private void loginUser(String userName, String userId, String password, String organizationId) {
+        System.out.println("User " + userName + " wants to login with password: " + password);
+        //TODO: check if login is correct, else print error message and show users again
+        createLocalSession(userId, organizationId);
+        ctrl.getGui().getApp().afterLogin();
+    }
+
+    private void createLocalSession(String userId, String organizationId) {
+        DataStorage dataStorage = ctrl.getDataStorage();
+        User user = dataStorage.getUser(userId);
+        Organization organization = dataStorage.getOrganization(organizationId);
+        ctrl.getGui().setLocalSession(new Session(ctrl, ctrl.getSystem(), user,organization));
     }
 }

@@ -78,13 +78,9 @@ public class Gui {
             primaryStage.setScene(new Scene(app.getRoot()));
             splashStage.hide();
             primaryStage.show();
+            restoreLocalSession(config);
+            app.startLogin();
         });
-
-        DataStorage dataStorage = ctrl.getDataStorage();
-        User user = dataStorage.getUser(config.gui.userId);
-        Organization organization = dataStorage.getOrganization(config.gui.organizationId);
-        localSession = new Session(ctrl, ctrl.getSystem(), user, organization);
-        app.startLogin();
     }
 
     public App getApp() { return app; }
@@ -142,5 +138,12 @@ public class Gui {
             Log.trace(e);
             return null;
         }
+    }
+
+    private void restoreLocalSession(Config config) {
+        DataStorage dataStorage = ctrl.getDataStorage();
+        User user = dataStorage.getUser(config.gui.userId);
+        Organization organization = dataStorage.getOrganization(config.gui.organizationId);
+        localSession = new Session(ctrl, ctrl.getSystem(), user, organization);
     }
 }
