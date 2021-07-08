@@ -2,7 +2,6 @@ package be.vsol.vsol6.controller.fx;
 
 import be.vsol.fx.util.ImageIcon;
 import be.vsol.vsol6.controller.backend.DataStorage;
-import be.vsol.vsol6.controller.fx.app.Dialog;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Session;
 import be.vsol.vsol6.model.User;

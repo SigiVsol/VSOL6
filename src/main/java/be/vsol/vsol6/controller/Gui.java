@@ -79,7 +79,7 @@ public class Gui {
             splashStage.hide();
             primaryStage.show();
             restoreLocalSession(config);
-            app.startLogin();
+            app.beforeLogin();
         });
     }
 

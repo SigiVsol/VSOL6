@@ -92,7 +92,8 @@ public class Dialog extends FxController<DialogPane> {
 
     @FXML private void ok() {
         switch (activeDialogType) {
-
+            case Confirm:
+                callback.invoke();
             case Text:
                 stringCallback.invoke(txtString.getText());
                 break;
