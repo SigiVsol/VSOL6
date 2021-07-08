@@ -51,7 +51,6 @@ public class Console implements Runnable {
                 for (User user : users) {
                     System.out.println(user.getFirstName());
                 }
-
             }
         }
     }

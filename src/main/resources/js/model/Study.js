@@ -18,6 +18,9 @@ export class Study extends VsolRecord {
         }
         return result;
     }
+    toString() {
+        return this.description;
+    }
     // Getters
     getPatient() { return this.patient; }
     getClient() { return this.patient == null ? null : this.patient.getClient(); }

@@ -2,6 +2,7 @@ import { API } from "../tools/API.js";
 import { Client } from "../model/Client.js";
 import { Patient } from "../model/Patient.js";
 import { Study } from "../model/Study.js";
+import { Dialog } from "../popup/Dialog.js";
 export class ExplorerTable {
     constructor(explorer) {
         this.sortField = "";
@@ -42,82 +43,105 @@ export class ExplorerTable {
         }
         this.explorer.fill();
     }
-    createUrl(request) {
-        let filter = $("#divExplorer .txt-filter").val();
-        return "api/organizations/" + this.app.getOrganization().getId() + "/" + request + "?filter=" + filter + "&sortField=" + this.sortField + "&sortAsc=" + this.sortAsc;
-    }
     fillClients() {
         $("#divExplorerTable .explorer-table").css("display", "none");
         let tbody = $("<tbody></tbody>");
-        API.getJson(this.createUrl("clients"), json => {
+        API.getJson(this.url("clients"), json => {
             this.explorer.setNumRows(json.availableRows);
             for (let client of Client.fromRows(json.rows)) {
                 let tr = $("<tr></tr>");
-                $("<td><label><input type='checkbox'></label>").appendTo(tr);
-                $("<td>" + client.getName() + "</td>").appendTo(tr);
-                $("<td>" + client.getVia() + "</td>").appendTo(tr);
-                $("<td>" + client.getAddress() + "</td>").appendTo(tr);
-                $("<td>" + this.getClientActionButtons() + "</td>").appendTo(tr);
-                tr.appendTo(tbody);
+                tr.append(this.tdCheckbox());
+                tr.append(this.tdText(client.getName(), () => this.explorer.openClient(client)));
+                tr.append(this.tdText(client.getVia()));
+                tr.append(this.tdText(client.getAddress()));
+                tr.append(this.tdClientActionButtons(client));
+                tbody.append(tr);
             }
             $("#divExplorer .table-clients tbody").replaceWith(tbody);
             $("#divExplorer .table-clients").css("display", "block");
         });
     }
-    getClientActionButtons() {
-        let result = "";
-        result += "<button><img src='icon/open/16'></button>";
-        result += "<button><img src='icon/delete/16'></button>";
-        return result;
-    }
     fillPatients() {
-        let tbody = "";
-        $("#divExplorer .explorer-table").css("display", "none");
-        API.getJson(this.createUrl("patients"), json => {
+        $("#divExplorerTable .explorer-table").css("display", "none");
+        let tbody = $("<tbody></tbody>");
+        API.getJson(this.url("patients"), json => {
             this.explorer.setNumRows(json.availableRows);
             for (let patient of Patient.fromRows(json.rows)) {
-                tbody += "<tr>";
-                tbody += "<td><label><input type='checkbox'></label>";
-                tbody += "<td>" + patient.getName() + "</td>";
-                tbody += "<td>" + patient.getOrigin() + "</td>";
-                tbody += "<td>" + patient.getReference() + "</td>";
-                tbody += "<td>" + this.getPatientsActionButtons() + "</td>";
-                tbody += "</tr>\n";
+                let tr = $("<tr></tr>");
+                tr.append(this.tdCheckbox());
+                tr.append(this.tdText(patient.getName(), () => this.explorer.openPatient(patient)));
+                tr.append(this.tdText(patient.getOrigin()));
+                tr.append(this.tdText(patient.getReference()));
+                tr.append(this.tdPatientsActionButtons(patient));
+                tbody.append(tr);
             }
+            $("#divExplorer .table-patients tbody").replaceWith(tbody);
             $("#divExplorer .table-patients").css("display", "block");
-            $("#divExplorer .table-patients tbody").html(tbody);
         });
-    }
-    getPatientsActionButtons() {
-        let result = "";
-        result += "<button><img src='icon/edit/16'></button>";
-        result += "<button><img src='icon/delete/16'></button>";
-        return result;
     }
     fillStudies() {
-        let tbody = "";
-        $("#divExplorer .explorer-table").css("display", "none");
-        API.getJson(this.createUrl("studies"), json => {
+        $("#divExplorerTable .explorer-table").css("display", "none");
+        let tbody = $("<tbody></tbody>");
+        API.getJson(this.url("studies"), json => {
             this.explorer.setNumRows(json.availableRows);
             for (let study of Study.fromRows(json.rows)) {
-                tbody += "<tr>";
-                tbody += "<td><label><input type='checkbox'></label>";
-                tbody += "<td>" + study.getClient().getName() + "</td>";
-                tbody += "<td>" + study.getPatient().getName() + "</td>";
-                tbody += "<td>" + study.getDateTime() + "</td>";
-                tbody += "<td>" + study.getDescription() + "</td>";
-                tbody += "<td>" + study.getSeriesCount() + "</td>";
-                tbody += "<td>" + this.getStudiesActionButtons() + "</td>";
-                tbody += "</tr>\n";
+                let tr = $("<tr></tr>");
+                tr.append(this.tdCheckbox());
+                tr.append(this.tdText(study.getClient().getName()));
+                tr.append(this.tdText(study.getPatient().getName()));
+                tr.append(this.tdText(String(study.getDateTime())));
+                tr.append(this.tdText(study.getDescription()));
+                tr.append(this.tdText(String(study.getSeriesCount())));
+                tr.append(this.tdStudiesActionButtons(study));
+                tbody.append(tr);
             }
+            $("#divExplorer .table-studies tbody").replaceWith(tbody);
             $("#divExplorer .table-studies").css("display", "block");
-            $("#divExplorer .table-studies tbody").html(tbody);
         });
     }
-    getStudiesActionButtons() {
-        let result = "";
-        result += "<button><img src='icon/eye/16'></button>";
-        result += "<button><img src='icon/delete/16'></button>";
-        return result;
+    url(request) {
+        let filter = $("#divExplorer .txt-filter").val();
+        return "api/organizations/" + this.app.getOrganization().getId() + "/" + request + "?filter=" + filter + "&sortField=" + this.sortField + "&sortAsc=" + this.sortAsc;
+    }
+    tdText(text, callback = null) {
+        let td = $("<td>" + text + "</td>");
+        if (callback != null) {
+            td.addClass("pointer");
+            td.click(callback);
+        }
+        return td;
+    }
+    tdCheckbox() {
+        return $("<td><label><input type='checkbox'></label>");
+    }
+    tdClientActionButtons(client) {
+        let td = $("<td></td>");
+        td.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openClient(client)));
+        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+            Dialog.confirm("Are you sure?", () => {
+                console.log("delete client " + client.getName()); // TODO
+            });
+        }));
+        return td;
+    }
+    tdPatientsActionButtons(patient) {
+        let td = $("<td></td>");
+        td.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openPatient(patient)));
+        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+            Dialog.confirm("Are you sure?", () => {
+                console.log("delete patient " + patient.getName()); // TODO
+            });
+        }));
+        return td;
+    }
+    tdStudiesActionButtons(study) {
+        let td = $("<td></td>");
+        td.append($("<button><img src='icon/eye/16'></button>").click(() => this.explorer.openStudy(study)));
+        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+            Dialog.confirm("Are you sure?", () => {
+                console.log("delete study " + study.getDescription()); // TODO
+            });
+        }));
+        return td;
     }
 }

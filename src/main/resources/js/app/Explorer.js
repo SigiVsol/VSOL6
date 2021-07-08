@@ -38,6 +38,15 @@ export class Explorer extends Content {
         $("#divExplorer .txt-filter").val("").select();
         this.fill();
     }
+    openClient(client) {
+        console.log("TODO: open client " + client.toString()); // TODO
+    }
+    openPatient(patient) {
+        console.log("TODO: open patient " + patient.toString()); // TODO
+    }
+    openStudy(study) {
+        console.log("TODO: open study " + study.toString()); // TODO
+    }
     // Getters
     getApp() { return this.app; }
 }

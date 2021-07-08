@@ -75,7 +75,7 @@ export class Patient extends VsolRecord {
         else return "?";
     }
 
-    toString() {
+    public toString() {
         return this.name;
     }
 
