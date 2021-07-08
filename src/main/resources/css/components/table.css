@@ -1,0 +1,7 @@
+table {
+  width: 100%;
+}
+table tbody tr:hover {
+  background-color: #029ddf;
+}
+/*# sourceMappingURL=table.css.map */
