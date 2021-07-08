@@ -1,7 +1,18 @@
 @import "../variables/colors";
 
+#divExplorerTable, #divUserManager {
+  overflow-y: auto;
+  height: 800px
+}
+
 table {
   width: 100%;
+
+  thead {
+    position: sticky;
+    background-color: @background;
+    top: 0;
+  }
 
   tbody {
 
