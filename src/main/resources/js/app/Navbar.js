@@ -1,6 +1,9 @@
 import { Tools } from "../tools/Tools.js";
+import { Dialog } from "../popup/Dialog.js";
 export class Navbar {
     constructor(app) {
+        this.visible = true;
+        this.width = 75;
         this.lblUsername = $("#lblUsername");
         this.lblOrganization = $("#lblOrganization");
         this.app = app;
@@ -14,6 +17,11 @@ export class Navbar {
         this.lblUsername.text(this.app.getUser().getUsername());
         this.lblOrganization.text(this.app.getOrganization().getName());
     }
+    resize() {
+        this.visible = this.app.getWidth() > 700;
+        $("#divNavbar").css("width", (this.visible ? this.width + "px" : "0"));
+        $("#divContent").css("right", (this.visible ? (this.width + 1) + "px" : "0"));
+    }
     home() {
         this.app.setPage("explorer");
         this.app.setClient(null);
@@ -21,12 +29,13 @@ export class Navbar {
         this.app.pushHistory();
     }
     logout() {
-        // TODO are you sure?
-        Tools.clearStorage("userId");
-        Tools.clearStorage("organizationId");
-        this.app.setUser(null);
-        this.app.setOrganization(null);
-        this.app.fill();
+        Dialog.confirm("%{Are_you_sure}?", () => {
+            Tools.clearStorage("userId");
+            Tools.clearStorage("organizationId");
+            this.app.setUser(null);
+            this.app.setOrganization(null);
+            this.app.fill();
+        });
     }
     changeOrganization() {
     }
@@ -36,4 +45,6 @@ export class Navbar {
         this.app.setPatient(null);
         this.app.pushHistory();
     }
+    // Getters
+    isVisible() { return this.visible; }
 }

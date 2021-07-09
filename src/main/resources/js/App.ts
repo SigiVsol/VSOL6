@@ -12,6 +12,9 @@ import {API} from "./tools/API.js";
 
 export class App {
 
+    private width : number;
+    private height : number;
+
     private readonly navbar = new Navbar(this);
     private readonly login = new Login(this);
     private readonly explorer = new Explorer(this);
@@ -30,7 +33,6 @@ export class App {
         $(window).on('load', () => this.login.restore()); // this will try to restore User and Organization (from cookie / URL), and call fill() either way
         $(window).on('popstate', e => this.popHistory(e.originalEvent["state"])); // Back button behaviour
 
-        $(window).on('load', () => this.resize()); // call resize the first time
         $(window).on('resize', () => this.resize()); // call resize every time the window is resized
     }
 
@@ -60,6 +62,25 @@ export class App {
                     case "viewer": this.viewer.fill(); break;
                     case "settings": this.settings.fill(); break;
                 }
+            }
+        }
+
+        this.resize();
+    }
+
+    public resize() : void {
+        this.width = $(window).width();
+        this.height = $(window).height();
+
+        if (this.user == null || this.organization == null) {
+            this.login.resize();
+        } else {
+            this.navbar.resize();
+
+            switch (this.page) {
+                case "explorer": this.explorer.resize(); break;
+                case "viewer": this.viewer.resize(); break;
+                case "settings": this.settings.resize(); break;
             }
         }
     }
@@ -121,12 +142,6 @@ export class App {
         });
     }
 
-    public resize() : void {
-        console.log("resize");
-        console.log( $(window).width() );
-        console.log( $(window).height() );
-    }
-
     // Getters
 
     public getTab() { return this.tab; }
@@ -134,6 +149,8 @@ export class App {
     public getOrganization() { return this.organization; }
     public getClient() { return this.client; }
     public getPatient() { return this.patient; }
+    public getWidth() { return this.width; }
+    public getHeight() { return this.height; }
 
     // Setters
 

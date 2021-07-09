@@ -3,7 +3,7 @@
 		"home": "C:/VSOL6",
 		"debug": false,
 		"dataStorage": "vsol4",
-		"dicomStorage": "orthanc",
+		"dicomStorage": "orthanc"
 	},
 	"console":{
 		"active": true

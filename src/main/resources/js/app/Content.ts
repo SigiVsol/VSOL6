@@ -16,4 +16,6 @@ export abstract class Content {
 
     public abstract fill() : void;
 
+    public abstract resize() ; void;
+
 }

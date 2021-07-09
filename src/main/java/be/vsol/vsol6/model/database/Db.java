@@ -12,7 +12,11 @@ public class Db {
 
     private final DbDriver driver;
 
+    // MetaDb
+    // Vector<OrgDbs> ...
+
     private final SystemDb systemDb;
+
     private final UserDb userDb;
     private final OrganizationDb organizationDb;
 

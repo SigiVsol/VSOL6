@@ -16,7 +16,6 @@ export class App {
         this.settings = new Settings(this);
         $(window).on('load', () => this.login.restore()); // this will try to restore User and Organization (from cookie / URL), and call fill() either way
         $(window).on('popstate', e => this.popHistory(e.originalEvent["state"])); // Back button behaviour
-        $(window).on('load', () => this.resize()); // call resize the first time
         $(window).on('resize', () => this.resize()); // call resize every time the window is resized
     }
     fill() {
@@ -52,6 +51,28 @@ export class App {
                         this.settings.fill();
                         break;
                 }
+            }
+        }
+        this.resize();
+    }
+    resize() {
+        this.width = $(window).width();
+        this.height = $(window).height();
+        if (this.user == null || this.organization == null) {
+            this.login.resize();
+        }
+        else {
+            this.navbar.resize();
+            switch (this.page) {
+                case "explorer":
+                    this.explorer.resize();
+                    break;
+                case "viewer":
+                    this.viewer.resize();
+                    break;
+                case "settings":
+                    this.settings.resize();
+                    break;
             }
         }
     }
@@ -108,17 +129,14 @@ export class App {
             this.fill();
         });
     }
-    resize() {
-        console.log("resize");
-        console.log($(window).width());
-        console.log($(window).height());
-    }
     // Getters
     getTab() { return this.tab; }
     getUser() { return this.user; }
     getOrganization() { return this.organization; }
     getClient() { return this.client; }
     getPatient() { return this.patient; }
+    getWidth() { return this.width; }
+    getHeight() { return this.height; }
     // Setters
     setPage(page) { this.page = page; }
     setTab(tab) { this.tab = tab; }

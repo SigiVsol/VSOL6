@@ -21,6 +21,9 @@ img {
 .pointer {
   cursor: pointer;
 }
+.nowrap {
+  white-space: nowrap;
+}
 button {
   border: none;
   border-radius: 5px;
@@ -174,11 +177,6 @@ input:checked + span.switch:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-#divExplorerTable,
-#divUserManager {
-  overflow-y: auto;
-  height: 800px;
-}
 table {
   width: 100%;
 }
@@ -195,11 +193,35 @@ table tbody > :nth-child(even) {
 }
 table tbody tr {
   height: 55px;
-  font-weight: bold;
 }
 table tbody tr td {
   padding-left: 5px;
   padding-right: 5px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  /* for vertical scrollbars */
+  height: 10px;
+  /* for horizontal scrollbars */
+}
+::-webkit-scrollbar-track {
+  background-color: #555;
+  margin-top: 50px;
+}
+::-webkit-scrollbar-track:disabled {
+  background-color: #282828;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #029ddf;
+}
+.clients-scrollbar ::-webkit-scrollbar-thumb {
+  background-color: #335c81;
+}
+.patients-scrollbar ::-webkit-scrollbar-thumb {
+  background-color: #406869;
+}
+.entries-scrollbar ::-webkit-scrollbar-thumb {
+  background-color: #73937e;
 }
 #divBaseLayer {
   position: fixed;
@@ -232,7 +254,7 @@ table tbody tr td {
   display: none;
 }
 #divBaseLayer #divMain #divNavbar {
-  width: 75px;
+  width: 0;
   position: absolute;
   top: 0;
   right: 0;
@@ -267,23 +289,42 @@ table tbody tr td {
 #divBaseLayer #divMain #divContent {
   position: absolute;
   top: 0;
-  right: calc(75px + 1px);
+  right: 0;
   bottom: 0;
   left: 0;
 }
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer div {
-  margin: 5px;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table {
+  padding: 5px;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-fiche {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-fiche {
   margin: 20px;
   border: solid thin white;
   border-radius: 5px;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table td {
-  border: solid thin white;
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable {
+  width: 100%;
+  height: 0;
+  overflow-y: auto;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table {
+  width: 100%;
+  border-spacing: 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table th {
+  text-align: left;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table thead {
+  height: 50px;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table .th-action-buttons {
+  width: 1px;
+}
+#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table .th-checkbox {
+  text-align: center;
+  width: 1px;
 }
 #divPopupLayer {
   background-color: rgba(0, 0, 0, 0.7);

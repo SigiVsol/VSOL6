@@ -9,4 +9,6 @@ export class Settings extends Content {
         super.show();
         this.userManager.fill();
     }
+    resize() {
+    }
 }

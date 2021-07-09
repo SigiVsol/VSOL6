@@ -11,4 +11,8 @@ export class Viewer extends Content {
 
     }
 
+    public resize() : void {
+
+    }
+
 }

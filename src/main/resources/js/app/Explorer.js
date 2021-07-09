@@ -27,6 +27,9 @@ export class Explorer extends Content {
         super.show();
         this.table.fill();
     }
+    resize() {
+        this.table.resize();
+    }
     setTab(tab) {
         this.app.setTab(tab);
         this.app.pushHistory();

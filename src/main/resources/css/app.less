@@ -1,5 +1,4 @@
 @import "variables/colors";
-@import "variables/sizes";
 
 html, body {
   position: fixed;
@@ -27,6 +26,10 @@ img {
   cursor: pointer;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 @import "components/button";
 @import "components/input";
 @import "components/switch";
@@ -45,8 +48,7 @@ img {
 
     #divContent {
       position: absolute;
-      top: 0; right: calc(@navbar-width + 1px); bottom: 0; left: 0;
-      //@media @portrait { right: 0; }
+      top: 0; right: 0; bottom: 0; left: 0; // right/left set by JS
 
 
       .div-base-content {
@@ -56,7 +58,6 @@ img {
       @import "app/explorer";
 
       @import "app/viewer";
-
     }
   }
 }

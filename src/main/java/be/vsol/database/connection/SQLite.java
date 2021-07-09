@@ -38,7 +38,7 @@ public class SQLite extends FileBasedDbDriver {
                     String targetStructure = getFieldStructure(field, object);
 
                     if (!targetStructure.equals(dbStructure)) { // the field's signature is different
-                        /* not supported in SQLite */
+                        /* not supported in SQLite */ // TODO!
                         Log.err("[Not supported in SQLite] " + "ALTER TABLE " + dbTable.getName() + " CHANGE COLUMN " + field.getName() + " " + targetStructure);
                     }
                 } else {

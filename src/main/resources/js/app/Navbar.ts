@@ -1,9 +1,13 @@
 import {App} from "../App.js";
 import {Tools} from "../tools/Tools.js";
+import {Dialog} from "../popup/Dialog.js";
 
 export class Navbar {
 
     private app : App;
+
+    private visible = true;
+    private width = 75;
 
     private readonly lblUsername = $("#lblUsername");
     private readonly lblOrganization = $("#lblOrganization");
@@ -23,6 +27,13 @@ export class Navbar {
         this.lblOrganization.text(this.app.getOrganization().getName());
     }
 
+    public resize() : void {
+        this.visible = this.app.getWidth() > 700;
+
+        $("#divNavbar").css("width", (this.visible ? this.width + "px" : "0"));
+        $("#divContent").css("right", (this.visible ? (this.width + 1) + "px" : "0"));
+    }
+
     private home() {
         this.app.setPage("explorer");
         this.app.setClient(null);
@@ -31,14 +42,14 @@ export class Navbar {
     }
 
     private logout() {
-        // TODO are you sure?
+        Dialog.confirm("%{Are_you_sure}?", () => {
+            Tools.clearStorage("userId");
+            Tools.clearStorage("organizationId");
 
-        Tools.clearStorage("userId");
-        Tools.clearStorage("organizationId");
-
-        this.app.setUser(null);
-        this.app.setOrganization(null);
-        this.app.fill();
+            this.app.setUser(null);
+            this.app.setOrganization(null);
+            this.app.fill();
+        });
     }
 
     private changeOrganization() {
@@ -51,6 +62,10 @@ export class Navbar {
         this.app.setPatient(null);
         this.app.pushHistory();
     }
+
+    // Getters
+
+    public isVisible() { return this.visible; }
 
 }
 

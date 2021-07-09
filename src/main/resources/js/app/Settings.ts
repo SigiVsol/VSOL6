@@ -16,4 +16,8 @@ export class Settings extends Content {
         this.userManager.fill();
     }
 
+    public resize() : void {
+
+    }
+
 }

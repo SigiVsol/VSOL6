@@ -34,6 +34,10 @@ export class Login {
         $("#divMain").css("display", "block");
     }
 
+    public resize() : void {
+
+    }
+
     private attemptLogin() : void {
         let remember = this.chkRememberMe.prop("checked");
 

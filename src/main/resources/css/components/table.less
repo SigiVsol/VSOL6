@@ -1,10 +1,5 @@
 @import "../variables/colors";
 
-#divExplorerTable, #divUserManager {
-  overflow-y: auto;
-  height: 800px
-}
-
 table {
   width: 100%;
 
@@ -26,7 +21,7 @@ table {
 
     tr {
       height: 55px;
-      font-weight: bold;
+      //font-weight: bold;
 
       td {
         padding-left: 5px;
@@ -34,9 +29,42 @@ table {
       }
     }
 
-    tr:hover {
-      //color: @vsol;
-      //cursor: pointer;
-    }
   }
+}
+
+::-webkit-scrollbar {
+  width: 10px; /* for vertical scrollbars */
+  height: 10px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #555;
+  //border-radius: 5px;
+  margin-top: 50px;
+  //margin-bottom: 1px;
+}
+
+::-webkit-scrollbar-track:disabled {
+  background-color: @background;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: @vsol;
+  //border-radius: 5px;
+}
+
+//.explorer-scrollbar ::-webkit-scrollbar-track {
+//  margin-top: 55px;
+//}
+
+.clients-scrollbar ::-webkit-scrollbar-thumb {
+  background-color: @clients;
+}
+
+.patients-scrollbar ::-webkit-scrollbar-thumb{
+  background-color: @patients;
+}
+
+.entries-scrollbar ::-webkit-scrollbar-thumb{
+  background-color: @entries;
 }

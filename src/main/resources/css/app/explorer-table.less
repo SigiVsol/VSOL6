@@ -1,9 +1,37 @@
 @import "../variables/colors";
 
 #divExplorerTable {
+  width: 100%;
+  height: 0; // set by JS
+  overflow-y: auto;
+  //height: 500px;
+  //background: red;
+
   table {
-    td {
-      border: solid thin white;
+    width: 100%;
+    border-spacing: 0;
+
+    th {
+      text-align: left;
+    }
+
+    thead {
+      height: 50px;
+    }
+
+    .th-action-buttons {
+      width: 1px;
+    }
+
+    .th-checkbox {
+      text-align: center;
+      width: 1px;
     }
   }
+
+  //table {
+  //  td {
+  //    border: solid thin white;
+  //  }
+  //}
 }

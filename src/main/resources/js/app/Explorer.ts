@@ -37,6 +37,10 @@ export class Explorer extends Content {
         this.table.fill();
     }
 
+    public resize() : void {
+        this.table.resize();
+    }
+
     private setTab(tab : string) : void {
         this.app.setTab(tab);
         this.app.pushHistory();
@@ -66,7 +70,5 @@ export class Explorer extends Content {
     // Getters
 
     public getApp() { return this.app; }
-
-
 
 }

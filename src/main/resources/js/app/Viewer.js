@@ -5,4 +5,6 @@ export class Viewer extends Content {
     }
     fill() {
     }
+    resize() {
+    }
 }

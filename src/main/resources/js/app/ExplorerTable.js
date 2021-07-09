@@ -28,6 +28,10 @@ export class ExplorerTable {
                 this.fillClients();
         }
     }
+    resize() {
+        let height = this.app.getHeight() - $(".div-explorer-above-table").height() - 10;
+        $("#divExplorerTable").css("height", height + "px");
+    }
     setSort(field) {
         if (this.sortField == field) {
             if (this.sortAsc)
@@ -58,7 +62,7 @@ export class ExplorerTable {
                 tbody.append(tr);
             }
             $("#divExplorer .table-clients tbody").replaceWith(tbody);
-            $("#divExplorer .table-clients").css("display", "block");
+            $("#divExplorer .table-clients").css("display", "table");
         });
     }
     fillPatients() {
@@ -76,7 +80,7 @@ export class ExplorerTable {
                 tbody.append(tr);
             }
             $("#divExplorer .table-patients tbody").replaceWith(tbody);
-            $("#divExplorer .table-patients").css("display", "block");
+            $("#divExplorer .table-patients").css("display", "table");
         });
     }
     fillStudies() {
@@ -96,7 +100,7 @@ export class ExplorerTable {
                 tbody.append(tr);
             }
             $("#divExplorer .table-studies tbody").replaceWith(tbody);
-            $("#divExplorer .table-studies").css("display", "block");
+            $("#divExplorer .table-studies").css("display", "table");
         });
     }
     url(request) {
@@ -116,32 +120,41 @@ export class ExplorerTable {
     }
     tdClientActionButtons(client) {
         let td = $("<td></td>");
-        td.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openClient(client)));
-        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        let div = $("<div class='nowrap'></div>");
+        div.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openClient(client)));
+        div.append("&nbsp;");
+        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete client " + client.getName()); // TODO
             });
         }));
+        td.append(div);
         return td;
     }
     tdPatientsActionButtons(patient) {
         let td = $("<td></td>");
-        td.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openPatient(patient)));
-        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        let div = $("<div class='nowrap'></div>");
+        div.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openPatient(patient)));
+        div.append("&nbsp;");
+        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete patient " + patient.getName()); // TODO
             });
         }));
+        td.append(div);
         return td;
     }
     tdStudiesActionButtons(study) {
         let td = $("<td></td>");
-        td.append($("<button><img src='icon/eye/16'></button>").click(() => this.explorer.openStudy(study)));
-        td.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        let div = $("<div class='nowrap'></div>");
+        div.append($("<button><img src='icon/eye/16'></button>").click(() => this.explorer.openStudy(study)));
+        div.append("&nbsp;");
+        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete study " + study.getDescription()); // TODO
             });
         }));
+        td.append(div);
         return td;
     }
 }
