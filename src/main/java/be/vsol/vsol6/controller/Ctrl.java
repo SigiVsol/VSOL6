@@ -39,6 +39,7 @@ public class Ctrl {
     private final Db db;
     private final Vsol4 vsol4;
     private final Orthanc orthanc;
+    private final HttpServer cloud;
     private final HttpServer server;
     private final DataStorage dataStorage;
     private final DicomStorage dicomStorage;
@@ -65,6 +66,7 @@ public class Ctrl {
         this.server = new HttpServer(sig.getAppTitle());
         this.vsol4 = new Vsol4();
         this.orthanc = new Orthanc();
+        this.cloud = new HttpServer("Cloud");
 
         this.dataStorage = switch (appConfig.app.dataStorage) {
             case vsol4 -> new Vsol4DataStorage(this);
@@ -88,6 +90,7 @@ public class Ctrl {
         if (appConfig.vsol4.active) startVsol4(systemSession.getConfig());
         if (appConfig.orthanc.active) startOrthanc(systemSession.getConfig());
         if (gui != null && appConfig.gui.active) startGui(systemSession.getConfig());
+        if (cloud != null && appConfig.cloud.active) startCloud(systemSession.getConfig());
     }
 
     private void startConsole() {
@@ -108,6 +111,10 @@ public class Ctrl {
 
     private void startOrthanc(Config config) {
         orthanc.start(config.orthanc.host, config.orthanc.port, config.orthanc.timeout);
+    }
+
+    private void startCloud(Config config) {
+        //cloud.start();
     }
 
     private void startFujiDR() {
