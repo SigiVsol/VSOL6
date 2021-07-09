@@ -18,6 +18,8 @@ public class Config {
     @json public orthanc orthanc = new orthanc();
     @json public db db = new db();
     @json public bridge bridge = new bridge();
+    @json public cloud cloud = new cloud();
+
 
     /**
      * Constructor
@@ -104,6 +106,12 @@ public class Config {
         @json public boolean active;
         @json public String host;
         @json public int port, timeout;
+    }
+
+    public static class cloud {
+        @json public boolean active;
+        @json public String host;
+        @json public int port;
     }
 
 
