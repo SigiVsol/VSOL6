@@ -17,8 +17,7 @@ public class Db {
 
     private final SystemDb systemDb;
 
-    private final UserDb userDb;
-    private final OrganizationDb organizationDb;
+    private final MetaDb metaDB;
 
     private boolean active = false;
 
@@ -30,16 +29,14 @@ public class Db {
         };
 
         systemDb = new SystemDb(driver);
-        userDb = new UserDb(driver);
-        organizationDb = new OrganizationDb(driver);
+        metaDB = new MetaDb(driver);
     }
 
     public void start() {
         driver.start();
 
         systemDb.connect();
-        userDb.connect();
-        organizationDb.connect();
+        metaDB.connect();
 
         active = true;
     }
@@ -52,9 +49,7 @@ public class Db {
 
     public SystemDb getSystemDb() { return systemDb; }
 
-    public UserDb getUserDb() { return userDb; }
-
-    public OrganizationDb getOrganizationDb() { return organizationDb; }
+    public MetaDb getMetaDb() { return  metaDB;}
 
     public boolean isActive() { return active; }
 

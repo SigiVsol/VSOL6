@@ -1,11 +1,16 @@
 package be.vsol.vsol6.controller;
 
+import be.vsol.http.*;
 import be.vsol.util.Bytes;
+import be.vsol.util.Json;
 import be.vsol.util.Log;
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.User;
+import be.vsol.vsol6.model.enums.Language;
+import org.json.JSONObject;
 
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -51,6 +56,23 @@ public class Console implements Runnable {
                 for (User user : users) {
                     System.out.println(user.getFirstName());
                 }
+            }
+            case "server" -> {
+                HttpServer httpServer = new HttpServer("TestServer");
+                httpServer.start(8000, new RequestHandler() {
+                    @Override
+                    public HttpResponse respond(HttpRequest request) {
+                        String path = request.getPath();
+                        Language language = request.getLanguage();
+                        Map<String, String> parameters = request.getParameters();
+                        System.out.println("New client with request:" + request.getPath());
+                        JSONObject jsonResponse = new JSONObject();
+                        jsonResponse.put("message", "Hello, world!");
+                        jsonResponse.put("user", "Pieter");
+                        jsonResponse.put("organization", "Veterinary Solutions");
+                        return new HttpResponse(jsonResponse);
+                    }
+                });
             }
         }
     }
