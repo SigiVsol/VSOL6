@@ -33,6 +33,7 @@ public class Db {
         driver.start();
 
         systemDb.connect();
+        metaDB.connect();
 
         active = true;
     }
