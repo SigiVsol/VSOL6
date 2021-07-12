@@ -80,8 +80,8 @@ public class Console implements Runnable {
             }
             case "sync" -> {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("client", "client_id");
-                jsonObject.put("organization", "org_id");
+                jsonObject.put("computerId", "computer_id");
+                jsonObject.put("organizationId", "org_id");
                 jsonObject.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
 
                 System.out.println("Request queries: " + jsonObject);
@@ -90,28 +90,48 @@ public class Console implements Runnable {
                 HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
                 System.out.println("Response: " + httpResponse.getBodyAsJSONObject());
 
-                JSONArray updates = httpResponse.getBodyAsJSONObject().getJSONArray("updates");
-                System.out.println("'updates' : " + updates);
-                for (int i = 0; i < updates.length(); i++) {
-                    JSONObject record = updates.getJSONObject(i);
-                    switch (record.getString("type")) {
-                        case "organization" -> {
-                            Organization organization = Json.get(record.getJSONObject("object"), Organization::new);
-                            ctrl.getDb().getMetaDb().getOrganizations().save(organization);
-                        }
-                    }
-                }
-
-                JSONArray queryIds = httpResponse.getBodyAsJSONObject().getJSONArray("queries");
+                JSONArray queryIds = httpResponse.getBodyAsJSONObject().getJSONArray("queryIds");
                 for (int i = 0; i < queryIds.length(); i++) {
                     String queryId = queryIds.getString(i);
                     Query query = ctrl.getDb().getMetaDb().getQueries().getById(queryId);
                     query.setDeleted(true);
                     ctrl.getDb().getMetaDb().getQueries().save(query);
                 }
+
+                JSONArray updates = httpResponse.getBodyAsJSONObject().getJSONArray("updates");
+                System.out.println("'updates' : " + updates);
+                Vector<String> updateIds = new Vector<>();
+                for (int i = 0; i < updates.length(); i++) {
+                    JSONObject record = updates.getJSONObject(i);
+                    switch (record.getString("tableName")) {
+                        case "organizations" -> {
+                            Organization organization = Json.get(record.getJSONObject("record"), Organization::new);
+                            ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                        }
+                    }
+//                    updateIds.add(record.getString("id"));
+                }
+
+//                JSONObject ack = new JSONObject();
+//                ack.put("computerId", "computer_id");
+//                ack.put("organizationId", "organization_id");
+//                ack.put("updateIds", new JSONArray(updateIds));
+//                HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/sync/client/data", ack);
+//                Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, requestAck);
             }
             case "add" -> {
                 Organization organization = new Organization("ORG_1");
+                Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                System.out.println("Queries: " + queries);
+
+                for (String sql : queries) {
+                    Query query = new Query(sql.replace("'", "\""));
+                    ctrl.getDb().getMetaDb().getQueries().save(query);
+                }
+            }
+            case "change" -> {
+                Organization organization = ctrl.getDb().getMetaDb().getOrganizations().getAll().firstElement();
+                organization.setName(organization.getName().equals("ORG_1") ? "ORG_2" : "ORG_1");
                 Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
                 System.out.println("Queries: " + queries);
 
