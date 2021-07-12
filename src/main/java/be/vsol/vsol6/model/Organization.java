@@ -12,6 +12,7 @@ public class Organization extends Record {
 
     public Organization() { }
 
+    // TestConstructor
     public Organization(String name) {
         this.name = name;
     }

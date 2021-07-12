@@ -14,6 +14,21 @@ public class Query extends DbRecord {
 
     public Query(String query) {
         this.query = query;
+        fill(query);
+    }
+
+    private void fill(String query) {
+        if (query.contains("INSERT")) {
+            this.tableName = query.substring(12, query.indexOf("(")).trim();
+
+            String values = query.substring(query.lastIndexOf("(") + 2);
+            this.recordId = values.substring(0, values.indexOf("\""));
+        } else {
+            this.tableName = query.split(" ")[1];
+
+            String id = query.substring(query.lastIndexOf("=") + 1).trim();
+            this.recordId = id.substring(1, id.length() - 1);
+        }
     }
 
     //Getters

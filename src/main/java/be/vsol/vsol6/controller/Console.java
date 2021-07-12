@@ -9,7 +9,9 @@ import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.User;
+import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.enums.Language;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -19,9 +21,11 @@ import java.util.Vector;
 public class Console implements Runnable {
 
     private final Ctrl ctrl;
+    private final Config config;
 
-    public Console(Ctrl ctrl) {
+    public Console(Ctrl ctrl, Config config) {
         this.ctrl = ctrl;
+        this.config = config;
     }
 
     public void start() {
@@ -74,18 +78,46 @@ public class Console implements Runnable {
                     }
                 });
             }
+            case "sync" -> {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("client", "client_id");
+                jsonObject.put("organization", "org_id");
+                jsonObject.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
+
+                System.out.println("Request queries: " + jsonObject);
+                HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync/client/data", jsonObject);
+
+                HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
+                System.out.println("Response: " + httpResponse.getBodyAsJSONObject());
+
+                JSONArray updates = httpResponse.getBodyAsJSONObject().getJSONArray("updates");
+                System.out.println("'updates' : " + updates);
+                for (int i = 0; i < updates.length(); i++) {
+                    JSONObject record = updates.getJSONObject(i);
+                    switch (record.getString("type")) {
+                        case "organization" -> {
+                            Organization organization = Json.get(record.getJSONObject("object"), Organization::new);
+                            ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                        }
+                    }
+                }
+
+                JSONArray queryIds = httpResponse.getBodyAsJSONObject().getJSONArray("queries");
+                for (int i = 0; i < queryIds.length(); i++) {
+                    String queryId = queryIds.getString(i);
+                    Query query = ctrl.getDb().getMetaDb().getQueries().getById(queryId);
+                    query.setDeleted(true);
+                    ctrl.getDb().getMetaDb().getQueries().save(query);
+                }
+            }
             case "add" -> {
                 Organization organization = new Organization("ORG_1");
-                DbTable<Organization> dbTableOrganizations= ctrl.getDb().getMetaDb().getOrganizations();
+                Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                System.out.println("Queries: " + queries);
 
-                Vector<String> queries = dbTableOrganizations.save(organization);
-                System.out.println("sql: " + queries);
-
-                DbTable<Query> dbTableQuery = ctrl.getDb().getMetaDb().getQueries();
-
-                for (String sql : queries){
+                for (String sql : queries) {
                     Query query = new Query(sql.replace("'", "\""));
-                    dbTableQuery.save(query);
+                    ctrl.getDb().getMetaDb().getQueries().save(query);
                 }
             }
         }
