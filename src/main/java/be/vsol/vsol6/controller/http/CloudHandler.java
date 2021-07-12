@@ -6,6 +6,7 @@ import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.Json;
+import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.Update;
 import be.vsol.vsol6.model.database.MetaDb;
@@ -30,12 +31,9 @@ public class CloudHandler implements RequestHandler {
             System.out.println("New client with request: " + path);
             try{
                 JSONObject json = request.getBodyAsJSONObject();
-                String client = json.getString("client");
-                String organization = json.getString("organization");
+                String client = json.getString("computerId");
+                String organization = json.getString("organizationId");
                 JSONArray jsonQueries = json.getJSONArray("queries");
-                System.out.println("Client: " + client);
-                System.out.println("Organization: " + organization);
-                System.out.println("Queries: " + jsonQueries.toString());
 
                 Vector<Query> queries = new Vector<>();
                 Vector<String> queryIds = new Vector<>();
@@ -56,13 +54,30 @@ public class CloudHandler implements RequestHandler {
                     for(Query query : queriesToExecute) {
                         System.out.println(query.getQuery());
                         metaDb.update(query.getQuery());
+                        if(query.getQuery().contains("INSERT"))
+                        {
+                            query.setDeleted(true);
+                            metaDb.getQueries().save(query);
+                        }
                     }
                 }
 
+                //make changes as a test
+//                Vector<Organization> orgs = metaDb.getOrganizations().getAll();
+//                for(Organization org : orgs)
+//                {
+//                    org.setName("Pieter");
+//                    org.setDescription("Pieter was hier :-)");
+//                    metaDb.getOrganizations().save(org);
+//                }
+
+
                 //save updates
                 for(Query query : queries) {
-                    Update update = new Update(client, query.getTableName(), query.getRecordId());
-                    metaDb.getUpdates().save(update);
+                    if(metaDb.getUpdates().get(" tableName='" + query.getTableName() + "' AND " + " recordId='" + query.getRecordId() + "'") == null) {
+                        Update update = new Update(client, query.getTableName(), query.getRecordId());
+                        metaDb.getUpdates().save(update);
+                    }
                 }
 
                 //get updates
@@ -70,13 +85,12 @@ public class CloudHandler implements RequestHandler {
                 JSONArray updateArray = new JSONArray();
                 for(Update update : updates) {
                     JSONObject object = new JSONObject();
-                    object.put("type", "organization");
-                    object.put("object", Json.get(metaDb.getOrganizations().getById(update.getRecordId())));
+                    object.put("tableName", "organizations");
+                    object.put("record", Json.get(metaDb.getOrganizations().getById(update.getRecordId())));
                     updateArray.put(object);
                     update.setDeleted(true);
                     metaDb.getUpdates().save(update);
                 }
-
 
                 //send response
                 return sendResponse(organization, queryIds, updateArray);
@@ -84,7 +98,6 @@ public class CloudHandler implements RequestHandler {
             }catch(Exception e) {
                 e.printStackTrace();
                 HttpResponse.get404("Unknown request: expect a json object with a client, organization and a list of queries.");
-
             }
 
         } else if (path.matches("/sync/client/images")){
@@ -95,9 +108,9 @@ public class CloudHandler implements RequestHandler {
 
     public HttpResponse sendResponse(String organization, Vector<String> queryIds, JSONArray updates) {
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("organization", organization);
+        jsonResponse.put("organizationId", organization);
+        jsonResponse.put("queryIds", queryIds);
         jsonResponse.put("updates", updates);
-        jsonResponse.put("queries", queryIds);
         return new HttpResponse(jsonResponse);
     }
 }
