@@ -6,7 +6,8 @@ import be.vsol.tools.json;
 
 public class Query extends DbRecord {
 
-    @json @db private String tableName, recordId, query;
+    @json @db private String tableName, recordId;
+    @json @db(length = 200) String query;
 
     // Constructors
 

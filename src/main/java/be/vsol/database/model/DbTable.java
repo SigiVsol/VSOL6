@@ -33,13 +33,13 @@ public class DbTable<R extends DbRecord> {
 
     public Vector<R> getAll() { return getAll(false); }
 
-    public Vector<R> getAll(String where) { return getAll(false, where); }
+    public Vector<R> getAll(String where, String orderBy) { return getAll(false, where, orderBy); }
 
     public Vector<R> getAll(boolean inclDeleted) {
-        return getAll(inclDeleted, null);
+        return getAll(inclDeleted, null, null);
     }
 
-    public Vector<R> getAll(boolean inclDeleted, String where) {
+    public Vector<R> getAll(boolean inclDeleted, String where, String orderBy) {
         Vector<R> result = new Vector<>();
 
         String query = "SELECT * FROM " + name;
@@ -47,10 +47,16 @@ public class DbTable<R extends DbRecord> {
             if (where != null && !where.isBlank()) {
                 query += " WHERE " + where;
             }
+            if(orderBy != null && !orderBy.isBlank()) {
+                query += " ORDER BY " + orderBy;
+            }
         } else {
             query += " WHERE NOT deleted";
             if (where != null && !where.isBlank()) {
                 query += " AND " + where;
+            }
+            if(orderBy != null && !orderBy.isBlank()) {
+                query += " ORDER BY " + orderBy;
             }
         }
 
@@ -66,7 +72,7 @@ public class DbTable<R extends DbRecord> {
     }
 
     public R get(boolean inclDeleted, String where, R defaultValue) {
-        Vector<R> all = getAll(inclDeleted, where);
+        Vector<R> all = getAll(inclDeleted, where, null);
         if (all.isEmpty()) return defaultValue;
         else return all.firstElement();
     }

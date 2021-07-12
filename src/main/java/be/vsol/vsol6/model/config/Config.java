@@ -47,6 +47,7 @@ public class Config {
                     case "int" -> field.set(object, Int.parse(value, 0));
                     case "String" -> field.set(object, value);
                     case "File" -> field.set(object, new File(value));
+                    case "Type" -> field.set(object, Enum.valueOf((Class<Enum>) field.getType(),value));
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {

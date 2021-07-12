@@ -44,7 +44,7 @@ public class Session {
 
             }
             if (system != null) {
-                Vector<Setting> settings = ctrl.getDb().getSystemDb().getSettings().getAll("systemId = '" + system.getId() + "'");
+                Vector<Setting> settings = ctrl.getDb().getSystemDb().getSettings().getAll("systemId = '" + system.getId() + "'", null);
                 for (Setting setting : settings) {
                     overrides.put(setting.getKey(), setting.getValue());
                 }

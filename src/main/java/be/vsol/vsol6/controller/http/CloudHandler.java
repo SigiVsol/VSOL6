@@ -1,27 +1,25 @@
 package be.vsol.vsol6.controller.http;
 
+import be.vsol.database.model.DbTable;
 import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
-import be.vsol.vsol6.controller.backend.DataStorage;
-import be.vsol.vsol6.controller.backend.DicomStorage;
-import be.vsol.vsol6.model.Organization;
+import be.vsol.util.Json;
 import be.vsol.vsol6.model.Query;
-import netscape.javascript.JSObject;
+import be.vsol.vsol6.model.Update;
+import be.vsol.vsol6.model.database.MetaDb;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CloudHandler implements RequestHandler {
 
-    private final DataStorage dataStorage;
-    private final DicomStorage dicomStorage;
+    private final MetaDb metaDb;
 
-    public CloudHandler(DataStorage dataStorage, DicomStorage dicomStorage) {
-        this.dataStorage = dataStorage;
-        this.dicomStorage = dicomStorage;
+    public CloudHandler(MetaDb metaDb) {
+        this.metaDb = metaDb;
     }
 
     @Override
@@ -30,34 +28,76 @@ public class CloudHandler implements RequestHandler {
 
         if (path.matches("/sync/client/data")) {
             System.out.println("New client with request: " + path);
-            JSONObject json = request.getBodyAsJSONObject();
-            String client = json.getString("client");
-            String organization = json.getString("organization");
-            JSONArray queries = json.getJSONArray("queries");
-            System.out.println("Client: " + client);
-            System.out.println("Organization" + organization);
-            System.out.println("Queries" + queries.toString());
+            try{
+                JSONObject json = request.getBodyAsJSONObject();
+                String client = json.getString("client");
+                String organization = json.getString("organization");
+                JSONArray jsonQueries = json.getJSONArray("queries");
+                System.out.println("Client: " + client);
+                System.out.println("Organization: " + organization);
+                System.out.println("Queries: " + jsonQueries.toString());
 
-            for(int i = 0; i < queries.length(); i++) {
-                //Query query = Json.get(queries.getJSONObject(i), Query::new)
-                //dataStorage.saveQuery(organization, query);
+                Vector<Query> queries = new Vector<>();
+                Vector<String> queryIds = new Vector<>();
+                Set<String> recordIds = new HashSet<String>();
+
+                //save queries
+                for(int i = 0; i < jsonQueries.length(); i++) {
+                    Query query = Json.get(jsonQueries.getJSONObject(i), Query::new);
+                    queryIds.add(query.getId());
+                    recordIds.add(query.getRecordId());
+                    queries.add(query);
+                    metaDb.getQueries().save(query);
+                }
+
+                //execute queries
+                for(String recordId : recordIds) {
+                    Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "'", " createdTime ASC");
+                    for(Query query : queriesToExecute) {
+                        System.out.println(query.getQuery());
+                        metaDb.update(query.getQuery());
+                    }
+                }
+
+                //save updates
+                for(Query query : queries) {
+                    Update update = new Update(client, query.getTableName(), query.getRecordId());
+                    metaDb.getUpdates().save(update);
+                }
+
+                //get updates
+                Vector<Update> updates = metaDb.getUpdates().getAll("computerId=" +  "'" + client + "'", null);
+                JSONArray updateArray = new JSONArray();
+                for(Update update : updates) {
+                    JSONObject object = new JSONObject();
+                    object.put("type", "organization");
+                    object.put("object", Json.get(metaDb.getOrganizations().getById(update.getRecordId())));
+                    updateArray.put(object);
+                    update.setDeleted(true);
+                    metaDb.getUpdates().save(update);
+                }
+
+
+                //send response
+                return sendResponse(organization, queryIds, updateArray);
+
+            }catch(Exception e) {
+                e.printStackTrace();
+                HttpResponse.get404("Unknown request: expect a json object with a client, organization and a list of queries.");
+
             }
-            //save queries to query table
-            //for each record, check for other updates in the query table, execute queries sorted on time on the DB again
-            //check which other computers there are for this organization
-            //fill update table with updates
 
-            return sendResponse(organization);
         } else if (path.matches("/sync/client/images")){
             return HttpResponse.get404();
         }
         return HttpResponse.get404();
     }
 
-    public HttpResponse sendResponse(String organization) {
+    public HttpResponse sendResponse(String organization, Vector<String> queryIds, JSONArray updates) {
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put("organization", organization);
-        //json.put("queries");
+        jsonResponse.put("updates", updates);
+        jsonResponse.put("queries", queryIds);
         return new HttpResponse(jsonResponse);
     }
 }
