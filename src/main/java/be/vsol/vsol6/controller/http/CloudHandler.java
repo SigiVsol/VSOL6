@@ -50,15 +50,11 @@ public class CloudHandler implements RequestHandler {
 
                 //execute queries
                 for(String recordId : recordIds) {
-                    Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "'", " createdTime ASC");
+                    Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "' AND type='UPDATE'", " createdTime ASC");
                     for(Query query : queriesToExecute) {
                         System.out.println(query.getQuery());
                         metaDb.update(query.getQuery());
-                        if(query.getQuery().contains("INSERT"))
-                        {
-                            query.setDeleted(true);
-                            metaDb.getQueries().save(query);
-                        }
+                        metaDb.getQueries().save(query);
                     }
                 }
 
