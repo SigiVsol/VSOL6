@@ -8,9 +8,13 @@ public class Query extends DbRecord {
 
     @json @db private String tableName, recordId, query;
 
-    // Constructor
+    // Constructors
 
     public Query() { }
+
+    public Query(String query) {
+        this.query = query;
+    }
 
     //Getters
 

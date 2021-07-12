@@ -7,6 +7,8 @@ import be.vsol.database.model.DbTable;
 import be.vsol.database.model.RS;
 import be.vsol.util.Log;
 import be.vsol.util.Uid;
+import be.vsol.vsol6.model.Query;
+import be.vsol.vsol6.model.config.Setting;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -83,16 +85,20 @@ public abstract class DbDriver {
 
     public abstract <R extends DbRecord> void matchStructure(DbTable<R> dbTable);
 
-    public <R extends DbRecord> void insertRecord(DbTable<R> dbTable, R record) {
+    public <R extends DbRecord> String insertRecord(DbTable<R> dbTable, R record) {
         if (record.getId() == null) {
             record.setId(Uid.getRandom());
         }
         record.setCreatedTime(Instant.now());
 
-        update(dbTable.getDb(), "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')");
+        String sql = "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')";
+
+        update(dbTable.getDb(), sql);
+
+        return sql;
     }
 
-    public <R extends DbRecord> void updateRecord(DbTable<R> dbTable, R record) {
+    public <R extends DbRecord> String updateRecord(DbTable<R> dbTable, R record) {
         String query = "";
 
         R current = getRecord(dbTable, record.getId());
@@ -167,9 +173,11 @@ public abstract class DbDriver {
         }
 
         if (!query.isEmpty()) {
-            update(dbTable.getDb(), "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + query + " WHERE id = '" + record.getId() + "'");
+            String sql = "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + query + " WHERE id = '" + record.getId() + "'";
+            update(dbTable.getDb(), sql);
+            return sql;
         }
-
+        return null;
     }
 
     public <R extends DbRecord> R getRecord(DbTable<R> dbTable, String id) {

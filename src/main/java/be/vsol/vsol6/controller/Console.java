@@ -1,11 +1,13 @@
 package be.vsol.vsol6.controller;
 
+import be.vsol.database.model.DbTable;
 import be.vsol.http.*;
 import be.vsol.util.Bytes;
 import be.vsol.util.Json;
 import be.vsol.util.Log;
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.enums.Language;
 import org.json.JSONObject;
@@ -73,6 +75,20 @@ public class Console implements Runnable {
                         return new HttpResponse(jsonResponse);
                     }
                 });
+            }
+            case "add" -> {
+                Organization organization = new Organization("ORG_1");
+                DbTable<Organization> dbTableOrganizations= ctrl.getDb().getMetaDb().getOrganizations();
+
+                Vector<String> queries = dbTableOrganizations.save(organization);
+                System.out.println("sql: " + queries);
+
+                DbTable<Query> dbTableQuery = ctrl.getDb().getMetaDb().getQueries();
+
+                for (String sql : queries){
+                    Query query = new Query(sql.replace("'", "\""));
+                    dbTableQuery.save(query);
+                }
             }
         }
     }

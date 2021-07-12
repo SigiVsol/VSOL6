@@ -1,5 +1,7 @@
 package be.vsol.database.model;
 
+import be.vsol.vsol6.model.Query;
+
 import java.util.Vector;
 import java.util.function.Supplier;
 
@@ -15,14 +17,18 @@ public class DbTable<R extends DbRecord> {
         this.supplier = supplier;
     }
 
-    public void save(R r) {
+    public Vector<String> save(R r) {
+        Vector<String> queries = new Vector<>();
+
         if (r.getId() == null) {
-            db.getDriver().insertRecord(this, r);
+            queries.add(db.getDriver().insertRecord(this, r));
         } else if (!db.getDriver().exists(db, "SELECT * FROM " + getName() + " WHERE id = '" + r.getId() + "'")) {
-            db.getDriver().insertRecord(this, r);
+            queries.add(db.getDriver().insertRecord(this, r));
         }
 
-        db.getDriver().updateRecord(this, r);
+        queries.add(db.getDriver().updateRecord(this, r));
+
+        return queries;
     }
 
     public Vector<R> getAll() { return getAll(false); }

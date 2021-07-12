@@ -12,6 +12,10 @@ public class Organization extends Record {
 
     public Organization() { }
 
+    public Organization(String name) {
+        this.name = name;
+    }
+
     public Organization(Vsol4Organization vsol4Organization) {
         super(vsol4Organization.getId(), vsol4Organization.getLastOpenedDate());
         name = vsol4Organization.getName();
