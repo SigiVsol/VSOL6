@@ -62,7 +62,7 @@ public class Ctrl {
         Log.init(new File(appConfig.app.home, "logs"), sig.getAppTitle(), appConfig.app.debug);
         Log.out("Starting " + sig + ".");
 
-        this.console = new Console(this);
+        this.console = new Console(this, appConfig);
         this.gui = primaryStage == null ? null : new Gui(this, primaryStage);
         this.db = new Db(appConfig);
         this.server = new HttpServer(sig.getAppTitle());
