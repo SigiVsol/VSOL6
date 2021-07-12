@@ -11,6 +11,7 @@ import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.backend.DicomStorage;
 import be.vsol.vsol6.controller.backend.OrthancDicomStorage;
 import be.vsol.vsol6.controller.backend.Vsol4DataStorage;
+import be.vsol.vsol6.controller.http.CloudHandler;
 import be.vsol.vsol6.controller.http.ServerHandler;
 import be.vsol.vsol6.model.LocalSystem;
 import be.vsol.vsol6.model.Organization;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.nio.file.ClosedDirectoryStreamException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;
@@ -114,7 +116,7 @@ public class Ctrl {
     }
 
     private void startCloud(Config config) {
-        //cloud.start();
+        cloud.start(config.cloud.port, new CloudHandler(dataStorage, dicomStorage));
     }
 
     private void startFujiDR() {
