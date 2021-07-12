@@ -64,8 +64,6 @@ public class Console implements Runnable {
                 httpServer.start(8000, new RequestHandler() {
                     @Override
                     public HttpResponse respond(HttpRequest request) {
-                        String path = request.getPath();
-                        Language language = request.getLanguage();
                         Map<String, String> parameters = request.getParameters();
                         System.out.println("New client with request:" + request.getPath());
                         JSONObject jsonResponse = new JSONObject();
