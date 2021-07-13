@@ -5,22 +5,26 @@ import be.vsol.database.model.DbRecord;
 
 public class Car extends DbRecord {
 
+    public static enum Type { Hybrid, Electric }
+
     @db(length = 100) private String brand = "";
     @db private String model;
     @db private int year;
+    @db private Type type = Type.Hybrid;
 
     public Car() {
 
     }
 
-    public Car(String brand, String model, int year) {
+    public Car(String brand, String model, int year, Type type) {
         this.brand = brand;
         this.model = model;
         this.year = year;
+        this.type = type;
     }
 
     @Override public String toString() {
-        return brand + " (" + model + ")";
+        return brand + " (" + model + "): " + type;
     }
 
     public String getBrand() { return brand; }

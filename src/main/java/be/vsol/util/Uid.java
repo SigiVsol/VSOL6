@@ -11,7 +11,7 @@ public class Uid {
         return UUID.randomUUID().toString();
     }
 
-    public static String getMachineUuid() {
+    public static String getHardwareCode() {
         String result = null;
 
         try {

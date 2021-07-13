@@ -11,8 +11,9 @@ import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.backend.DicomStorage;
 import be.vsol.vsol6.controller.backend.OrthancDicomStorage;
 import be.vsol.vsol6.controller.backend.Vsol4DataStorage;
+import be.vsol.vsol6.controller.http.CloudHandler;
 import be.vsol.vsol6.controller.http.ServerHandler;
-import be.vsol.vsol6.model.LocalSystem;
+import be.vsol.vsol6.model.Computer;
 import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Session;
 import be.vsol.vsol6.model.User;
@@ -33,7 +34,7 @@ public class Ctrl {
     private final JSONObject jsonDefaults;
     private final Map<String, String> params;
 
-    private final LocalSystem system;
+    private final Computer computer;
     private final Console console;
     private final Gui gui;
     private final Db db;
@@ -54,7 +55,7 @@ public class Ctrl {
     public Ctrl(Map<String, String> params, Stage primaryStage) {
         this.params = params;
         this.jsonDefaults = new JSONObject(Resource.getString("config/defaults.json"));
-        this.system = new LocalSystem();
+        this.computer = new Computer();
         Config appConfig = new Config(jsonDefaults, params);
 
         Log.init(new File(appConfig.app.home, "logs"), sig.getAppTitle(), appConfig.app.debug);
@@ -66,7 +67,7 @@ public class Ctrl {
         this.server = new HttpServer(sig.getAppTitle());
         this.vsol4 = new Vsol4();
         this.orthanc = new Orthanc();
-        this.cloud = new HttpServer("Cloud");
+        this.cloud = new HttpServer("VSOL Cloud Server");
 
         this.dataStorage = switch (appConfig.app.dataStorage) {
             case vsol4 -> new Vsol4DataStorage(this);
@@ -84,7 +85,7 @@ public class Ctrl {
         if (appConfig.console.active) startConsole();
         if (appConfig.db.active) startDb();
 
-        systemSession = new Session(this, system);
+        systemSession = new Session(this, computer);
 
         if (appConfig.server.active) startServer(systemSession.getConfig());
         if (appConfig.vsol4.active) startVsol4(systemSession.getConfig());
@@ -114,7 +115,7 @@ public class Ctrl {
     }
 
     private void startCloud(Config config) {
-        //cloud.start();
+        cloud.start(config.cloud.port, new CloudHandler(db));
     }
 
     private void startFujiDR() {
@@ -135,7 +136,7 @@ public class Ctrl {
         } else {
             User user = dataStorage.getUser(config.gui.userId);
             Organization organization = dataStorage.getOrganization(config.gui.organizationId);
-            localSession = new Session(this, system, user, organization);
+            localSession = new Session(this, computer, user, organization);
             gui.start(config);
         }
     }
@@ -169,7 +170,7 @@ public class Ctrl {
 
     public Session getSystemSession() { return systemSession; }
 
-    public LocalSystem getSystem() { return system; }
+    public Computer getComputer() { return computer; }
 
     public DataStorage getDataStorage() { return dataStorage; }
 

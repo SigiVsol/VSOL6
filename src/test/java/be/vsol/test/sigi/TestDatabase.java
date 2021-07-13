@@ -14,8 +14,8 @@ public class TestDatabase {
     public static void main(String[] args) {
         System.out.println("TestDatabase");
 
-//        MySQL driver = new MySQL(mysql.host, mysql.port, mysql.user, mysql.password);
-        SQLite driver = new SQLite(new File("C:/Sandbox/db"));
+        MySQL driver = new MySQL("localhost", 3306, "root", "LesMiserables1862");
+//        SQLite driver = new SQLite(new File("C:/Sandbox/db"));
         driver.start();
 
         TestDb db = new TestDb(driver);
@@ -24,13 +24,13 @@ public class TestDatabase {
 
 
 
-//        DbTable<Car> cars = new DbTable<>(db, "cars", Car::new);
+        DbTable<Car> cars = new DbTable<>(db, "cars", Car::new);
 
-//        Car car = new Car("Mercedes", "A Class", 2019);
-//        cars.save(car);
+        Car car = new Car("Mercedes", "B Class", 2019, Car.Type.Electric);
+        cars.save(car);
 
 
-//        System.out.println( cars.getAll() );
+        System.out.println( cars.getAll() );
 
 //        System.out.println(db.getTables());
 
