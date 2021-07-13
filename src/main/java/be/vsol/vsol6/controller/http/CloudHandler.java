@@ -7,6 +7,8 @@ import be.vsol.util.Json;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.Update;
 import be.vsol.vsol6.model.database.MetaDb;
+import be.vsol.vsol6.model.meta.Network;
+import be.vsol.vsol6.model.meta.Organization;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,29 +53,33 @@ public class CloudHandler implements RequestHandler {
             Vector<String> queryIds = new Vector<>();
             Set<String> recordIds = new HashSet<>();
 
-            //save incoming UPDATE queries; if INSERT query, execute (once) instantly
-            for(int i = 0; i < jsonQueries.length(); i++) {
-                Query query = Json.get(jsonQueries.getJSONObject(i), Query::new);
+            Network network = metaDb.getNetworks().get("computerId='" + computerId + "'", null);
+            if(network.isInitialized()) {
+                //save incoming UPDATE queries; if INSERT query, execute (once) instantly
+                for(int i = 0; i < jsonQueries.length(); i++) {
+                    Query query = Json.get(jsonQueries.getJSONObject(i), Query::new);
 
-                if (query.getType() == Query.Type.UPDATE) {
-                    metaDb.getQueries().save(query);
-                }else {
-                    metaDb.update(query.getQuery());
+                    if (query.getType() == Query.Type.UPDATE) {
+                        metaDb.getQueries().save(query);
+                    }else {
+                        metaDb.update(query.getQuery());
+                    }
+
+                    queryIds.add(query.getId());
+                    recordIds.add(query.getRecordId());
                 }
 
-                queryIds.add(query.getId());
-                recordIds.add(query.getRecordId());
+                //execute all (saved) queries involved and add updates
+                for(String recordId : recordIds) {
+                    executeInvolvedQueries(recordId);
+                    addUpdate(computerId, "organizations", recordId);
+                }
+
+                //send response
+                return sendResponse(organization, computerId, queryIds);
+            }else{
+                return sendAllResponse(computerId);
             }
-
-            //execute all (saved) queries involved and add updates
-            for(String recordId : recordIds) {
-                executeInvolvedQueries(recordId);
-                addUpdate(computerId, "organizations", recordId);
-            }
-
-            //send response
-            return sendResponse(organization, computerId, queryIds);
-
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -111,6 +117,23 @@ public class CloudHandler implements RequestHandler {
         jsonResponse.put("organizationId", organization);
         jsonResponse.put("queryIds", queryIds);
         jsonResponse = addUpdatesToJson(computerId, jsonResponse);
+        return new HttpResponse(jsonResponse);
+    }
+
+    private HttpResponse sendAllResponse(String computerId) {
+        JSONObject jsonResponse = new JSONObject();
+        Vector<Organization> organizations = metaDb.getOrganizations().getAll();
+        JSONArray jsonArray = new JSONArray();
+        for(Organization organization: organizations) {
+            JSONObject object = new JSONObject();
+            object.put("tableName", "organizations");
+            object.put("record", Json.get(organization));
+            jsonArray.put(object);
+        }
+        jsonResponse.put("organizationId", "VSOL");
+        jsonResponse.put("queryIds", new JSONArray());
+        jsonResponse.put("updates",jsonArray);
+        jsonResponse.put("updateIds", new JSONArray());
         return new HttpResponse(jsonResponse);
     }
 
