@@ -18,7 +18,7 @@ public class LocalStorage {
     }
 
     private String getMachineCode() {
-        return Checksum.getSha256(Uid.getMachineUuid());
+        return Checksum.getSha256(Uid.getHardwareCode());
     }
 
     public String get(String key, String defaultValue) {

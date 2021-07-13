@@ -7,17 +7,16 @@ import be.vsol.database.connection.SQLite;
 import be.vsol.vsol6.model.config.Config;
 
 import java.io.File;
+import java.util.Vector;
 
 public class Db {
 
     private final DbDriver driver;
 
-    // MetaDb
-    // Vector<OrgDbs> ...
+    private final SystemDb systemDb; // TODO delete when refactored
 
-    private final SystemDb systemDb;
-
-    private final MetaDb metaDB;
+    private final MetaDb metaDb;
+    private final Vector<OrganizationDb> organizationDbs = new Vector<>();
 
     private boolean active = false;
 
@@ -29,14 +28,14 @@ public class Db {
         };
 
         systemDb = new SystemDb(driver);
-        metaDB = new MetaDb(driver);
+        metaDb = new MetaDb(driver);
     }
 
     public void start() {
         driver.start();
 
         systemDb.connect();
-        metaDB.connect();
+        metaDb.connect();
 
         active = true;
     }
@@ -49,7 +48,7 @@ public class Db {
 
     public SystemDb getSystemDb() { return systemDb; }
 
-    public MetaDb getMetaDb() { return  metaDB;}
+    public MetaDb getMetaDb() { return metaDb;}
 
     public boolean isActive() { return active; }
 

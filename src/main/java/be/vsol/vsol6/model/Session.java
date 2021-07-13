@@ -2,9 +2,6 @@ package be.vsol.vsol6.model;
 
 import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.controller.Ctrl;
-import be.vsol.vsol6.model.LocalSystem;
-import be.vsol.vsol6.model.Organization;
-import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
 
@@ -15,7 +12,7 @@ import java.util.Vector;
 public class Session {
 
     private final Ctrl ctrl;
-    private final LocalSystem system;
+    private final Computer system;
     private final User user;
     private final Organization organization;
 
@@ -23,11 +20,11 @@ public class Session {
 
     // Constructors
 
-    public Session(Ctrl ctrl, LocalSystem system) {
+    public Session(Ctrl ctrl, Computer system) {
         this(ctrl, system, null, null);
     }
 
-    public Session(Ctrl ctrl, LocalSystem system, User user, Organization organization) {
+    public Session(Ctrl ctrl, Computer system, User user, Organization organization) {
         this.ctrl = ctrl;
         this.system = system;
         this.user = user;
