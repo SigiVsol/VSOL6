@@ -1,16 +1,13 @@
 package be.vsol.vsol6.controller;
 
-import be.vsol.database.model.DbTable;
 import be.vsol.http.*;
 import be.vsol.util.Bytes;
 import be.vsol.util.Json;
 import be.vsol.util.Log;
-import be.vsol.vsol6.controller.Ctrl;
-import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
-import be.vsol.vsol6.model.enums.Language;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

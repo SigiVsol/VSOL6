@@ -4,6 +4,8 @@ import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.controller.Ctrl;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.config.Setting;
+import be.vsol.vsol6.model.meta.Computer;
+import be.vsol.vsol6.model.meta.Organization;
 
 import java.util.HashMap;
 import java.util.Map;

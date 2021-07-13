@@ -2,7 +2,7 @@ package be.vsol.vsol6.model.database;
 
 import be.vsol.database.connection.DbDriver;
 import be.vsol.database.model.DbTable;
-import be.vsol.vsol6.model.Computer;
+import be.vsol.vsol6.model.meta.Computer;
 
 public class SystemDb extends VsolDb {
 

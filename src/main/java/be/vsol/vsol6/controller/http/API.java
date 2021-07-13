@@ -1,7 +1,6 @@
 package be.vsol.vsol6.controller.http;
 
 import be.vsol.dicom.Dicom;
-import be.vsol.dicom.model.SOPInstance;
 import be.vsol.dicom.model.SeriesInstance;
 import be.vsol.dicom.model.StudyInstance;
 import be.vsol.http.HttpRequest;
@@ -11,7 +10,7 @@ import be.vsol.http.RequestHandler;
 import be.vsol.util.*;
 import be.vsol.vsol6.controller.backend.DataStorage;
 import be.vsol.vsol6.controller.backend.DicomStorage;
-import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.Record;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;

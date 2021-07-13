@@ -13,8 +13,8 @@ import be.vsol.vsol6.controller.backend.OrthancDicomStorage;
 import be.vsol.vsol6.controller.backend.Vsol4DataStorage;
 import be.vsol.vsol6.controller.http.CloudHandler;
 import be.vsol.vsol6.controller.http.ServerHandler;
-import be.vsol.vsol6.model.Computer;
-import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.meta.Computer;
+import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.Session;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.file.ClosedDirectoryStreamException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;

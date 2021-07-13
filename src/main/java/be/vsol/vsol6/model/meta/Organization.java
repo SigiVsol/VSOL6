@@ -1,8 +1,9 @@
-package be.vsol.vsol6.model;
+package be.vsol.vsol6.model.meta;
 
 import be.vsol.database.db;
 import be.vsol.tools.json;
 import be.vsol.vsol4.model.Vsol4Organization;
+import be.vsol.vsol6.model.Record;
 
 public class Organization extends Record {
 

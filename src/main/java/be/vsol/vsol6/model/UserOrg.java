@@ -1,5 +1,7 @@
 package be.vsol.vsol6.model;
 
+import be.vsol.vsol6.model.meta.Organization;
+
 public class UserOrg {
 
     private final User user;

@@ -1,14 +1,10 @@
 package be.vsol.vsol6.controller.http;
 
-import be.vsol.database.model.DbTable;
-import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.Json;
-import be.vsol.vsol6.model.Organization;
 import be.vsol.vsol6.model.Query;
-import be.vsol.vsol6.model.Record;
 import be.vsol.vsol6.model.Update;
 import be.vsol.vsol6.model.database.MetaDb;
 import org.json.JSONArray;

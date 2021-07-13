@@ -1,7 +1,7 @@
 package be.vsol.vsol6.controller.backend;
 
 import be.vsol.vsol6.controller.Ctrl;
-import be.vsol.vsol6.model.Organization;
+import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.UserOrg;
 import be.vsol.vsol6.model.organization.Client;

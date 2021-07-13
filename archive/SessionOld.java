@@ -3,7 +3,7 @@
 //import be.vsol.database.model.DbTable;
 //import be.vsol.util.*;
 //import be.vsol.vsol6.model.LocalSystem;
-//import be.vsol.vsol6.model.Organization;
+//import be.vsol.vsol6.model.meta.Organization;
 //import be.vsol.vsol6.model.User;
 //import be.vsol.vsol6.model.config.Config;
 //import be.vsol.vsol6.model.config.Setting;
