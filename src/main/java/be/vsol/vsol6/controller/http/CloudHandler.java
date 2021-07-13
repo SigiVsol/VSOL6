@@ -154,6 +154,25 @@ public class CloudHandler implements RequestHandler {
                     case "organizations":
                         object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
                         break;
+                    case "computer":
+                        object.put("record", Json.get(metaDb.getComputers().getById(recordId)));
+                        break;
+                    case "computer_setting":
+                        object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
+                        break;
+                    case "roles":
+                        object.put("record", Json.get(metaDb.getRoles().getById(recordId)));
+                        break;
+                    case "users":
+                        object.put("users", Json.get(metaDb.getUsers().getById(recordId)));
+                        break;
+                    case "user_setting":
+                        object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
+                        break;
+                    case "network":
+                        object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
+                        break;
+
                 }
                 jsonUpdates.put(object);
                 recordIds.add(recordId);
