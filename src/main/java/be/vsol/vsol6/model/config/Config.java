@@ -20,7 +20,6 @@ public class Config {
     @json public bridge bridge = new bridge();
     @json public cloud cloud = new cloud();
 
-
     /**
      * Constructor
      * @param jsonDefaults JSONObject which contains all the default values for the configurations

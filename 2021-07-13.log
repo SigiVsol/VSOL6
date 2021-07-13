@@ -1,0 +1,30 @@
+09:01:09 mysql) > CREATE DATABASE test_db
+09:01:09 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type  DEFAULT )
+09:01:09 [ERR] java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DEFAULT )' at line 1
+09:01:09 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('44d0dda9-4780-4dc1-8809-3bdc1f5e0d33', '2021-07-13 07:01:09.221')
+09:01:09 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:01:09 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:03:33 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type  DEFAULT )
+09:03:33 [ERR] java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DEFAULT )' at line 1
+09:03:33 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('3367be2a-354f-45fa-83dc-282b901a4097', '2021-07-13 07:03:33.048')
+09:03:33 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:03:33 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:04:32 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type VARCHAR(50) DEFAULT )
+09:04:32 [ERR] java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+09:04:32 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('cdb3f7ec-9c73-4b76-8d7e-7255fbf5158c', '2021-07-13 07:04:32.053')
+09:04:32 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:04:32 [ERR] java.sql.SQLSyntaxErrorException: Table 'test_db.cars' doesn't exist
+09:09:05 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type VARCHAR(50) DEFAULT 'Hybrid')
+09:09:05 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('a274b04a-dd78-4b8b-bb3c-930604c3dc76', '2021-07-13 07:09:05.813')
+09:09:05 mysql (test_db) > UPDATE cars SET updatedTime = '2021-07-13 07:09:05.836', brand = 'Mercedes', model = 'A Class', year = 2019 WHERE id = 'a274b04a-dd78-4b8b-bb3c-930604c3dc76'
+09:09:51 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('c4dc5bb7-5b02-48f3-9a86-f169aa6175aa', '2021-07-13 07:09:51.971')
+09:09:52 mysql (test_db) > UPDATE cars SET updatedTime = '2021-07-13 07:09:52.008', brand = 'Mercedes', model = 'B Class', year = 2019 WHERE id = 'c4dc5bb7-5b02-48f3-9a86-f169aa6175aa'
+09:14:30 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('cef4333f-5615-4584-b360-ffe8cb864b51', '2021-07-13 07:14:30.045')
+09:14:30 mysql (test_db) > UPDATE cars SET updatedTime = '2021-07-13 07:14:30.080', brand = 'Mercedes', model = 'B Class', year = 2019, type = 'Electric' WHERE id = 'cef4333f-5615-4584-b360-ffe8cb864b51'
+09:16:01 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type VARCHAR(50) DEFAULT 'Hybrid')
+09:16:01 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('7835d01a-62ed-4da4-8e9d-898268c97a4e', '2021-07-13 07:16:01.057')
+09:16:01 mysql (test_db) > UPDATE cars SET updatedTime = '2021-07-13 07:16:01.080', brand = 'Mercedes', model = 'B Class', year = 2019, type = 'Electric' WHERE id = '7835d01a-62ed-4da4-8e9d-898268c97a4e'
+09:17:49 mysql) > CREATE DATABASE test_db
+09:17:49 mysql (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0, type VARCHAR(50) DEFAULT 'Hybrid')
+09:17:49 mysql (test_db) > INSERT INTO cars(id, createdTime) VALUES ('e2b20605-0638-426c-93d9-a07f63b1943f', '2021-07-13 07:17:49.681')
+09:17:49 mysql (test_db) > UPDATE cars SET updatedTime = '2021-07-13 07:17:49.708', brand = 'Mercedes', model = 'B Class', year = 2019, type = 'Electric' WHERE id = 'e2b20605-0638-426c-93d9-a07f63b1943f'
