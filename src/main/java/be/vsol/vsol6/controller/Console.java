@@ -78,8 +78,8 @@ public class Console implements Runnable {
             case "sync" -> {
                 // Request (queries) & Response
                 JSONObject syncRequest = new JSONObject();
-                syncRequest.put("computerId", "computer_id");
-                syncRequest.put("organizationId", "org_id");
+                syncRequest.put("computerId", "comp1");
+                syncRequest.put("organizationId", "VSOL");
                 syncRequest.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
                 System.out.println("Request: " + syncRequest);
                 HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync/meta", syncRequest);
@@ -112,7 +112,7 @@ public class Console implements Runnable {
 
                 // Send Ack
                 JSONObject ack = new JSONObject();
-                ack.put("computerId", "computer_id");
+                ack.put("computerId", "comp1");
                 ack.put("organizationId", response.getString("organizationId"));
                 ack.put("updateIds", response.getJSONArray("updateIds"));
                 System.out.println("ack: " + ack);

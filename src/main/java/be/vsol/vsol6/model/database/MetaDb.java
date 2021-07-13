@@ -4,12 +4,9 @@ import be.vsol.database.connection.DbDriver;
 import be.vsol.database.model.Database;
 import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.model.User;
-import be.vsol.vsol6.model.meta.Computer;
-import be.vsol.vsol6.model.meta.Network;
-import be.vsol.vsol6.model.meta.Organization;
+import be.vsol.vsol6.model.meta.*;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.Update;
-import be.vsol.vsol6.model.meta.Roles;
 
 public class MetaDb extends Database {
 
@@ -18,6 +15,8 @@ public class MetaDb extends Database {
     private final DbTable<Network> networks;
     private final DbTable<User> users;
     private final DbTable<Roles> roles;
+    private final DbTable<UserSetting> userSettings;
+    private final DbTable<ComputerSetting> computerSettings;
     private final DbTable<Query> queries;
     private final DbTable<Update> updates;
 
@@ -30,6 +29,8 @@ public class MetaDb extends Database {
         networks = new DbTable<>(this, "networks", Network::new);
         users = new DbTable<>(this, "users", User::new);
         roles = new DbTable<>(this, "roles", Roles::new);
+        userSettings = new DbTable<>(this, "user_settings", UserSetting::new);
+        computerSettings = new DbTable<>(this, "computer_settings", ComputerSetting::new);
         queries = new DbTable<>(this, "queries", Query::new);
         updates = new DbTable<>(this, "updates", Update::new);
     }
@@ -45,6 +46,10 @@ public class MetaDb extends Database {
     public DbTable<User> getUsers() { return users; }
 
     public DbTable<Roles> getRoles() { return roles; }
+
+    public DbTable<UserSetting> getUserSettings() { return userSettings; }
+
+    public DbTable<ComputerSetting> getComputerSettings() { return computerSettings; }
 
     public DbTable<Query> getQueries() { return queries; }
 
