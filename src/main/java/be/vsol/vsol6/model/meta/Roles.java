@@ -1,4 +1,4 @@
-package be.vsol.vsol6.model;
+package be.vsol.vsol6.model.meta;
 
 import be.vsol.database.db;
 import be.vsol.database.model.DbRecord;

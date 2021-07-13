@@ -3,11 +3,13 @@ package be.vsol.vsol6.model.database;
 import be.vsol.database.connection.DbDriver;
 import be.vsol.database.model.Database;
 import be.vsol.database.model.DbTable;
+import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.meta.Computer;
 import be.vsol.vsol6.model.meta.Network;
 import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.Update;
+import be.vsol.vsol6.model.meta.Roles;
 
 public class MetaDb extends Database {
 
