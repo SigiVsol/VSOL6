@@ -8,7 +8,7 @@ public class Query extends DbRecord {
 
     @json @db private String tableName, recordId;
     @json @db(length = 200) private String query;
-    @json @db private Type type;
+    @json @db private Type type = Type.UPDATE;
 
     // Constructors
 
