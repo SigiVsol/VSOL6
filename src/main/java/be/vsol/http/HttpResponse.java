@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 public class HttpResponse extends HttpMessage {
 
-    public enum Status { OK, NOT_FOUND, INTERNAL_SERVER_ERROR }
+    public enum Status { OK, NOT_FOUND, INTERNAL_SERVER_ERROR, BAD_REQUEST }
 
     private int statusCode;
     private String reasonPhrase;
@@ -38,6 +38,8 @@ public class HttpResponse extends HttpMessage {
         return new HttpResponse(HttpResponse.Status.NOT_FOUND, text);
     }
 
+    public static HttpResponse get400(String text) { return  new HttpResponse(HttpResponse.Status.BAD_REQUEST, text); }
+
     // Methods
 
     @Override public String getFirstLine() {
@@ -60,6 +62,7 @@ public class HttpResponse extends HttpMessage {
             case OK -> 200;
             case NOT_FOUND -> 404;
             case INTERNAL_SERVER_ERROR -> 500;
+            case BAD_REQUEST -> 400;
         };
     }
 
@@ -68,6 +71,7 @@ public class HttpResponse extends HttpMessage {
             case OK -> "OK";
             case NOT_FOUND -> "NOT FOUND";
             case INTERNAL_SERVER_ERROR -> "INTERNAL SERVER ERROR";
+            case BAD_REQUEST -> "BAD REQUEST";
         };
     }
 
