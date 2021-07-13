@@ -14,6 +14,8 @@ public class MetaDb extends Database {
     private final DbTable<Organization> organizations;
     private final DbTable<Computer> computers;
     private final DbTable<Network> networks;
+    private final DbTable<User> users;
+    private final DbTable<Roles> roles;
     private final DbTable<Query> queries;
     private final DbTable<Update> updates;
 
@@ -24,6 +26,8 @@ public class MetaDb extends Database {
         organizations = new DbTable<>(this, "organizations", Organization::new);
         computers = new DbTable<>(this, "computers", Computer::new);
         networks = new DbTable<>(this, "networks", Network::new);
+        users = new DbTable<>(this, "users", User::new);
+        roles = new DbTable<>(this, "roles", Roles::new);
         queries = new DbTable<>(this, "queries", Query::new);
         updates = new DbTable<>(this, "updates", Update::new);
     }
@@ -35,6 +39,10 @@ public class MetaDb extends Database {
     public DbTable<Computer> getComputers() { return  computers;}
 
     public DbTable<Network> getNetworks() { return networks;}
+
+    public DbTable<User> getUsers() { return users; }
+
+    public DbTable<Roles> getRoles() { return roles; }
 
     public DbTable<Query> getQueries() { return queries; }
 
