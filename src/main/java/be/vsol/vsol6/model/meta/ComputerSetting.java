@@ -6,7 +6,7 @@ import be.vsol.tools.json;
 
 public class ComputerSetting extends DbRecord {
 
-    @json @db private String computerId, key, value;
+    @json @db private String computerId, settingName, value;
 
     // Constructor
 
@@ -17,7 +17,7 @@ public class ComputerSetting extends DbRecord {
 
     public String getComputerId() { return computerId; }
 
-    public String getKey() { return key; }
+    public String getSettingName() { return settingName; }
 
     public String getValue() { return value; }
 }
