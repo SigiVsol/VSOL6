@@ -52,15 +52,16 @@ public class CloudHandler implements RequestHandler {
             JSONArray jsonQueries = json.getJSONArray("queries");
 
             JSONObject jsonResponse = new JSONObject();
-            boolean networkInit = false;
-            Vector<Network> networks = metaDb.getNetworks().getAll("computerId='" + computerId + "'", null);
-            for (Network network : networks) {
-                if (network.isInitialized()) {
-                    networkInit = true;
-                }
-            }
 
-            if (networkInit) {
+//            Vector<Network> networks = metaDb.getNetworks().getAll("computerId='" + computerId + "'", null);
+//            for (Network network : networks) {
+//                if (network.isInitialized()) {
+//                    //sync organization data
+//
+//                }
+//            }
+            Network network = metaDb.getNetworks().get("computerId='" + computerId + "'");
+            if (network.isInitialized()) {
                 //sync queries
                 Vector<String> queryIds = syncQueries(computerId, jsonQueries, metaDb);
 
@@ -149,6 +150,7 @@ public class CloudHandler implements RequestHandler {
             if(!recordIds.contains(recordId)) {
                 JSONObject object = new JSONObject();
                 String tableName = update.getTableName();
+                //can be used on multiple occasions? move to separate function?
                 object.put("tableName", tableName);
                 switch (tableName) {
                     case "organizations":
