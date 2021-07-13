@@ -123,12 +123,16 @@ public class Console implements Runnable {
                 // Save new record & get queries
                 Organization organization = new Organization("ORG_1");
                 Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                User user = new User("user1");
+                queries.addAll(ctrl.getDb().getMetaDb().getUsers().save(user));
                 System.out.println("Queries: " + queries);
 
                 // Save queries
                 for (String sql : queries) {
-                    Query query = new Query(sql.replace("'", "\""));
-                    ctrl.getDb().getMetaDb().getQueries().save(query);
+                    if (sql != null) {
+                        Query query = new Query(sql.replace("'", "\""));
+                        ctrl.getDb().getMetaDb().getQueries().save(query);
+                    }
                 }
             }
             case "change" -> {

@@ -12,6 +12,11 @@ public class User extends Record {
 
     public User() { }
 
+    // TestConstructor
+    public User(String username) {
+        this.username = username;
+    }
+
     public User(Vsol4User vsol4User) {
         super(vsol4User.getId(), vsol4User.getLastOpenedDate());
         username = vsol4User.getUsername();
