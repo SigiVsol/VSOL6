@@ -31,65 +31,29 @@ public class CloudHandler implements RequestHandler {
             System.out.println("New client with request: " + path);
             try{
                 JSONObject json = request.getBodyAsJSONObject();
-                String client = json.getString("computerId");
+                String computerId = json.getString("computerId");
                 String organization = json.getString("organizationId");
                 JSONArray jsonQueries = json.getJSONArray("queries");
 
                 Vector<Query> queries = new Vector<>();
                 Vector<String> queryIds = new Vector<>();
-                Set<String> recordIds = new HashSet<String>();
 
-                //save queries
+                //save new queries
                 for(int i = 0; i < jsonQueries.length(); i++) {
                     Query query = Json.get(jsonQueries.getJSONObject(i), Query::new);
                     queryIds.add(query.getId());
-                    recordIds.add(query.getRecordId());
                     queries.add(query);
                     metaDb.getQueries().save(query);
                 }
 
-                //execute queries
-                for(String recordId : recordIds) {
-                    Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "' AND type='UPDATE'", " createdTime ASC");
-                    for(Query query : queriesToExecute) {
-                        System.out.println(query.getQuery());
-                        metaDb.update(query.getQuery());
-                        metaDb.getQueries().save(query);
-                    }
-                }
-
-                //make changes as a test
-//                Vector<Organization> orgs = metaDb.getOrganizations().getAll();
-//                for(Organization org : orgs)
-//                {
-//                    org.setName("Pieter");
-//                    org.setDescription("Pieter was hier :-)");
-//                    metaDb.getOrganizations().save(org);
-//                }
-
-
-                //save updates
-                for(Query query : queries) {
-                    if(metaDb.getUpdates().get(" tableName='" + query.getTableName() + "' AND " + " recordId='" + query.getRecordId() + "'") == null) {
-                        Update update = new Update(client, query.getTableName(), query.getRecordId());
-                        metaDb.getUpdates().save(update);
-                    }
-                }
-
-                //get updates
-                Vector<Update> updates = metaDb.getUpdates().getAll("computerId=" +  "'" + client + "'", null);
-                JSONArray updateArray = new JSONArray();
-                for(Update update : updates) {
-                    JSONObject object = new JSONObject();
-                    object.put("tableName", "organizations");
-                    object.put("record", Json.get(metaDb.getOrganizations().getById(update.getRecordId())));
-                    updateArray.put(object);
-                    update.setDeleted(true);
-                    metaDb.getUpdates().save(update);
+                //execute all (saved) queries involved and add updates
+                for(Query query: queries) {
+                    executeInvolvedQueries(query.getRecordId());
+                    addUpdate(computerId, query);
                 }
 
                 //send response
-                return sendResponse(organization, queryIds, updateArray);
+                return sendResponse(organization, queryIds, getUpdates(computerId));
 
             }catch(Exception e) {
                 e.printStackTrace();
@@ -102,11 +66,42 @@ public class CloudHandler implements RequestHandler {
         return HttpResponse.get404();
     }
 
-    public HttpResponse sendResponse(String organization, Vector<String> queryIds, JSONArray updates) {
+    private HttpResponse sendResponse(String organization, Vector<String> queryIds, JSONArray updates) {
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put("organizationId", organization);
         jsonResponse.put("queryIds", queryIds);
         jsonResponse.put("updates", updates);
         return new HttpResponse(jsonResponse);
     }
+
+    private void executeInvolvedQueries(String recordId) {
+        Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "' AND type='UPDATE'", " createdTime ASC");
+        for(Query query : queriesToExecute) {
+            System.out.println(query.getQuery());
+            metaDb.update(query.getQuery());
+        }
+    }
+
+    private void addUpdate(String client, Query query) {
+        if(metaDb.getUpdates().get(" tableName='" + query.getTableName() + "' AND " + " recordId='" + query.getRecordId() + "'") == null) {
+            Update update = new Update(client, query.getTableName(), query.getRecordId());
+            metaDb.getUpdates().save(update);
+        }
+    }
+
+    private JSONArray getUpdates(String computerId) {
+        Vector<Update> dbUpdates = metaDb.getUpdates().getAll("computerId=" +  "'" + computerId + "'", null);
+        JSONArray jsonUpdates = new JSONArray();
+        for(Update update : dbUpdates) {
+            JSONObject object = new JSONObject();
+            object.put("tableName", "organizations");
+            object.put("record", Json.get(metaDb.getOrganizations().getById(update.getRecordId())));
+            jsonUpdates.put(object);
+            update.setDeleted(true);
+            metaDb.getUpdates().save(update);
+        }
+        return jsonUpdates;
+    }
+
+
 }
