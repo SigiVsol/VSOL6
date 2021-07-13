@@ -43,10 +43,10 @@ public class Session {
 
             }
             if (system != null) {
-                Vector<Setting> settings = ctrl.getDb().getSystemDb().getSettings().getAll("systemId = '" + system.getId() + "'", null);
-                for (Setting setting : settings) {
-                    overrides.put(setting.getKey(), setting.getValue());
-                }
+//                Vector<Setting> settings = ctrl.getDb().getSystemDb().getSettings().getAll("systemId = '" + system.getId() + "'", null);
+//                for (Setting setting : settings) {
+//                    overrides.put(setting.getKey(), setting.getValue());
+//                }
             }
         }
 
@@ -61,20 +61,20 @@ public class Session {
     // Methods
 
     public void saveSystem(Setting newSetting) {
-        if (ctrl.getDb().isActive() && system != null) {
-            String key = newSetting.getKey();
-            String value = newSetting.getValue();
-
-            DbTable<Setting> dbTable = ctrl.getDb().getSystemDb().getSettings();
-            Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND settingName = '" + key + "'");
-            if (setting == null) {
-                setting = new Setting(key, value);
-                setting.setSystemId(system.getId());
-            } else {
-                setting.setValue(value);
-            }
-            dbTable.save(setting);
-        }
+//        if (ctrl.getDb().isActive() && system != null) {
+//            String key = newSetting.getKey();
+//            String value = newSetting.getValue();
+//
+//            DbTable<Setting> dbTable = ctrl.getDb().getSystemDb().getSettings();
+//            Setting setting = dbTable.get("systemId = '" + system.getId() + "' AND settingName = '" + key + "'");
+//            if (setting == null) {
+//                setting = new Setting(key, value);
+//                setting.setSystemId(system.getId());
+//            } else {
+//                setting.setValue(value);
+//            }
+//            dbTable.save(setting);
+//        }
     }
 
     // Getters

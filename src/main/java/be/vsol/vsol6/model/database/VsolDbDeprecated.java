@@ -5,13 +5,13 @@ import be.vsol.database.model.Database;
 import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.model.config.Setting;
 
-public abstract class VsolDb extends Database {
+public abstract class VsolDbDeprecated extends Database {
 
     protected DbTable<Setting> settings;
 
     // Constructors
 
-    public VsolDb(DbDriver driver, String name) {
+    public VsolDbDeprecated(DbDriver driver, String name) {
         super(driver, name);
 
         settings = new DbTable<>(this, "settings", Setting::new);

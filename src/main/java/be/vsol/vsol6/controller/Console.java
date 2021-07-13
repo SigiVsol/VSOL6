@@ -1,17 +1,18 @@
 package be.vsol.vsol6.controller;
 
-import be.vsol.http.*;
+import be.vsol.database.model.DbQuery;
+import be.vsol.http.Curl;
+import be.vsol.http.HttpRequest;
+import be.vsol.http.HttpResponse;
 import be.vsol.util.Bytes;
 import be.vsol.util.Json;
 import be.vsol.util.Log;
-import be.vsol.vsol6.model.meta.Organization;
-import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.meta.Organization;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -60,21 +61,6 @@ public class Console implements Runnable {
                     System.out.println(user.getFirstName());
                 }
             }
-            case "server" -> {
-                HttpServer httpServer = new HttpServer("TestServer");
-                httpServer.start(8000, new RequestHandler() {
-                    @Override
-                    public HttpResponse respond(HttpRequest request) {
-                        Map<String, String> parameters = request.getParameters();
-                        System.out.println("New client with request:" + request.getPath());
-                        JSONObject jsonResponse = new JSONObject();
-                        jsonResponse.put("message", "Hello, world!");
-                        jsonResponse.put("user", "Pieter");
-                        jsonResponse.put("organization", "Veterinary Solutions");
-                        return new HttpResponse(jsonResponse);
-                    }
-                });
-            }
             case "sync" -> {
                 // Request (queries) & Response
                 JSONObject syncRequest = new JSONObject();
@@ -91,7 +77,7 @@ public class Console implements Runnable {
                 JSONArray queryIds = response.getJSONArray("queryIds");
                 for (int i = 0; i < queryIds.length(); i++) {
                     String queryId = queryIds.getString(i);
-                    Query query = ctrl.getDb().getMetaDb().getQueries().getById(queryId);
+                    DbQuery query = ctrl.getDb().getMetaDb().getQueries().getById(queryId);
                     query.setDeleted(true);
                     ctrl.getDb().getMetaDb().getQueries().save(query);
                 }
@@ -122,29 +108,25 @@ public class Console implements Runnable {
             case "add" -> {
                 // Save new record & get queries
                 Organization organization = new Organization("ORG_1");
-                Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
                 User user = new User("user1");
                 queries.addAll(ctrl.getDb().getMetaDb().getUsers().save(user));
                 System.out.println("Queries: " + queries);
 
                 // Save queries
-                for (String sql : queries) {
-                    if (sql != null) {
-                        Query query = new Query(sql.replace("'", "\""));
-                        ctrl.getDb().getMetaDb().getQueries().save(query);
-                    }
+                for (DbQuery query : queries) {
+                    ctrl.getDb().getMetaDb().getQueries().save(query);
                 }
             }
             case "change" -> {
                 // Update record & get queries
                 Organization organization = ctrl.getDb().getMetaDb().getOrganizations().getAll().firstElement();
                 organization.setName(organization.getName().equals("ORG_1") ? "ORG_2" : "ORG_1");
-                Vector<String> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
                 System.out.println("Queries: " + queries);
 
                 // Save queries
-                for (String sql : queries) {
-                    Query query = new Query(sql.replace("'", "\""));
+                for (DbQuery query : queries) {
                     ctrl.getDb().getMetaDb().getQueries().save(query);
                 }
             }

@@ -1,7 +1,5 @@
 package be.vsol.database.model;
 
-import be.vsol.vsol6.model.Query;
-
 import java.util.Vector;
 import java.util.function.Supplier;
 
@@ -17,18 +15,23 @@ public class DbTable<R extends DbRecord> {
         this.supplier = supplier;
     }
 
-    public Vector<String> save(R r) {
-        Vector<String> queries = new Vector<>();
+    /**
+     * [Create and] save the object
+     * @param r the generic object to be saved
+     * @return A vector with [the INSERT query and] the UPDATE query
+     */
+    public Vector<DbQuery> save(R r) {
+        Vector<DbQuery> result = new Vector<>();
 
-        if (r.getId() == null) {
-            queries.add(db.getDriver().insertRecord(this, r));
-        } else if (!db.getDriver().exists(db, "SELECT * FROM " + getName() + " WHERE id = '" + r.getId() + "'")) {
-            queries.add(db.getDriver().insertRecord(this, r));
+        if (r.getId() == null || !db.getDriver().exists(db, "SELECT * FROM " + getName() + " WHERE id = '" + r.getId() + "'")) {
+            DbQuery insertQuery = db.getDriver().insertRecord(this, r);
+            result.add(insertQuery);
         }
 
-        queries.add(db.getDriver().updateRecord(this, r));
+        DbQuery updateQuery = db.getDriver().updateRecord(this, r);
+        result.add(updateQuery);
 
-        return queries;
+        return result;
     }
 
     public Vector<R> getAll() { return getAll(false); }
@@ -47,17 +50,14 @@ public class DbTable<R extends DbRecord> {
             if (where != null && !where.isBlank()) {
                 query += " WHERE " + where;
             }
-            if(orderBy != null && !orderBy.isBlank()) {
-                query += " ORDER BY " + orderBy;
-            }
         } else {
             query += " WHERE NOT deleted";
             if (where != null && !where.isBlank()) {
                 query += " AND " + where;
             }
-            if(orderBy != null && !orderBy.isBlank()) {
-                query += " ORDER BY " + orderBy;
-            }
+        }
+        if (orderBy != null && !orderBy.isBlank()) {
+            query += " ORDER BY " + orderBy;
         }
 
         RS rs = db.query(query);

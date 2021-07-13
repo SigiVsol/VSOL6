@@ -1,14 +1,9 @@
 package be.vsol.database.connection;
 
 import be.vsol.database.db;
-import be.vsol.database.model.Database;
-import be.vsol.database.model.DbRecord;
-import be.vsol.database.model.DbTable;
-import be.vsol.database.model.RS;
+import be.vsol.database.model.*;
 import be.vsol.util.Log;
 import be.vsol.util.Uid;
-import be.vsol.vsol6.model.Query;
-import be.vsol.vsol6.model.config.Setting;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -31,19 +26,19 @@ public abstract class DbDriver {
 
     public abstract Connection getConnection(String dbname);
 
-    public boolean exists(Database db, String sql) {
-        RS rs = query(db, sql);
+    public boolean exists(Database db, String query) {
+        RS rs = query(db, query);
         boolean exists = rs.next();
         rs.close();
         return exists;
     }
 
-    public RS query(Database db, String sql) {
+    public RS query(Database db, String query) {
 //        Log.out("SQL> " + sql);
         RS rs = null;
         try {
             Statement statement = (db == null ? this.connection : db.getConnection()).createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(query);
             rs = new RS(resultSet);
         } catch (SQLException e) {
             Log.trace(e);
@@ -51,11 +46,11 @@ public abstract class DbDriver {
         return rs;
     }
 
-    public void update(Database db, String sql) {
-        Log.out(protocol + (db == null ? "" : " (" + db.getName()) + ")" + " > " + sql);
+    public void update(Database db, String query) {
+        Log.out(protocol + (db == null ? "" : " (" + db.getName()) + ")" + " > " + query);
         try {
             Statement statement = (db == null ? this.connection : db.getConnection()).createStatement();
-            statement.executeUpdate(sql);
+            statement.executeUpdate(query);
         } catch (SQLException e) {
             Log.trace(e);
         }
@@ -85,21 +80,21 @@ public abstract class DbDriver {
 
     public abstract <R extends DbRecord> void matchStructure(DbTable<R> dbTable);
 
-    public <R extends DbRecord> String insertRecord(DbTable<R> dbTable, R record) {
+    public <R extends DbRecord> DbQuery insertRecord(DbTable<R> dbTable, R record) {
         if (record.getId() == null) {
             record.setId(Uid.getRandom());
         }
         record.setCreatedTime(Instant.now());
 
-        String sql = "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')";
+        String query = "INSERT INTO " + dbTable.getName() + "(id, createdTime) VALUES ('" + record.getId() + "', '" + getString(record.getCreatedTime()) + "')";
 
-        update(dbTable.getDb(), sql);
+        update(dbTable.getDb(), query);
 
-        return sql;
+        return new DbQuery(dbTable.getName(), record.getId(), query, DbQuery.Type.INSERT);
     }
 
-    public <R extends DbRecord> String updateRecord(DbTable<R> dbTable, R record) {
-        String query = "";
+    public <R extends DbRecord> DbQuery updateRecord(DbTable<R> dbTable, R record) {
+        String sql = "";
 
         R current = getRecord(dbTable, record.getId());
 
@@ -116,58 +111,58 @@ public abstract class DbDriver {
 
                 if (field.get(record) == null) { // new value is null -> only update if the old value isn't null (type doesn't matter)
                     if (!currentlyNull) {
-                        query += (query.isEmpty() ? "" : ", ") + name + " = NULL";
+                        sql += (sql.isEmpty() ? "" : ", ") + name + " = NULL";
                     }
                 } else { // new value isn't null -> check the type and update if needed
                     if (field.getType().isEnum()) {
                         if (currentlyNull || !field.get(current).equals(field.get(record))) {
-                            query += (query.isEmpty() ? "" : ", ") + name + " = '" + Enum.valueOf(field.getType().asSubclass(Enum.class), field.get(record).toString()) + "'";
+                            sql += (sql.isEmpty() ? "" : ", ") + name + " = '" + Enum.valueOf(field.getType().asSubclass(Enum.class), field.get(record).toString()) + "'";
                         }
                     } else {
                         switch (field.getType().getSimpleName()) {
                             case "boolean" -> {
                                 if (currentlyNull || field.getBoolean(current) != field.getBoolean(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getBoolean(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getBoolean(record);
                                 }
                             }
                             case "int" -> {
                                 if (currentlyNull || field.getInt(current) != field.getInt(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getInt(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getInt(record);
                                 }
                             }
                             case "long" -> {
                                 if (currentlyNull || field.getLong(current) != field.getLong(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getLong(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getLong(record);
                                 }
                             }
                             case "short" -> {
                                 if (currentlyNull || field.getShort(current) != field.getShort(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getShort(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getShort(record);
                                 }
                             }
                             case "double" -> {
                                 if (currentlyNull || field.getDouble(current) != field.getDouble(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getDouble(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getDouble(record);
                                 }
                             }
                             case "float" -> {
                                 if (currentlyNull || field.getFloat(current) != field.getFloat(record)) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.getFloat(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.getFloat(record);
                                 }
                             }
                             case "Boolean", "Integer", "Long", "Short", "Double", "Float" -> {
                                 if (currentlyNull || !field.get(current).equals(field.get(record))) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = " + field.get(record);
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = " + field.get(record);
                                 }
                             }
                             case "String" -> {
                                 if (currentlyNull || !field.get(current).equals(field.get(record))) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = '" + field.get(record) + "'";
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = '" + field.get(record) + "'";
                                 }
                             }
                             case "Instant" -> { // TODO check for LocalDate, LocalTime, LocalDateTime and Instant
                                 if (currentlyNull || !field.get(current).equals(field.get(record))) {
-                                    query += (query.isEmpty() ? "" : ", ") + name + " = '" + getString((Instant) field.get(record)) + "'";
+                                    sql += (sql.isEmpty() ? "" : ", ") + name + " = '" + getString((Instant) field.get(record)) + "'";
                                 }
                             }
                         }
@@ -178,12 +173,13 @@ public abstract class DbDriver {
             Log.trace(e);
         }
 
-        if (!query.isEmpty()) {
-            String sql = "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + query + " WHERE id = '" + record.getId() + "'";
-            update(dbTable.getDb(), sql);
-            return sql;
+        if (!sql.isEmpty()) {
+            String query = "UPDATE " + dbTable.getName() + " SET updatedTime = '" + getString(Instant.now()) + "', " + sql + " WHERE id = '" + record.getId() + "'";
+            update(dbTable.getDb(), query);
+            return new DbQuery(dbTable.getName(), record.getId(), query, DbQuery.Type.UPDATE);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public <R extends DbRecord> R getRecord(DbTable<R> dbTable, String id) {

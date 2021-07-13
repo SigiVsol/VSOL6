@@ -6,6 +6,9 @@ import be.vsol.tools.json;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Subclasses MUST include an empty constructor for reflection!
+ */
 public abstract class DbRecord {
 
     @json @db(primaryKey = true, length = 36, auto = true) protected String id;

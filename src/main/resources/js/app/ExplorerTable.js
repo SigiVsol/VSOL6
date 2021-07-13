@@ -17,15 +17,23 @@ export class ExplorerTable {
         $("#divExplorerTable .th-patients-reference").click(() => this.setSort("reference"));
     }
     fill() {
-        switch (this.app.getTab()) {
-            case "patients":
-                this.fillPatients();
-                break;
-            case "studies":
-                this.fillStudies();
-                break;
-            default:
-                this.fillClients();
+        if (this.app.getPatient() != null) {
+            this.fillStudies();
+        }
+        else if (this.app.getClient() != null) {
+            this.fillPatients();
+        }
+        else {
+            switch (this.app.getTab()) {
+                case "patients":
+                    this.fillPatients();
+                    break;
+                case "studies":
+                    this.fillStudies();
+                    break;
+                default:
+                    this.fillClients();
+            }
         }
     }
     resize() {
@@ -68,7 +76,8 @@ export class ExplorerTable {
     fillPatients() {
         $("#divExplorerTable .explorer-table").css("display", "none");
         let tbody = $("<tbody></tbody>");
-        API.getJson(this.url("patients"), json => {
+        let request = this.app.getClient() == null ? "patients" : "clients/" + this.app.getClient().getId() + "/patients";
+        API.getJson(this.url(request), json => {
             this.explorer.setNumRows(json.availableRows);
             for (let patient of Patient.fromRows(json.rows)) {
                 let tr = $("<tr></tr>");

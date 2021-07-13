@@ -13,7 +13,7 @@ public class Db {
 
     private final DbDriver driver;
 
-    private final SystemDb systemDb; // TODO delete when refactored
+//    private final SystemDb systemDb; // TODO delete when refactored
 
     private final MetaDb metaDb;
     private final Vector<OrganizationDb> organizationDbs = new Vector<>();
@@ -27,15 +27,20 @@ public class Db {
             case postgresql -> new PostgreSQL(config.db.host, config.db.port, config.db.user, config.db.password);
         };
 
-        systemDb = new SystemDb(driver);
+//        systemDb = new SystemDb(driver);
         metaDb = new MetaDb(driver);
     }
 
     public void start() {
         driver.start();
 
-        systemDb.connect();
+//        systemDb.connect();
         metaDb.connect();
+
+        // TODO fill organizationDbs
+        for (OrganizationDb organizationDb : organizationDbs) {
+            organizationDb.connect();
+        }
 
         active = true;
     }
@@ -46,9 +51,11 @@ public class Db {
 
     // Getters
 
-    public SystemDb getSystemDb() { return systemDb; }
+//    public SystemDb getSystemDb() { return systemDb; }
 
     public MetaDb getMetaDb() { return metaDb;}
+
+    public Vector<OrganizationDb> getOrganizationDbs() { return organizationDbs; }
 
     public boolean isActive() { return active; }
 

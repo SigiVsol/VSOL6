@@ -32,6 +32,8 @@ export class Explorer extends Content {
     }
     setTab(tab) {
         this.app.setTab(tab);
+        this.app.setClient(null);
+        this.app.setPatient(null);
         this.app.pushHistory();
     }
     setNumRows(numRows) {
@@ -42,10 +44,15 @@ export class Explorer extends Content {
         this.fill();
     }
     openClient(client) {
-        console.log("TODO: open client " + client.toString()); // TODO
+        this.app.setTab(null);
+        this.app.setPatient(null);
+        this.app.setClient(client);
+        this.app.pushHistory();
     }
     openPatient(patient) {
-        console.log("TODO: open patient " + patient.toString()); // TODO
+        this.app.setTab(null);
+        this.app.setPatient(patient);
+        this.app.pushHistory();
     }
     openStudy(study) {
         console.log("TODO: open study " + study.toString()); // TODO

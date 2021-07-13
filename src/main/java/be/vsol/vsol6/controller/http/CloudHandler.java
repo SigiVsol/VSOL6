@@ -1,11 +1,10 @@
 package be.vsol.vsol6.controller.http;
 
-import be.vsol.database.model.Database;
+import be.vsol.database.model.DbQuery;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
 import be.vsol.util.Json;
-import be.vsol.vsol6.model.Query;
 import be.vsol.vsol6.model.Update;
 import be.vsol.vsol6.model.database.MetaDb;
 import be.vsol.vsol6.model.meta.Network;
@@ -23,19 +22,19 @@ public class CloudHandler implements RequestHandler {
         this.metaDb = metaDb;
     }
 
-    @Override
-    public HttpResponse respond(HttpRequest request) {
+    @Override public HttpResponse respond(HttpRequest request) {
         String path = request.getPath();
         System.out.println("New client with request: " + path);
 
         if (path.matches("/sync/meta")) {
             System.out.println("sync queries");
             return syncQueries(request);
-        }else if(path.matches("/ack/meta")) {
+        } else if (path.matches("/ack/meta")) {
             System.out.println("sync updates");
             return syncUpdates(request);
         }
-        else if (path.matches("/sync/client/images")){
+        else if (path.matches("/sync/client/images")) {
+            // TODO
             System.out.println("sync images");
             return HttpResponse.get404();
         }
@@ -48,7 +47,7 @@ public class CloudHandler implements RequestHandler {
         try {
             JSONObject json = request.getBodyAsJSONObject();
             String computerId = json.getString("computerId");
-            String organization = json.getString("organizationId");
+            String organizationId = json.getString("organizationId");
             JSONArray jsonQueries = json.getJSONArray("queries");
 
             JSONObject jsonResponse = new JSONObject();
@@ -66,7 +65,7 @@ public class CloudHandler implements RequestHandler {
                 Vector<String> queryIds = syncQueries(computerId, jsonQueries, metaDb);
 
                 //send response
-                jsonResponse.put("organizationId", organization);
+                jsonResponse.put("organizationId", organizationId);
                 jsonResponse.put("queryIds", queryIds);
                 jsonResponse = addMetaUpdatesToJson(computerId, jsonResponse);
                 return new HttpResponse(jsonResponse);
@@ -74,7 +73,7 @@ public class CloudHandler implements RequestHandler {
                 return sendAllResponse(computerId);
             }
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -86,9 +85,9 @@ public class CloudHandler implements RequestHandler {
         Map<String, String> tableRecords = new HashMap<>();
         //save incoming UPDATE queries; if INSERT query, execute (once) instantly
         for (int i = 0; i < jsonQueries.length(); i++) {
-            Query query = Json.get(jsonQueries.getJSONObject(i), Query::new);
+            DbQuery query = Json.get(jsonQueries.getJSONObject(i), DbQuery::new);
 
-            if (query.getType() == Query.Type.UPDATE) {
+            if (query.getType() == DbQuery.Type.UPDATE) {
                 database.getQueries().save(query);
             } else {
                 database.update(query.getQuery());
@@ -98,7 +97,7 @@ public class CloudHandler implements RequestHandler {
         }
 
         //execute all (saved) queries involved and add updates
-        tableRecords.forEach((recordId,tableName) -> {
+        tableRecords.forEach((recordId, tableName) -> {
             executeInvolvedQueries(recordId);
             addUpdate(computerId, tableName, recordId);
         });
@@ -128,8 +127,8 @@ public class CloudHandler implements RequestHandler {
     }
 
     private void executeInvolvedQueries(String recordId) {
-        Vector<Query> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "'", " createdTime ASC");
-        for(Query query : queriesToExecute) {
+        Vector<DbQuery> queriesToExecute = metaDb.getQueries().getAll("recordId=" + "'" + recordId + "'", " createdTime ASC");
+        for(DbQuery query : queriesToExecute) {
             System.out.println(query.getQuery());
             metaDb.update(query.getQuery());
         }

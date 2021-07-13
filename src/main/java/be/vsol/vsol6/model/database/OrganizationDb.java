@@ -1,21 +1,12 @@
 package be.vsol.vsol6.model.database;
 
 import be.vsol.database.connection.DbDriver;
-import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.model.meta.Organization;
 
-public class OrganizationDb extends VsolDb {
+public class OrganizationDb extends SyncDb {
 
-    private final DbTable<Organization> organizations;
-
-    public OrganizationDb(DbDriver driver) {
-        super(driver, "organization");
-
-        organizations = new DbTable<>(this, "organizations", Organization::new);
+    public OrganizationDb(DbDriver driver, Organization organization) {
+        super(driver, "db_" + organization.getId());
     }
-
-    // Getters
-
-    public DbTable<Organization> getOrganizations() { return organizations; }
 
 }

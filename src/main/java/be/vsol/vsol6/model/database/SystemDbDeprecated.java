@@ -4,11 +4,11 @@ import be.vsol.database.connection.DbDriver;
 import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.model.meta.Computer;
 
-public class SystemDb extends VsolDb {
+public class SystemDbDeprecated extends VsolDbDeprecated {
 
     private final DbTable<Computer> systems;
 
-    public SystemDb(DbDriver driver) {
+    public SystemDbDeprecated(DbDriver driver) {
         super(driver, "local_system");
 
         systems = new DbTable<>(this, "systems", Computer::new);

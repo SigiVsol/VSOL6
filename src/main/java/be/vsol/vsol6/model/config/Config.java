@@ -41,12 +41,15 @@ public class Config {
 
                 String value = overrides.get(key);
 
-                switch (field.getType().getSimpleName()) {
-                    case "boolean" -> field.set(object, Bool.parse(value, false));
-                    case "int" -> field.set(object, Int.parse(value, 0));
-                    case "String" -> field.set(object, value);
-                    case "File" -> field.set(object, new File(value));
-                    case "Type" -> field.set(object, Enum.valueOf((Class<Enum>) field.getType(),value));
+                if (field.getType().isEnum()) {
+                    field.set(object, Enum.valueOf(field.getType().asSubclass(Enum.class), value));
+                } else {
+                    switch (field.getType().getSimpleName()) {
+                        case "boolean" -> field.set(object, Bool.parse(value, false));
+                        case "int" -> field.set(object, Int.parse(value, 0));
+                        case "String" -> field.set(object, value);
+                        case "File" -> field.set(object, new File(value));
+                    }
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
