@@ -16,7 +16,7 @@ public class Patient extends Record {
     @json @db private String name, chip, ueln, breed, species, sire, damsire, color;
     @json @db private Sex sex;
     @json @db private boolean neutered;
-    @json @db private LocalDate birthdate;
+    private LocalDate birthdate;
     @json private Client client = new Client(); // TODO for db -> create and use a reference-interface
 
     // Constructors

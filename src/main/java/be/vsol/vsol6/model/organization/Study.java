@@ -13,7 +13,7 @@ import java.util.Comparator;
 public class Study extends Record {
 
     @json @db private String description;
-    @json @db private LocalDateTime dateTime;
+    private LocalDateTime dateTime;
     @json @db private int seriesCount;
     @json private Patient patient;
     @json private String uid;
@@ -38,6 +38,7 @@ public class Study extends Record {
     // Methods
 
     public Vsol4Study getVsol4Study() {
+        //TODO: change null back to LocalDateTime
         return new Vsol4Study(id, description, dateTime, patient == null ? null : patient.getVsol4Patient(), seriesCount, uid);
     }
 

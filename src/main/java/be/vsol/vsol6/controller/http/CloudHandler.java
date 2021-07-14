@@ -171,7 +171,7 @@ public class CloudHandler implements RequestHandler {
                 if(syncDb.getName().equals("metadb")) {
                     object = getMetaObjectByRecordId(update.getTableName(), recordId);
                 }else{
-                    //TODO: remove casting
+                    //TODO: remove casting!?!
                     object = getOrganizationObjectByRecordId(update.getTableName(), recordId, (OrganizationDb) syncDb);
                 }
                 jsonUpdates.put(object);
@@ -240,28 +240,15 @@ public class CloudHandler implements RequestHandler {
         return object;
     }
 
-    private JSONObject getOrganizationObjectByRecordId(String tableName, String recordId) {
-        JSONObject object = new JSONObject();
-        object.put("tableName", tableName);
-
-        switch (tableName) {
-            case "organizations" -> object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
-        }
-        return object;
-    }
-
     private JSONObject getOrganizationObjectByRecordId(String tableName, String recordId, OrganizationDb organizationDb) {
         JSONObject object = new JSONObject();
         object.put("tableName", tableName);
 
         switch (tableName) {
-            case "organizations" -> object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
-            case "computer" -> object.put("record", Json.get(metaDb.getComputers().getById(recordId)));
-            case "computerSettings" -> object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
-            case "roles" -> object.put("record", Json.get(metaDb.getRoles().getById(recordId)));
-            case "users" -> object.put("record", Json.get(metaDb.getUsers().getById(recordId)));
-            case "userSettings" -> object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
-            case "networks" -> object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
+            case "clients" -> object.put("record", Json.get(organizationDb.getClients().getById(recordId)));
+            case "patients" -> object.put("record", Json.get(organizationDb.getPatients().getById(recordId)));
+            case "studies" -> object.put("record", Json.get(organizationDb.getStudies().getById(recordId)));
+            case "setting" -> object.put("record", Json.get(organizationDb.getSettings().getById(recordId)));
         }
         return object;
     }
