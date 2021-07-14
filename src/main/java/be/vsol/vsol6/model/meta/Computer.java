@@ -13,6 +13,12 @@ public class Computer extends DbRecord {
         code = Uid.getHardwareCode();
     }
 
+    // TestConstructor
+    public Computer(String code, String alias) {
+        this.code = code;
+        this.alias = alias;
+    }
+
     @Override public String toString() {
         return alias;
     }

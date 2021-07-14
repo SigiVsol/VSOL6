@@ -11,7 +11,7 @@ public class MetaDb extends SyncDb {
     private final DbTable<Computer> computers;
     private final DbTable<Network> networks;
     private final DbTable<User> users;
-    private final DbTable<Roles> roles;
+    private final DbTable<Role> roles;
     private final DbTable<UserSetting> userSettings;
     private final DbTable<ComputerSetting> computerSettings;
 
@@ -22,7 +22,7 @@ public class MetaDb extends SyncDb {
         computers = new DbTable<>(this, "computers", Computer::new);
         networks = new DbTable<>(this, "networks", Network::new);
         users = new DbTable<>(this, "users", User::new);
-        roles = new DbTable<>(this, "roles", Roles::new);
+        roles = new DbTable<>(this, "roles", Role::new);
         userSettings = new DbTable<>(this, "user_settings", UserSetting::new);
         computerSettings = new DbTable<>(this, "computer_settings", ComputerSetting::new);
     }
@@ -37,7 +37,7 @@ public class MetaDb extends SyncDb {
 
     public DbTable<User> getUsers() { return users; }
 
-    public DbTable<Roles> getRoles() { return roles; }
+    public DbTable<Role> getRoles() { return roles; }
 
     public DbTable<UserSetting> getUserSettings() { return userSettings; }
 

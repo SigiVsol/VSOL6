@@ -9,7 +9,10 @@ import be.vsol.util.Json;
 import be.vsol.util.Log;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.meta.Computer;
+import be.vsol.vsol6.model.meta.Network;
 import be.vsol.vsol6.model.meta.Organization;
+import be.vsol.vsol6.model.meta.Role;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -61,20 +64,53 @@ public class Console implements Runnable {
                     System.out.println(user.getFirstName());
                 }
             }
+            case "fillServerDb" -> {
+                // META
+                for (int i = 1; i <= 5; i++) {
+                    Organization organization = new Organization("ORG" + i);
+                    ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                    for (int j = 1; j <= 5; j++) {
+                        String userName = "user" + i * 100 + j;
+                        User user = new User(userName, null, null, userName + "@org" + i + ".test");
+                        ctrl.getDb().getMetaDb().getUsers().save(user);
+                        Role role = new Role(organization.getId(), user.getId(), j == 1 ? Role.Type.ADMIN : Role.Type.USER);
+                        ctrl.getDb().getMetaDb().getRoles().save(role);
+                    }
+                    for (int k = 1; k <= 5; k++) {
+                        String computerCode = String.valueOf(i * 1000 + k);
+                        Computer computer = new Computer(computerCode, "alias" + computerCode);
+                        ctrl.getDb().getMetaDb().getComputers().save(computer);
+                        Network network = new Network(organization.getId(), computer.getId());
+                        ctrl.getDb().getMetaDb().getNetworks().save(network);
+                    }
+                }
+            }
             case "sync" -> {
-                // Request (queries) & Response
+                // Request (queries)
                 JSONObject syncRequest = new JSONObject();
                 syncRequest.put("computerId", "comp1");
-                syncRequest.put("organizationId", "VSOL");
                 syncRequest.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
+                JSONArray syncOrgs = new JSONArray();
+                {
+                    JSONObject org = new JSONObject();
+                    org.put("id", "VSOL");
+                    org.put("queries", "");
+                    syncOrgs.put(org);
+                }
+                syncRequest.put("orgs", syncOrgs);
                 System.out.println("Request: " + syncRequest);
                 HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync/meta", syncRequest);
                 HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
+
+                // Response
                 JSONObject response = httpResponse.getBodyAsJSONObject();
                 System.out.println("Response: " + response);
+                JSONArray queryIds = response.getJSONArray("queryIds");
+                JSONArray updates = response.getJSONArray("updates");
+                JSONArray updateIds = response.getJSONArray("updateIds");
+                JSONArray orgs = response.getJSONArray("orgs");
 
                 // Delete queries
-                JSONArray queryIds = response.getJSONArray("queryIds");
                 for (int i = 0; i < queryIds.length(); i++) {
                     String queryId = queryIds.getString(i);
                     DbQuery query = ctrl.getDb().getMetaDb().getQueries().getById(queryId);
@@ -83,15 +119,17 @@ public class Console implements Runnable {
                 }
 
                 // Update records
-                JSONArray updates = response.getJSONArray("updates");
-                System.out.println("'updates' : " + updates);
                 for (int i = 0; i < updates.length(); i++) {
                     JSONObject update = updates.getJSONObject(i);
+                    JSONObject record =  update.getJSONObject("record");
                     switch (update.getString("tableName")) {
                         case "organizations" -> {
-                            JSONObject record =  update.getJSONObject("record");
                             Organization organization = Json.get(record, Organization::new);
                             ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                        }
+                        case "users" -> {
+                            User user = Json.get(record, User::new);
+                            ctrl.getDb().getMetaDb().getUsers().save(user);
                         }
                     }
                 }
@@ -99,8 +137,12 @@ public class Console implements Runnable {
                 // Send Ack
                 JSONObject ack = new JSONObject();
                 ack.put("computerId", "comp1");
-                ack.put("organizationId", response.getString("organizationId"));
-                ack.put("updateIds", response.getJSONArray("updateIds"));
+                ack.put("updateIds", updateIds);
+                for (int i = 0; i < orgs.length(); i++) {
+                    JSONObject orgAck = orgs.getJSONObject(i);
+                    orgAck.remove("updates");
+                }
+                ack.put("orgs", orgs);
                 System.out.println("ack: " + ack);
                 HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/ack/meta", ack);
                 Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, requestAck);
@@ -109,7 +151,7 @@ public class Console implements Runnable {
                 // Save new record & get queries
                 Organization organization = new Organization("ORG_1");
                 Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
-                User user = new User("user1");
+                User user = new User("user1", null, null, "user1@vsol.test");
                 queries.addAll(ctrl.getDb().getMetaDb().getUsers().save(user));
                 System.out.println("Queries: " + queries);
 
