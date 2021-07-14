@@ -12,9 +12,11 @@ public class User extends Record {
 
     public User() { }
 
-    // TestConstructor
-    public User(String username) {
+    public User(String username, String firstName, String lastName, String email) {
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public User(Vsol4User vsol4User) {
