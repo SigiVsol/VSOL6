@@ -88,18 +88,18 @@ public class Console implements Runnable {
             case "sync" -> {
                 // Request (queries)
                 JSONObject syncRequest = new JSONObject();
-                syncRequest.put("computerId", "comp1");
+                syncRequest.put("computerId", "11b36713-559f-487a-b790-b0ae203115d5");
                 syncRequest.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
-                JSONArray syncOrgs = new JSONArray();
-                {
-                    JSONObject org = new JSONObject();
-                    org.put("id", "VSOL");
-                    org.put("queries", "");
-                    syncOrgs.put(org);
-                }
-                syncRequest.put("orgs", syncOrgs);
+//                JSONArray syncOrgs = new JSONArray();
+//                {
+//                    JSONObject org = new JSONObject();
+//                    org.put("id", "VSOL");
+//                    org.put("queries", "");
+//                    syncOrgs.put(org);
+//                }
+//                syncRequest.put("organization", syncOrgs);
                 System.out.println("Request: " + syncRequest);
-                HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync/meta", syncRequest);
+                HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync", syncRequest);
                 HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
 
                 // Response
@@ -108,7 +108,7 @@ public class Console implements Runnable {
                 JSONArray queryIds = response.getJSONArray("queryIds");
                 JSONArray updates = response.getJSONArray("updates");
                 JSONArray updateIds = response.getJSONArray("updateIds");
-                JSONArray orgs = response.getJSONArray("orgs");
+//                JSONArray orgs = response.getJSONArray("organizations");
 
                 // Delete queries
                 for (int i = 0; i < queryIds.length(); i++) {
@@ -120,9 +120,9 @@ public class Console implements Runnable {
 
                 // Update records
                 for (int i = 0; i < updates.length(); i++) {
-                    JSONObject update = updates.getJSONObject(i);
-                    JSONObject record =  update.getJSONObject("record");
-                    switch (update.getString("tableName")) {
+                    String tableName = updates.getJSONObject(i).getString("tableName");
+                    JSONObject record =  updates.getJSONObject(i).getJSONObject("record");
+                    switch (tableName) {
                         case "organizations" -> {
                             Organization organization = Json.get(record, Organization::new);
                             ctrl.getDb().getMetaDb().getOrganizations().save(organization);
@@ -131,20 +131,32 @@ public class Console implements Runnable {
                             User user = Json.get(record, User::new);
                             ctrl.getDb().getMetaDb().getUsers().save(user);
                         }
+                        case "roles" -> {
+                            Role role = Json.get(record, Role::new);
+                            ctrl.getDb().getMetaDb().getRoles().save(role);
+                        }
+                        case "computers" -> {
+                            Computer computer = Json.get(record, Computer::new);
+                            ctrl.getDb().getMetaDb().getComputers().save(computer);
+                        }
+                        case "networks" -> {
+                            Network network = Json.get(record, Network::new);
+                            ctrl.getDb().getMetaDb().getNetworks().save(network);
+                        }
                     }
                 }
 
                 // Send Ack
                 JSONObject ack = new JSONObject();
-                ack.put("computerId", "comp1");
+                ack.put("computerId", "11b36713-559f-487a-b790-b0ae203115d5");
                 ack.put("updateIds", updateIds);
-                for (int i = 0; i < orgs.length(); i++) {
-                    JSONObject orgAck = orgs.getJSONObject(i);
-                    orgAck.remove("updates");
-                }
-                ack.put("orgs", orgs);
+//                for (int i = 0; i < orgs.length(); i++) {
+//                    JSONObject orgAck = orgs.getJSONObject(i);
+//                    orgAck.remove("updates");
+//                }
+//                ack.put("organization", orgs);
                 System.out.println("ack: " + ack);
-                HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/ack/meta", ack);
+                HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/ack", ack);
                 Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, requestAck);
             }
             case "add" -> {
