@@ -167,7 +167,13 @@ public class CloudHandler implements RequestHandler {
         for(Update update : dbUpdates) {
             String recordId = update.getRecordId();
             if(!recordIds.contains(recordId)) {
-                JSONObject object = getObjectInJsonByRecordId(update.getTableName(),recordId);
+                JSONObject object;
+                if(syncDb.getName().equals("metadb")) {
+                    object = getMetaObjectByRecordId(update.getTableName(), recordId);
+                }else{
+                    //TODO: remove casting
+                    object = getOrganizationObjectByRecordId(update.getTableName(), recordId, (OrganizationDb) syncDb);
+                }
                 jsonUpdates.put(object);
                 recordIds.add(recordId);
             }
@@ -218,18 +224,44 @@ public class CloudHandler implements RequestHandler {
         return object;
     }
 
-    private JSONObject getObjectInJsonByRecordId(String tableName, String recordId) {
+    private JSONObject getMetaObjectByRecordId(String tableName, String recordId) {
         JSONObject object = new JSONObject();
         object.put("tableName", tableName);
 
         switch (tableName) {
             case "organizations" -> object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
             case "computer" -> object.put("record", Json.get(metaDb.getComputers().getById(recordId)));
-            case "computer_setting" -> object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
+            case "computerSettings" -> object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
             case "roles" -> object.put("record", Json.get(metaDb.getRoles().getById(recordId)));
             case "users" -> object.put("record", Json.get(metaDb.getUsers().getById(recordId)));
-            case "user_setting" -> object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
-            case "network" -> object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
+            case "userSettings" -> object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
+            case "networks" -> object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
+        }
+        return object;
+    }
+
+    private JSONObject getOrganizationObjectByRecordId(String tableName, String recordId) {
+        JSONObject object = new JSONObject();
+        object.put("tableName", tableName);
+
+        switch (tableName) {
+            case "organizations" -> object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
+        }
+        return object;
+    }
+
+    private JSONObject getOrganizationObjectByRecordId(String tableName, String recordId, OrganizationDb organizationDb) {
+        JSONObject object = new JSONObject();
+        object.put("tableName", tableName);
+
+        switch (tableName) {
+            case "organizations" -> object.put("record", Json.get(metaDb.getOrganizations().getById(recordId)));
+            case "computer" -> object.put("record", Json.get(metaDb.getComputers().getById(recordId)));
+            case "computerSettings" -> object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
+            case "roles" -> object.put("record", Json.get(metaDb.getRoles().getById(recordId)));
+            case "users" -> object.put("record", Json.get(metaDb.getUsers().getById(recordId)));
+            case "userSettings" -> object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
+            case "networks" -> object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
         }
         return object;
     }
@@ -247,7 +279,7 @@ public class CloudHandler implements RequestHandler {
     private OrganizationDb getOrganisationDb(String organizationId) {
         OrganizationDb selected = null;
         for(OrganizationDb organizationDb: organizationDbs) {
-            if(organizationDb.getName().equals("db_" + organizationId)){
+            if(organizationDb.getName().equals("db_" + organizationId.replace("-", "_"))){
                 selected = organizationDb;
                 break;
             }
