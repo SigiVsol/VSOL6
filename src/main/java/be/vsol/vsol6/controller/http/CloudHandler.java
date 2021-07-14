@@ -9,6 +9,7 @@ import be.vsol.util.Json;
 import be.vsol.vsol6.model.Update;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.database.MetaDb;
+import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.database.SyncDb;
 import be.vsol.vsol6.model.meta.*;
 import org.json.JSONArray;
@@ -19,9 +20,11 @@ import java.util.*;
 public class CloudHandler implements RequestHandler {
 
     private final MetaDb metaDb;
+    private final Vector<OrganizationDb> organizationDbs;
 
-    public CloudHandler(MetaDb metaDb) {
+    public CloudHandler(MetaDb metaDb, Vector<OrganizationDb> organizationDbs) {
         this.metaDb = metaDb;
+        this.organizationDbs = organizationDbs;
     }
 
     @Override public HttpResponse respond(HttpRequest request) {
@@ -63,10 +66,11 @@ public class CloudHandler implements RequestHandler {
                         jsonResponse = addUpdatesToJson(computerId,jsonResponse, metaDb);
                         metaUpdatesAdded = true;
                     }
-//                    JSONObject organization = new JSONObject();
-//                    organization.put("queryIds", syncQueries(computerId, queries, orgDb);
-//                    organization = addUpdatesToJson(computerId, organization, orgDb);
-//                    jsonResponse.append("organizations", organization);
+                    OrganizationDb organizationDb = getOrganisationDb(network.getOrganizationId());
+                    JSONObject organization = new JSONObject();
+                    organization.put("queryIds", syncQueries(computerId, queries, organizationDb));
+                    organization = addUpdatesToJson(computerId, organization, organizationDb);
+                    jsonResponse.append("organizations", organization);
 
                 }else{
                     jsonResponse.put("queryIds", new JSONArray());
@@ -122,12 +126,13 @@ public class CloudHandler implements RequestHandler {
             Vector<Network> networks = metaDb.getNetworks().getAll("computerId='" + computerId + "'", null);
             for(Network network: networks) {
                 if (network.isInitialized()) {
-//                    JSONArray orgUpdates = getFromOrganizationJson(json.getJSONArray("organizations"), network.getOrganizationId(), "updateIds");
-//                    for(int i = 0; i < orgUpdates.length(); i++) {
-//                        Update update = orgDb.getUpdates().get("id=" +  "'" + orgUpdates.getString(i) + "'");
-//                        update.setDeleted(true);
-//                        orgDb.getUpdates().save(update);
-//                    }
+                    OrganizationDb organizationDb = getOrganisationDb(network.getOrganizationId());
+                    JSONArray orgUpdates = getFromOrganizationJson(json.getJSONArray("organizations"), network.getOrganizationId(), "updateIds");
+                    for(int i = 0; i < orgUpdates.length(); i++) {
+                        Update update = organizationDb.getUpdates().get("id=" +  "'" + orgUpdates.getString(i) + "'");
+                        update.setDeleted(true);
+                        organizationDb.getUpdates().save(update);
+                    }
                 }else{
                     network.setInitialized();
                     metaDb.getNetworks().save(network);
@@ -175,7 +180,7 @@ public class CloudHandler implements RequestHandler {
     private JSONArray getAllMetaInJson(String computerId, String organizationId) {
         JSONArray metaObjects = new JSONArray();
 
-        Vector<Organization> organizations = metaDb.getOrganizations().getAll("organizationId=" +  "'" + organizationId + "'",null);
+        Vector<Organization> organizations = metaDb.getOrganizations().getAll("id=" +  "'" + organizationId + "'",null);
         for(Organization organization: organizations) {
             metaObjects.put(getObjectinJson("organization", organization));
         }
@@ -222,7 +227,7 @@ public class CloudHandler implements RequestHandler {
             case "computer" -> object.put("record", Json.get(metaDb.getComputers().getById(recordId)));
             case "computer_setting" -> object.put("record", Json.get(metaDb.getComputerSettings().getById(recordId)));
             case "roles" -> object.put("record", Json.get(metaDb.getRoles().getById(recordId)));
-            case "users" -> object.put("users", Json.get(metaDb.getUsers().getById(recordId)));
+            case "users" -> object.put("record", Json.get(metaDb.getUsers().getById(recordId)));
             case "user_setting" -> object.put("record", Json.get(metaDb.getUserSettings().getById(recordId)));
             case "network" -> object.put("record", Json.get(metaDb.getNetworks().getById(recordId)));
         }
@@ -237,5 +242,16 @@ public class CloudHandler implements RequestHandler {
             }
         }
         return new JSONArray();
+    }
+
+    private OrganizationDb getOrganisationDb(String organizationId) {
+        OrganizationDb selected = null;
+        for(OrganizationDb organizationDb: organizationDbs) {
+            if(organizationDb.getName().equals("db_" + organizationId)){
+                selected = organizationDb;
+                break;
+            }
+        }
+        return selected;
     }
 }

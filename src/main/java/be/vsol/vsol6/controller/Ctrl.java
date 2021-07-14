@@ -115,7 +115,7 @@ public class Ctrl {
     }
 
     private void startCloud(Config config) {
-        cloud.start(config.cloud.port, new CloudHandler(db.getMetaDb()));
+        cloud.start(config.cloud.port, new CloudHandler(db.getMetaDb(), db.getOrganizationDbs()));
     }
 
     private void startFujiDR() {
