@@ -13,7 +13,7 @@ import java.util.Comparator;
 public class Client extends Record {
 
     @json @db private String lastName, firstName, company, phone, email, street, postal, city, country, via, extraInfo;
-    @json @db private Language language;
+    @json @db private Language language = Language.nl;
 
     // Constructors
 
