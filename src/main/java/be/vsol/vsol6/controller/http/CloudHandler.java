@@ -12,6 +12,10 @@ import be.vsol.vsol6.model.database.MetaDb;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.database.SyncDb;
 import be.vsol.vsol6.model.meta.*;
+import be.vsol.vsol6.model.organization.Client;
+import be.vsol.vsol6.model.organization.Patient;
+import be.vsol.vsol6.model.organization.Setting;
+import be.vsol.vsol6.model.organization.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,6 +55,7 @@ public class CloudHandler implements RequestHandler {
     private HttpResponse syncQueries(HttpRequest request) {
         try {
             JSONObject json = request.getBodyAsJSONObject();
+            System.out.println("REQUEST" + json);
             String computerId = json.getString("computerId");
             JSONArray queries = json.getJSONArray("queries");
 
@@ -59,26 +64,34 @@ public class CloudHandler implements RequestHandler {
             Vector<Network> networks = metaDb.getNetworks().getAll("computerId='" + computerId + "'", null);
             boolean metaUpdatesAdded = false;
             for (Network network : networks) {
+                OrganizationDb organizationDb = getOrganisationDb(network.getOrganizationId());
+                JSONObject organization = new JSONObject();
+                organization.put("id", network.getOrganizationId());
                 if (network.isInitialized()) {
                     //Check meta updates for all organizations, so no need do it more then once
                     if(!metaUpdatesAdded) {
                         jsonResponse.put("queryIds", syncQueries(computerId,queries,metaDb));
-                        jsonResponse = addUpdatesToJson(computerId,jsonResponse, metaDb);
+                        addUpdatesToJson(computerId,jsonResponse, metaDb);
                         metaUpdatesAdded = true;
                     }
-                    OrganizationDb organizationDb = getOrganisationDb(network.getOrganizationId());
-                    JSONObject organization = new JSONObject();
-                    organization.put("id", network.getOrganizationId());
-                    organization.put("queryIds", syncQueries(computerId, queries, organizationDb));
-                    organization = addUpdatesToJson(computerId, organization, organizationDb);
-                    jsonResponse.append("organizations", organization);
 
+                    organization.put("queryIds", syncQueries(computerId, queries, organizationDb));
+                    addUpdatesToJson(computerId, organization, organizationDb);
                 }else{
-                    jsonResponse.put("queryIds", new JSONArray());
-                    jsonResponse.put("updates", getAllMetaInJson(computerId, network.getOrganizationId()));
-                    jsonResponse.put("updateIds", new JSONArray());
+
+                    if(!metaUpdatesAdded) {
+                        jsonResponse.put("queryIds", new JSONArray());
+                        jsonResponse.put("updateIds", new JSONArray());
+                        jsonResponse.put("updates", new JSONArray());
+                        metaUpdatesAdded = true;
+                    }
+
+                    getAllMetaInJson(computerId, network.getOrganizationId(), jsonResponse.getJSONArray("updates"));
+                    getAllOrganizationInJson(organizationDb, organization);
                 }
+                jsonResponse.append("organizations", organization);
             }
+            System.out.println("RESPONSE" + jsonResponse);
             return new HttpResponse(jsonResponse);
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,6 +128,7 @@ public class CloudHandler implements RequestHandler {
     private HttpResponse syncUpdates(HttpRequest request) {
         try{
             JSONObject json = request.getBodyAsJSONObject();
+            System.out.println("REQUEST" + json);
             String computerId = json.getString("computerId");
             JSONArray metaUpdates = json.getJSONArray("updateIds");
 
@@ -139,7 +153,7 @@ public class CloudHandler implements RequestHandler {
                     metaDb.getNetworks().save(network);
                 }
             }
-
+            System.out.println("RESPONSE:" + "OK");
             return new HttpResponse("OK");
 
         } catch (Exception e) {
@@ -185,39 +199,65 @@ public class CloudHandler implements RequestHandler {
         return jsonObject;
     }
 
-    private JSONArray getAllMetaInJson(String computerId, String organizationId) {
-        JSONArray metaObjects = new JSONArray();
+    private void getAllMetaInJson(String computerId, String organizationId, JSONArray updates) {
 
         Vector<Organization> organizations = metaDb.getOrganizations().getAll("id=" +  "'" + organizationId + "'",null);
         for(Organization organization: organizations) {
-            metaObjects.put(getObjectinJson("organization", organization));
+            updates.put(getObjectinJson("organizations", organization));
         }
 
         Vector<Role> roles = metaDb.getRoles().getAll("organizationId=" +  "'" + organizationId + "'",null);
         for(Role role: roles) {
-            metaObjects.put(getObjectinJson("roles", role));
+            updates.put(getObjectinJson("roles", role));
 
             User user = metaDb.getUsers().getById(role.getUserId());
-            metaObjects.put(getObjectinJson("users", user));
+            updates.put(getObjectinJson("users", user));
 
             Vector<UserSetting> userSettings = metaDb.getUserSettings().getAll("userId=" +  "'" + role.getUserId() + "'",null);
             for(UserSetting userSetting: userSettings) {
-                metaObjects.put(getObjectinJson("userSettings", userSetting));
+                updates.put(getObjectinJson("userSettings", userSetting));
             }
         }
         //TODO: Do we need to send computer DBRecord?
         Computer computer = metaDb.getComputers().getById(computerId);
-        metaObjects.put(getObjectinJson("computers", computer));
+        updates.put(getObjectinJson("computers", computer));
 
         Vector<ComputerSetting> computerSettings = metaDb.getComputerSettings().getAll("computerId=" +  "'" + computerId + "'",null);
         for(ComputerSetting computerSetting: computerSettings) {
-            metaObjects.put(getObjectinJson("computerSetting", computerSetting));
+            updates.put(getObjectinJson("computerSettings", computerSetting));
         }
 
         //TODO: Networks doesn't have to be shared with the computers?
-
-        return metaObjects;
     }
+    private JSONObject getAllOrganizationInJson(OrganizationDb organizationDb, JSONObject organization) {
+        JSONArray orgObjects = new JSONArray();
+
+        Vector<Client> clients = organizationDb.getClients().getAll();
+        for(Client client: clients) {
+            orgObjects.put(getObjectinJson("clients", client));
+        }
+
+        Vector<Patient> patients = organizationDb.getPatients().getAll();
+        for(Patient patient: patients) {
+            orgObjects.put(getObjectinJson("patients", patient));
+        }
+
+        Vector<Setting> settings = organizationDb.getSettings().getAll();
+        for(Setting setting: settings) {
+            orgObjects.put(getObjectinJson("settings", setting));
+        }
+
+        Vector<Study> studies = organizationDb.getStudies().getAll();
+        for(Study study: studies) {
+            orgObjects.put(getObjectinJson("studies", study));
+        }
+
+        organization.put("queryIds", new JSONArray());
+        organization.put("updateIds", new JSONArray());
+        organization.put("updates", orgObjects);
+        return organization;
+    }
+
 
     private JSONObject getObjectinJson(String tableName, DbRecord record) {
         JSONObject object = new JSONObject();
