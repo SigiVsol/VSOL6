@@ -43,6 +43,8 @@ export class Explorer extends Content {
 
     private setTab(tab : string) : void {
         this.app.setTab(tab);
+        this.app.setClient(null);
+        this.app.setPatient(null);
         this.app.pushHistory();
     }
 
@@ -56,11 +58,16 @@ export class Explorer extends Content {
     }
 
     public openClient(client : Client) : void {
-        console.log("TODO: open client " + client.toString()); // TODO
+        this.app.setTab(null);
+        this.app.setPatient(null);
+        this.app.setClient(client);
+        this.app.pushHistory();
     }
 
     public openPatient(patient : Patient) : void {
-        console.log("TODO: open patient " + patient.toString()); // TODO
+        this.app.setTab(null);
+        this.app.setPatient(patient);
+        this.app.pushHistory();
     }
 
     public openStudy(study : Study) : void {

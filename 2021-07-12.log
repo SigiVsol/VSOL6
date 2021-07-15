@@ -1,5 +1,0 @@
-16:58:34 sqlite (test_db) > CREATE TABLE cars (id VARCHAR(36) NOT NULL PRIMARY KEY, deleted BOOLEAN NOT NULL DEFAULT false, createdTime DATETIME(3) DEFAULT NULL, updatedTime DATETIME(3) DEFAULT NULL, brand VARCHAR(100) DEFAULT '', model VARCHAR(50) DEFAULT NULL, year INT NOT NULL DEFAULT 0)
-16:58:34 sqlite (test_db) > INSERT INTO cars(id, createdTime) VALUES ('64161765-be0d-4bcd-8cf1-1afbbdb924a4', '2021-07-12 14:58:34.118')
-16:58:34 sqlite (test_db) > UPDATE cars SET updatedTime = '2021-07-12 14:58:34.143', brand = 'Mercedes', model = 'A Class', year = 2019 WHERE id = '64161765-be0d-4bcd-8cf1-1afbbdb924a4'
-16:58:36 sqlite (test_db) > INSERT INTO cars(id, createdTime) VALUES ('13bb0081-47d9-4f53-95ae-8fa602563309', '2021-07-12 14:58:36.446')
-16:58:36 sqlite (test_db) > UPDATE cars SET updatedTime = '2021-07-12 14:58:36.493', brand = 'Mercedes', model = 'A Class', year = 2019 WHERE id = '13bb0081-47d9-4f53-95ae-8fa602563309'
