@@ -12,12 +12,10 @@ import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.database.MetaDb;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.database.SyncDb;
-import be.vsol.vsol6.model.meta.Computer;
-import be.vsol.vsol6.model.meta.Network;
-import be.vsol.vsol6.model.meta.Organization;
-import be.vsol.vsol6.model.meta.Role;
+import be.vsol.vsol6.model.meta.*;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
+import be.vsol.vsol6.model.organization.Setting;
 import be.vsol.vsol6.model.organization.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -186,16 +184,16 @@ public class Console implements Runnable {
             case "sync" -> {
                 // Request (queries)
                 JSONObject syncRequest = new JSONObject();
-                syncRequest.put("computerId", "11b36713-559f-487a-b790-b0ae203115d5");
+                syncRequest.put("computerId", "comp3");
                 syncRequest.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
-                JSONArray syncOrgs = new JSONArray();
+                JSONArray syncOrganizations = new JSONArray();
                 for (OrganizationDb organizationDb : ctrl.getDb().getOrganizationDbs()) {
-                    JSONObject org = new JSONObject();
-                    org.put("id", organizationDb.getName().substring(3).replace("_", "-"));
-                    org.put("queries", organizationDb.getQueries().getAll());
-                    syncOrgs.put(org);
+                    JSONObject syncOrg = new JSONObject();
+                    syncOrg.put("id", organizationDb.getName().substring(3).replace("_", "-"));
+                    syncOrg.put("queries", organizationDb.getQueries().getAll());
+                    syncOrganizations.put(syncOrg);
                 }
-                syncRequest.put("organization", syncOrgs);
+                syncRequest.put("organizations", syncOrganizations);
                 System.out.println("Request: " + syncRequest);
                 HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync", syncRequest);
                 HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
@@ -206,7 +204,7 @@ public class Console implements Runnable {
                 JSONArray queryIds = response.getJSONArray("queryIds");
                 JSONArray updates = response.getJSONArray("updates");
                 JSONArray updateIds = response.getJSONArray("updateIds");
-                JSONArray orgs = response.getJSONArray("organizations");
+                JSONArray organizations = response.getJSONArray("organizations");
 
                 // Delete meta queries
                 deleteQueries(ctrl.getDb().getMetaDb(), queryIds);
@@ -215,34 +213,32 @@ public class Console implements Runnable {
                 updateRecords(ctrl.getDb().getMetaDb(), updates);
 
                 // Org
-                for (int i = 0; i < orgs.length(); i++) {
-                    JSONObject org = orgs.getJSONObject(i);
+                for (int i = 0; i < organizations.length(); i++) {
+                    JSONObject org = organizations.getJSONObject(i);
                     String organizationId = org.getString("id");
                     JSONArray orgQueryIds = org.getJSONArray("queryIds");
                     JSONArray orgUpdates = org.getJSONArray("updates");
                     JSONArray orgUpdateIds = org.getJSONArray("updateIds");
 
-                    for (OrganizationDb organizationDb : ctrl.getDb().getOrganizationDbs()) {
-                        if (organizationDb.getName().equals("db_" + organizationId.replaceAll("-", "_"))) {
+                    OrganizationDb organizationDb = ctrl.getDb().getOrganizationDb(organizationId);
 
-                            // Delete org queries
-                            deleteQueries(organizationDb, orgQueryIds);
+                    // Delete org queries
+                    deleteQueries(organizationDb, orgQueryIds);
 
-                            // Update org records
-                            updateRecords(organizationDb, orgUpdates);
-                        }
-                    }
+                    // Update org records
+                    updateRecords(organizationDb, orgUpdates);
                 }
 
                 // Send Ack
                 JSONObject ack = new JSONObject();
-                ack.put("computerId", "11b36713-559f-487a-b790-b0ae203115d5");
+                ack.put("computerId", "comp3");
                 ack.put("updateIds", updateIds);
-                for (int i = 0; i < orgs.length(); i++) {
-                    JSONObject orgAck = orgs.getJSONObject(i);
+                for (int i = 0; i < organizations.length(); i++) {
+                    JSONObject orgAck = organizations.getJSONObject(i);
+                    orgAck.remove("queryIds");
                     orgAck.remove("updates");
                 }
-                ack.put("organizations", orgs);
+                ack.put("organizations", organizations);
                 System.out.println("ack: " + ack);
                 HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/ack", ack);
                 Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, requestAck);
@@ -309,23 +305,31 @@ public class Console implements Runnable {
         switch (tableName) {
             case "organizations" -> {
                 Organization organization = Json.get(record, Organization::new);
-                ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+                metaDb.getOrganizations().save(organization);
             }
             case "users" -> {
                 User user = Json.get(record, User::new);
-                ctrl.getDb().getMetaDb().getUsers().save(user);
+                metaDb.getUsers().save(user);
             }
             case "roles" -> {
                 Role role = Json.get(record, Role::new);
-                ctrl.getDb().getMetaDb().getRoles().save(role);
+                metaDb.getRoles().save(role);
             }
             case "computers" -> {
                 Computer computer = Json.get(record, Computer::new);
-                ctrl.getDb().getMetaDb().getComputers().save(computer);
+                metaDb.getComputers().save(computer);
             }
             case "networks" -> {
                 Network network = Json.get(record, Network::new);
-                ctrl.getDb().getMetaDb().getNetworks().save(network);
+                metaDb.getNetworks().save(network);
+            }
+            case "user_settings" -> {
+                UserSetting userSetting = Json.get(record, UserSetting::new);
+                metaDb.getUserSettings().save(userSetting);
+            }
+            case "computer_settings" -> {
+                ComputerSetting computerSetting = Json.get(record, ComputerSetting::new);
+                metaDb.getComputerSettings().save(computerSetting);
             }
         }
     }
@@ -343,6 +347,10 @@ public class Console implements Runnable {
             case "studies" -> {
                 Study study = Json.get(record, Study::new);
                 organizationDb.getStudies().save(study);
+            }
+            case "settings" -> {
+                Setting setting = Json.get(record, Setting::new);
+                organizationDb.getSettings().save(setting);
             }
         }
     }
