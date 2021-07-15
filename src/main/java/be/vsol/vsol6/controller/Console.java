@@ -9,6 +9,7 @@ import be.vsol.util.Json;
 import be.vsol.util.Log;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
+import be.vsol.vsol6.model.database.MetaDb;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.meta.Computer;
 import be.vsol.vsol6.model.meta.Network;
@@ -16,6 +17,7 @@ import be.vsol.vsol6.model.meta.Organization;
 import be.vsol.vsol6.model.meta.Role;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
+import com.teamdev.jxbrowser.deps.org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -67,39 +69,119 @@ public class Console implements Runnable {
                     System.out.println(user.getFirstName());
                 }
             }
-            case "fillMetaDb" -> {
-                for (int i = 1; i <= 2; i++) {
-                    Organization organization = new Organization("org" + i);
-                    ctrl.getDb().getMetaDb().getOrganizations().save(organization);
-                    for (int j = 1; j <= 2; j++) {
-                        String userName = "user" + i * 100 + j;
-                        User user = new User(userName, null, null, userName + "@org" + i + ".test");
-                        ctrl.getDb().getMetaDb().getUsers().save(user);
-                        Role role = new Role(organization.getId(), user.getId(), j == 1 ? Role.Type.ADMIN : Role.Type.USER);
-                        ctrl.getDb().getMetaDb().getRoles().save(role);
-                    }
-                    for (int k = 1; k <= 2; k++) {
-                        String computerCode = "org" + i * 100 + k;
-                        Computer computer = new Computer(computerCode, "alias_" + computerCode);
-                        ctrl.getDb().getMetaDb().getComputers().save(computer);
-                        Network network = new Network(organization.getId(), computer.getId());
-                        ctrl.getDb().getMetaDb().getNetworks().save(network);
-                    }
-                }
+            case "metadb" -> {
+                MetaDb metaDb = ctrl.getDb().getMetaDb();
+                Organization org1 = new Organization("Veterinary Solutions");
+                org1.setId("veterinarysolutions");
+                Organization org2 = new Organization("Animal Solutions");
+                org2.setId("animalsolutions");
+                metaDb.getOrganizations().save(org1);
+                metaDb.getOrganizations().save(org2);
+                User user1 = new User("Sigi", "Sigi", "Janssens", "sigi@janssens.be");
+                user1.setId("sigi");
+                User user2 = new User("Juriën", "Juriën", "GeenIdee", "jurien@geenidee.be");
+                user2.setId("jurien");
+                User user3 = new User("Pieter", "Pieter", "Olaerts", "pieter@olaerts.be");
+                user3.setId("pieter");
+                User user4 = new User("Mathias", "Mathias", "MVG", "mathias@mbg.be");
+                user4.setId("mathias");
+                metaDb.getUsers().save(user1);
+                metaDb.getUsers().save(user2);
+                metaDb.getUsers().save(user3);
+                metaDb.getUsers().save(user4);
+                Role role1 = new Role(org1.getId(), user1.getId(), Role.Type.ADMIN);
+                role1.setId("role1");
+                Role role2 = new Role(org2.getId(), user1.getId(), Role.Type.USER);
+                role2.setId("role2");
+                Role role3 = new Role(org2.getId(), user2.getId(), Role.Type.ADMIN);
+                role3.setId("role3");
+                Role role4 = new Role(org1.getId(), user3.getId(), Role.Type.USER);
+                role4.setId("role4");
+                Role role5 = new Role(org1.getId(), user4.getId(), Role.Type.USER);
+                role5.setId("role5");
+                metaDb.getRoles().save(role1);
+                metaDb.getRoles().save(role2);
+                metaDb.getRoles().save(role3);
+                metaDb.getRoles().save(role4);
+                metaDb.getRoles().save(role5);
+                Computer comp1 = new Computer("comp1", "comp1");
+                comp1.setId("comp1");
+                Computer comp2 = new Computer("comp2", "comp2");
+                comp2.setId("comp2");
+                Computer comp3 = new Computer("comp3", "comp3");
+                comp3.setId("comp3");
+                metaDb.getComputers().save(comp1);
+                metaDb.getComputers().save(comp2);
+                metaDb.getComputers().save(comp3);
+                Network network1 = new Network(org1.getId(), comp1.getId());
+                Network network2 = new Network(org2.getId(), comp2.getId());
+                Network network3 = new Network(org1.getId(), comp3.getId());
+                Network network4 = new Network(org2.getId(), comp3.getId());
+                network1.setId("network1");
+                network2.setId("network2");
+                network3.setId("network3");
+                network4.setId("network4");
+                metaDb.getNetworks().save(network1);
+                metaDb.getNetworks().save(network2);
+                metaDb.getNetworks().save(network3);
+                metaDb.getNetworks().save(network4);
             }
-            case "fillOrgDb" -> {
-                ctrl.getDb().start();
-                for (int i = 1; i <= 2; i++) {
+
+            case "organizations" -> {
+                int i = 1;
+
+                for(OrganizationDb organizationDb : ctrl.getDb().getOrganizationDbs()) {
+
                     Client client = new Client();
-                    client.setLastName("client" + i);
-                    ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getClients().save(client));
+                    client.setLastName("Gandalf " + i);
+                    client.setId("Gandalf " + i);
+                    organizationDb.getClients().save(client);
+
                     for (int j = 1; j <= 2; j++) {
                         Patient patient = new Patient();
-                        patient.setName("patient" + j + "_client" + i);
-                        ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getPatients().save(patient));
+                        patient.setName("Shadowfax " +  j);
+                        patient.setId("Shadowfax " +  j + "_" + client.getId());
+                        organizationDb.getPatients().save(patient);
                     }
+                    i++;
                 }
             }
+
+
+//            case "fillMetaDb" -> {
+//                for (int i = 1; i <= 2; i++) {
+//                    Organization organization = new Organization("org" + i);
+//                    ctrl.getDb().getMetaDb().getOrganizations().save(organization);
+//                    for (int j = 1; j <= 2; j++) {
+//                        String userName = "user" + i * 100 + j;
+//                        User user = new User(userName, null, null, userName + "@org" + i + ".test");
+//                        ctrl.getDb().getMetaDb().getUsers().save(user);
+//                        Role role = new Role(organization.getId(), user.getId(), j == 1 ? Role.Type.ADMIN : Role.Type.USER);
+//                        ctrl.getDb().getMetaDb().getRoles().save(role);
+//                    }
+//                    for (int k = 1; k <= 2; k++) {
+//                        String computerCode = "org" + i * 100 + k;
+//                        Computer computer = new Computer(computerCode, "alias_" + computerCode);
+//                        ctrl.getDb().getMetaDb().getComputers().save(computer);
+//                        Network network = new Network(organization.getId(), computer.getId());
+//                        ctrl.getDb().getMetaDb().getNetworks().save(network);
+//                    }
+//                }
+//            }
+//            case "fillOrgDb" -> {
+//                ctrl.getDb().start();
+//                for (int i = 1; i <= 2; i++) {
+//                    Client client = new Client();
+//                    client.setLastName("client" + i);
+//                    ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getClients().save(client));
+//                    for (int j = 1; j <= 2; j++) {
+//                        Patient patient = new Patient();
+//                        patient.setName("patient" + j + "_client" + i);
+//                        ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getPatients().save(patient));
+//                    }
+//                }
+//            }
+
             case "sync" -> {
                 // Request (queries)
                 JSONObject syncRequest = new JSONObject();

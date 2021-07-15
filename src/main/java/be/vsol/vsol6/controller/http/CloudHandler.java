@@ -68,6 +68,7 @@ public class CloudHandler implements RequestHandler {
                     }
                     OrganizationDb organizationDb = getOrganisationDb(network.getOrganizationId());
                     JSONObject organization = new JSONObject();
+                    organization.put("id", network.getOrganizationId());
                     organization.put("queryIds", syncQueries(computerId, queries, organizationDb));
                     organization = addUpdatesToJson(computerId, organization, organizationDb);
                     jsonResponse.append("organizations", organization);
@@ -162,23 +163,24 @@ public class CloudHandler implements RequestHandler {
 
     private JSONObject addUpdatesToJson(String computerId, JSONObject jsonObject, SyncDb syncDb) {
         Vector<Update> dbUpdates = syncDb.getUpdates().getAll("computerId=" +  "'" + computerId + "'", null);
+        Vector<String> updateIds = new Vector<>();
         Set<String> recordIds = new HashSet<>();
         JSONArray jsonUpdates = new JSONArray();
         for(Update update : dbUpdates) {
             String recordId = update.getRecordId();
             if(!recordIds.contains(recordId)) {
                 JSONObject object;
-                if(syncDb.getName().equals("metadb")) {
+                if(syncDb instanceof MetaDb) {
                     object = getMetaObjectByRecordId(update.getTableName(), recordId);
                 }else{
-                    //TODO: remove casting!?!
                     object = getOrganizationObjectByRecordId(update.getTableName(), recordId, (OrganizationDb) syncDb);
                 }
                 jsonUpdates.put(object);
                 recordIds.add(recordId);
             }
-            jsonObject.append("updateIds", update.getId());
+           updateIds.add(update.getId());
         }
+        jsonObject.put("updateIds", updateIds);
         jsonObject.put("updates", jsonUpdates);
         return jsonObject;
     }

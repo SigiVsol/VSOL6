@@ -40,12 +40,7 @@ public class Db {
 
         Vector<Organization> organizations = metaDb.getOrganizations().getAll();
         for (Organization organization : organizations) {
-            OrganizationDb organizationDb = new OrganizationDb(driver, organization);
-            organizationDbs.add(organizationDb);
-        }
-        // TODO fill organizationDbs
-        for (OrganizationDb organizationDb : organizationDbs) {
-            organizationDb.connect();
+            addOrganizationDb(organization);
         }
 
         active = true;
@@ -65,4 +60,20 @@ public class Db {
 
     public boolean isActive() { return active; }
 
+    public void addOrganizationDb(Organization organization) {
+        OrganizationDb organizationDb = new OrganizationDb(driver, organization);
+        organizationDbs.add(organizationDb);
+        organizationDb.connect();
+    }
+
+    public OrganizationDb getOrganizationDb(String organizationId) {
+        OrganizationDb selected = null;
+        for(OrganizationDb organizationDb: organizationDbs) {
+            if(organizationDb.getName().equals("db_" + organizationId.replace("-", "_"))){
+                selected = organizationDb;
+                break;
+            }
+        }
+        return selected;
+    }
 }
