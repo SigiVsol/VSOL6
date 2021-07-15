@@ -5,6 +5,8 @@ import be.vsol.database.model.Database;
 import be.vsol.database.model.DbQuery;
 import be.vsol.database.model.DbTable;
 import be.vsol.vsol6.model.Update;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public abstract class SyncDb extends Database {
 
@@ -17,6 +19,17 @@ public abstract class SyncDb extends Database {
         queries = new DbTable<>(this, "queries", DbQuery::new);
         updates = new DbTable<>(this, "updates", Update::new);
     }
+
+    public void deleteQueries(JSONArray queryIds) {
+        for (int i = 0; i < queryIds.length(); i++) {
+            String id =  queryIds.getString(i);
+            DbQuery dbQuery = this.getQueries().getById(id);
+            dbQuery.setDeleted(true);
+            this.getQueries().save(dbQuery);
+        }
+    }
+
+    public abstract void updateRecords(JSONArray updates);
 
     // Getters
 
