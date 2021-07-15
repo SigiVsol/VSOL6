@@ -143,6 +143,6 @@ export class App {
     setUser(user) { this.user = user; }
     setOrganization(organization) { this.organization = organization; }
     setClient(client) { this.client = client; }
-    setPatient(patient) { this.patient = patient; this.client = patient == null ? null : patient.getClient(); }
+    setPatient(patient) { this.patient = patient; }
 }
 new App();

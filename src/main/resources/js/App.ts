@@ -159,7 +159,7 @@ export class App {
     public setUser(user : User) { this.user = user; }
     public setOrganization(organization : Organization) { this.organization = organization; }
     public setClient(client : Client) { this.client = client; }
-    public setPatient(patient : Patient) { this.patient = patient; this.client = patient == null ? null : patient.getClient(); }
+    public setPatient(patient : Patient) { this.patient = patient; }
 
 }
 

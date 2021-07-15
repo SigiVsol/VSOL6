@@ -1,19 +1,26 @@
 <div class="div-explorer-above-table">
-    <div>
-        <button class="btn-add-client ok"><img src="icon/add/16"> Add client</button>
-        <button class="btn-add-patient ok"><img src="icon/add/16"> Add patient</button>
-        <button class="btn-add-study ok"><img src="icon/add/16"> Add study</button>
+    <div class="div-explorer-main-toggle-bar">
+        <button class="tgl-clients">%{Client|2}</button><!--
+        --><button class="tgl-patients">%{Patient|2}</button><!--
+        --><button class="tgl-studies">%{Study|2}</button>
     </div>
 
-    <div>
-        <button class="tgl-clients">%{Clients}</button>
-        <button class="tgl-patients">%{Patients}</button>
-        <button class="tgl-studies">%{Studies}</button>
+    <div class="div-explorer-nav-bar">
+        <div class="div-explorer-breadcrumb-bar">
+            <button class="btn-home"><img src="icon/home/16"></button>
+            <button class="clients"><img src="icon/forward/16"> <span class="span-client"></span></button>
+            <button class="patients"><img src="icon/forward/16"> <span class="span-patient"></span></button>
+        </div>
+        <div class="div-explorer-add-bar">
+            <button class="btn-add-client ok"><img src="icon/add/16"> %{Client}</button>
+            <button class="btn-add-patient ok"><img src="icon/add/16"> %{Patient}</button>
+            <button class="btn-add-study ok"><img src="icon/add/16"> %{Study}</button>
+        </div>
     </div>
 
-    <div class="div-explorer-fiche">@{app/explorer-fiche.html}</div>
+    <div id="divExplorerFiche">@{app/explorer-fiche.html}</div> <!-- has own HTML, CSS and JS -->
 
-    <div>
+    <div class="div-filter-zone">
         <button class="btn-clear"><img src="icon/cancel/16"></button>
         <label><input class="txt-filter" type="text" placeholder="filter"></label>
         <button class="btn-search"><img src="icon/zoom/16"></button>
@@ -21,5 +28,5 @@
     </div>
 </div>
 
-<div id="divExplorerTable" class="div-explorer-table">@{app/explorer-table.html}</div>
+<div id="divExplorerTable">@{app/explorer-table.html}</div> <!-- has own HTML, CSS and JS -->
 

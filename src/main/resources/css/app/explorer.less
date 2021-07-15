@@ -1,17 +1,70 @@
 @import "../variables/colors";
 
 #divExplorer {
-  //padding: 5px;
-  //text-align: center;
-
   .div-explorer-above-table {
-    padding: 5px;
+    .div-explorer-main-toggle-bar {
+      text-align: center;
 
-    .div-explorer-fiche {
-      margin: 20px;
-      border: solid thin white;
-      border-radius: 5px;
+      button {
+        font-size: medium;
+        width: 150px;
+        border-width: 0 1px 1px 1px;
+        border-color: gray;
+        border-style: solid;
+      }
+      button:disabled {
+        opacity: 1.0;
+      }
+
+      .tgl-clients {
+        border-radius: 0 0 0 5px;
+      }
+      .tgl-clients:hover, .tgl-clients:disabled {
+        background-color: @clients;
+      }
+
+      .tgl-patients {
+        border-radius: 0;
+        border-width: 0 0 1px 0;
+      }
+      .tgl-patients:hover, .tgl-patients:disabled {
+        background-color: @patients;
+      }
+
+      .tgl-studies {
+        border-radius: 0 0 5px 0;
+      }
+      .tgl-studies:hover, .tgl-studies:disabled {
+        background-color: @entries;
+      }
     }
+
+    .div-explorer-nav-bar {
+      padding: 5px;
+      .div-explorer-breadcrumb-bar {
+        display: inline-block;
+        button {
+          font-size: medium;
+          border-radius: 10px 0 10px 0;
+        }
+        .btn-home {
+          background-color: gray;
+        }
+      }
+      .div-explorer-add-bar {
+        display: inline-block;
+        float: right;
+        button {
+          font-size: medium;
+        }
+      }
+    }
+
+    .div-filter-zone {
+      text-align: center;
+    }
+
+    @import "explorer-fiche";
   }
 
   @import "explorer-table";

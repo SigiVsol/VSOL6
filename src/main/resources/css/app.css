@@ -296,10 +296,65 @@ table tbody tr td {
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar {
+  text-align: center;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar button {
+  font-size: medium;
+  width: 150px;
+  border-width: 0 1px 1px 1px;
+  border-color: gray;
+  border-style: solid;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar button:disabled {
+  opacity: 1;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients {
+  border-radius: 0 0 0 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients:disabled {
+  background-color: #335c81;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients {
+  border-radius: 0;
+  border-width: 0 0 1px 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients:disabled {
+  background-color: #406869;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies {
+  border-radius: 0 0 5px 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies:disabled {
+  background-color: #73937e;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar {
   padding: 5px;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-fiche {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar {
+  display: inline-block;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar button {
+  font-size: medium;
+  border-radius: 10px 0 10px 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar .btn-home {
+  background-color: gray;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-add-bar {
+  display: inline-block;
+  float: right;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-add-bar button {
+  font-size: medium;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-filter-zone {
+  text-align: center;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table #divExplorerFiche {
   margin: 20px;
   border: solid thin white;
   border-radius: 5px;

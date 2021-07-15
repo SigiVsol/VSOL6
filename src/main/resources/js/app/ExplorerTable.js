@@ -37,7 +37,7 @@ export class ExplorerTable {
         }
     }
     resize() {
-        let height = this.app.getHeight() - $(".div-explorer-above-table").height() - 10;
+        let height = this.app.getHeight() - $(".div-explorer-above-table").height();
         $("#divExplorerTable").css("height", height + "px");
     }
     setSort(field) {
@@ -57,6 +57,8 @@ export class ExplorerTable {
     }
     fillClients() {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        $(".btn-add-client").css("display", "inline-block");
+        $(".tgl-clients").prop("disabled", true);
         let tbody = $("<tbody></tbody>");
         API.getJson(this.url("clients"), json => {
             this.explorer.setNumRows(json.availableRows);
@@ -75,6 +77,9 @@ export class ExplorerTable {
     }
     fillPatients() {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        if (this.app.getClient() != null)
+            $(".btn-add-patient").css("display", "inline-block");
+        $(".tgl-patients").prop("disabled", true);
         let tbody = $("<tbody></tbody>");
         let request = this.app.getClient() == null ? "patients" : "clients/" + this.app.getClient().getId() + "/patients";
         API.getJson(this.url(request), json => {
@@ -94,6 +99,9 @@ export class ExplorerTable {
     }
     fillStudies() {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        if (this.app.getPatient() != null)
+            $(".btn-add-study").css("display", "inline-block");
+        $(".tgl-studies").prop("disabled", true);
         let tbody = $("<tbody></tbody>");
         API.getJson(this.url("studies"), json => {
             this.explorer.setNumRows(json.availableRows);

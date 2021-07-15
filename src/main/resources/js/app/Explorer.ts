@@ -4,15 +4,18 @@ import {ExplorerTable} from "./ExplorerTable.js";
 import {Client} from "../model/Client.js";
 import {Patient} from "../model/Patient.js";
 import {Study} from "../model/Study.js";
+import {ExplorerFiche} from "./ExplorerFiche.js";
 
 export class Explorer extends Content {
 
     private table = new ExplorerTable(this);
-    // private fiche = new ExplorerFiche(this); // TODO
+    private fiche = new ExplorerFiche(this);
     private filterDelay = null;
 
     constructor(app : App) {
         super(app, "divExplorer");
+
+        $("#divExplorer .btn-home").click(() => this.setTab(null));
 
         $("#divExplorer .tgl-clients").click(() => this.setTab(null));
         $("#divExplorer .tgl-patients").click(() => this.setTab("patients"));
@@ -28,16 +31,32 @@ export class Explorer extends Content {
                 this.filterDelay = setTimeout(() => this.fill(), 500);
             }
         });
+
+        $("#divExplorer .div-explorer-breadcrumb-bar .clients").click(() => {
+            this.app.setPatient(null);
+            this.app.pushHistory();
+        });
     }
 
     public fill() : void {
         clearTimeout(this.filterDelay);
         super.show();
 
+        $("#divExplorer .div-explorer-main-toggle-bar").css("display", this.app.getClient() == null && this.app.getPatient() == null ? "block" : "none");
+        $("#divExplorer .div-explorer-add-bar button").css("display", "none");
+        $("#divExplorer .div-explorer-main-toggle-bar button").prop("disabled", false);
+        $("#divExplorer .div-explorer-breadcrumb-bar .clients").css("display", this.app.getClient() == null ? "none" : "inline-block");
+        $("#divExplorer .div-explorer-breadcrumb-bar .patients").css("display", this.app.getPatient() == null ? "none" : "inline-block");
+
+        if (this.app.getClient() != null) $("#divExplorer .span-client").text(this.app.getClient().getName());
+        if (this.app.getPatient() != null) $("#divExplorer .span-patient").text(this.app.getPatient().getName());
+
+        this.fiche.fill();
         this.table.fill();
     }
 
     public resize() : void {
+        this.fiche.resize();
         this.table.resize();
     }
 
@@ -67,6 +86,7 @@ export class Explorer extends Content {
     public openPatient(patient : Patient) : void {
         this.app.setTab(null);
         this.app.setPatient(patient);
+        this.app.setClient(patient.getClient());
         this.app.pushHistory();
     }
 

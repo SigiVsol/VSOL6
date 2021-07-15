@@ -47,7 +47,7 @@ export class ExplorerTable {
     }
 
     public resize() : void {
-        let height = this.app.getHeight() - $(".div-explorer-above-table").height() - 10;
+        let height = this.app.getHeight() - $(".div-explorer-above-table").height();
 
         $("#divExplorerTable").css("height", height + "px");
     }
@@ -68,6 +68,8 @@ export class ExplorerTable {
 
     private fillClients() : void {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        $(".btn-add-client").css("display", "inline-block");
+        $(".tgl-clients").prop("disabled", true);
 
         let tbody = $("<tbody></tbody>");
 
@@ -93,6 +95,8 @@ export class ExplorerTable {
 
     private fillPatients() : void {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        if (this.app.getClient() != null) $(".btn-add-patient").css("display", "inline-block");
+        $(".tgl-patients").prop("disabled", true);
 
         let tbody = $("<tbody></tbody>");
 
@@ -120,6 +124,8 @@ export class ExplorerTable {
 
     private fillStudies() : void {
         $("#divExplorerTable .explorer-table").css("display", "none");
+        if (this.app.getPatient() != null) $(".btn-add-study").css("display", "inline-block");
+        $(".tgl-studies").prop("disabled", true);
 
         let tbody = $("<tbody></tbody>");
 
