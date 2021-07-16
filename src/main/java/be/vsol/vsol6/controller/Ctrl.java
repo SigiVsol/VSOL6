@@ -118,7 +118,7 @@ public class Ctrl {
     }
 
     private void startCloud(Config config) {
-        cloud.start(config.cloud.port, new CloudHandler(db.getMetaDb(), db.getOrganizationDbs()));
+        cloud.start(config.cloud.port, new CloudHandler(db));
     }
 
     private void startSync(Config config) {
