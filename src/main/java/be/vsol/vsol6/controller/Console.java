@@ -207,10 +207,10 @@ public class Console implements Runnable {
                 JSONArray organizations = response.getJSONArray("organizations");
 
                 // Delete meta queries
-                deleteQueries(ctrl.getDb().getMetaDb(), queryIds);
+                ctrl.getDb().getMetaDb().deleteQueries(queryIds);
 
                 // Update meta records
-                updateRecords(ctrl.getDb().getMetaDb(), updates);
+                ctrl.getDb().getMetaDb().updateRecords(updates);
 
                 // Org
                 for (int i = 0; i < organizations.length(); i++) {
@@ -221,12 +221,17 @@ public class Console implements Runnable {
                     JSONArray orgUpdateIds = org.getJSONArray("updateIds");
 
                     OrganizationDb organizationDb = ctrl.getDb().getOrganizationDb(organizationId);
+                    if (organizationDb == null) {
+                        Organization organization = ctrl.getDb().getMetaDb().getOrganizations().getById(organizationId);
+                        ctrl.getDb().addOrganizationDb(organization);
+                        organizationDb = ctrl.getDb().getOrganizationDb(organizationId);
+                    }
 
                     // Delete org queries
-                    deleteQueries(organizationDb, orgQueryIds);
+                    organizationDb.deleteQueries(orgQueryIds);
 
                     // Update org records
-                    updateRecords(organizationDb, orgUpdates);
+                    organizationDb.updateRecords(orgUpdates);
                 }
 
                 // Send Ack
@@ -280,78 +285,4 @@ public class Console implements Runnable {
         System.out.println(Bytes.getSizeString(runtime.totalMemory() - runtime.freeMemory()));
     }
 
-    private void deleteQueries(SyncDb syncDb, JSONArray queryIds) {
-        for (int i = 0; i < queryIds.length(); i++) {
-            String queryId = queryIds.getString(i);
-            DbQuery query = syncDb.getQueries().getById(queryId);
-            query.setDeleted(true);
-            syncDb.getQueries().save(query);
-        }
-    }
-
-    private void updateRecords(SyncDb syncDb, JSONArray updates) {
-        for (int i = 0; i < updates.length(); i++) {
-            String tableName = updates.getJSONObject(i).getString("tableName");
-            JSONObject record = updates.getJSONObject(i).getJSONObject("record");
-            if (syncDb instanceof MetaDb) {
-                updateMetaRecord((MetaDb) syncDb, tableName, record);
-            } else {
-                updateOrgRecord((OrganizationDb) syncDb, tableName, record);
-            }
-        }
-    }
-
-    private void updateMetaRecord(MetaDb metaDb, String tableName, JSONObject record) {
-        switch (tableName) {
-            case "organizations" -> {
-                Organization organization = Json.get(record, Organization::new);
-                metaDb.getOrganizations().save(organization);
-            }
-            case "users" -> {
-                User user = Json.get(record, User::new);
-                metaDb.getUsers().save(user);
-            }
-            case "roles" -> {
-                Role role = Json.get(record, Role::new);
-                metaDb.getRoles().save(role);
-            }
-            case "computers" -> {
-                Computer computer = Json.get(record, Computer::new);
-                metaDb.getComputers().save(computer);
-            }
-            case "networks" -> {
-                Network network = Json.get(record, Network::new);
-                metaDb.getNetworks().save(network);
-            }
-            case "user_settings" -> {
-                UserSetting userSetting = Json.get(record, UserSetting::new);
-                metaDb.getUserSettings().save(userSetting);
-            }
-            case "computer_settings" -> {
-                ComputerSetting computerSetting = Json.get(record, ComputerSetting::new);
-                metaDb.getComputerSettings().save(computerSetting);
-            }
-        }
-    }
-
-    private void updateOrgRecord(OrganizationDb organizationDb, String tableName, JSONObject record) {
-        switch (tableName) {
-            case "clients" -> {
-                Client client = Json.get(record, Client::new);
-                organizationDb.getClients().save(client);
-            }
-            case "patients" -> {
-                Patient patient = Json.get(record, Patient::new);
-                organizationDb.getPatients().save(patient);
-            }
-            case "studies" -> {
-                Study study = Json.get(record, Study::new);
-                organizationDb.getStudies().save(study);
-            }
-            case "settings" -> {
-                Setting setting = Json.get(record, Setting::new);
-                organizationDb.getSettings().save(setting);
-            }
-        }
-    }
 }

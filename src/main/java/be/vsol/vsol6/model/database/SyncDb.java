@@ -24,6 +24,17 @@ public abstract class SyncDb extends Database {
         updates = new DbTable<>(this, "updates", Update::new);
     }
 
+    public void deleteQueries(JSONArray queryIds) {
+        for (int i = 0; i < queryIds.length(); i++) {
+            String id =  queryIds.getString(i);
+            DbQuery dbQuery = this.getQueries().getById(id);
+            dbQuery.setDeleted(true);
+            this.getQueries().save(dbQuery);
+        }
+    }
+
+    public abstract void updateRecords(JSONArray updates);
+
     // Getters
 
     public DbTable<DbQuery> getQueries() { return queries; }
