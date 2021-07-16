@@ -54,7 +54,7 @@ public class Sync {
 
     private JSONObject getRequestJson(JSONArray data) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("computerId", "comp2");
+        jsonObject.put("computerId", "comp3");
         jsonObject.put("data", data);
         return jsonObject;
     }
