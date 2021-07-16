@@ -57,34 +57,15 @@ public abstract class SyncDb extends Database {
         }
     }
 
-    public Vector<String> saveQueries(JSONArray jsonQueries) {
-        Vector<String> queryIds = new Vector<>();
-        Set<String> recordIds = new HashSet<>();
+    public DbQuery saveQuery(JSONObject jsonQuery) {
+        DbQuery query = Json.get(jsonQuery, DbQuery::new);
         //save incoming UPDATE queries; if INSERT query, execute (once) instantly
-        for (int i = 0; i < jsonQueries.length(); i++) {
-            DbQuery query = Json.get(jsonQueries.getJSONObject(i), DbQuery::new);
-
-            if (query.getType() == DbQuery.Type.UPDATE) {
-                queries.save(query);
-            } else {
-                update(query.getQuery());
-            }
-            recordIds.add(query.getRecordId());
-            queryIds.add(query.getId());
-
+        if (query.getType() == DbQuery.Type.UPDATE) {
+            queries.save(query);
+        } else {
+            update(query.getQuery());
         }
-
-        for(String recordId: recordIds) {
-            executeInvolvedQueries(recordId);
-        }
-
-        //execute all (saved) queries involved and add updates
-//        tableRecords.forEach((recordId, tableName) -> {
-//
-//            addUpdate(computerIds, tableName, recordId);
-//        });
-
-        return queryIds;
+        return query;
     }
 
     public void addUpdatesToJson(String computerId, JSONObject jsonObject) {

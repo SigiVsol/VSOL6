@@ -9,6 +9,7 @@ import be.vsol.vsol6.model.meta.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 public class MetaDb extends SyncDb {
@@ -85,6 +86,13 @@ public class MetaDb extends SyncDb {
     public DbTable<UserSetting> getUserSettings() { return userSettings; }
 
     public DbTable<ComputerSetting> getComputerSettings() { return computerSettings; }
+
+    public void handleUpdates(String computerId, HashMap<String,String> recordTableMap) {
+        recordTableMap.forEach((recordId, tableName) -> {
+            executeInvolvedQueries(recordId);
+            addUpdate(getMetaUpdates(computerId, tableName, recordId), tableName, recordId);
+        });
+    }
 
     public Vector<String> getMetaUpdates(String computerId, String tableName, String recordId) {
         Vector<String> ids = new Vector<>();

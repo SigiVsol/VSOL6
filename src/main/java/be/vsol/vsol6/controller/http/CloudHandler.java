@@ -1,5 +1,6 @@
 package be.vsol.vsol6.controller.http;
 
+import be.vsol.database.model.DbQuery;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.http.RequestHandler;
@@ -131,6 +132,32 @@ public class CloudHandler implements RequestHandler {
         }
 
         return HttpResponse.get400("Excepting a JSON with updateIds");
+    }
+
+    private Vector<String> handleQueries(JSONArray jsonQueries, SyncDb syncDb, String computerId, String organizationId) {
+
+        Vector<String> queryIds = new Vector<>();
+        HashMap<String,String> recordTableMap = new HashMap<>();
+
+        for (int i = 0; i < jsonQueries.length(); i++) {
+
+            DbQuery query = syncDb.saveQuery(jsonQueries.getJSONObject(i));
+            queryIds.add(query.getId());
+            recordTableMap.put(query.getRecordId(), query.getTableName());
+        }
+
+
+        if(organizationId != null) {
+            OrganizationDb orgDb = (OrganizationDb) syncDb;
+            orgDb.handleUpdates(database.getMetaDb().getUpdateOnOrganisation(computerId,organizationId),recordTableMap);
+        }else{
+            MetaDb metaDb = (MetaDb) syncDb;
+            metaDb.handleUpdates(computerId,recordTableMap);
+        }
+
+
+
+        return queryIds;
     }
 
     private JSONObject getFromJsonData(JSONArray organizations, String organizationId) {

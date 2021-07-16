@@ -14,6 +14,7 @@ import be.vsol.vsol6.model.organization.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 public class OrganizationDb extends SyncDb {
@@ -89,6 +90,14 @@ public class OrganizationDb extends SyncDb {
         organization.put("queryIds", new JSONArray());
         organization.put("records", orgObjects);
         organization.put("updateIds", new JSONArray());
+    }
+
+    public void handleUpdates(Vector<String> computerIds, HashMap<String,String> recordTableMap) {
+        //execute all queries involved and add updates
+        recordTableMap.forEach((recordId, tableName) -> {
+            executeInvolvedQueries(recordId);
+            addUpdate(computerIds, tableName, recordId);
+        });
     }
 
     @Override public JSONObject getObjectByRecordId(String tableName, String recordId) {
