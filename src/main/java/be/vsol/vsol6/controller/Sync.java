@@ -3,6 +3,7 @@ package be.vsol.vsol6.controller;
 import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
+import be.vsol.util.Json;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.meta.Organization;
 import org.json.JSONArray;
@@ -53,7 +54,7 @@ public class Sync {
 
     private JSONObject getRequestJson(JSONArray data) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("computerId", ctrl.getComputer().getId());
+        jsonObject.put("computerId", "comp2");
         jsonObject.put("data", data);
         return jsonObject;
     }
@@ -84,14 +85,22 @@ public class Sync {
 
     private void updateDbs(JSONArray data) {
         for (int i = 0; i < data.length(); i++) {
-            String organizationId = data.getJSONObject(i).getString("organizationId");
-            JSONArray queryIds = data.getJSONObject(i).getJSONArray("queryIds");
-            JSONArray records = data.getJSONObject(i).getJSONArray("records");
+            String organizationId = data.getJSONObject(i).optString("organizationId");
 
-            if (organizationId == JSONObject.NULL) {
+            if (organizationId.equals("")) {
+                JSONArray queryIds = data.getJSONObject(i).getJSONArray("queryIds");
+                JSONArray records = data.getJSONObject(i).getJSONArray("records");
                 ctrl.getDb().getMetaDb().deleteQueries(queryIds);
                 ctrl.getDb().getMetaDb().updateRecords(records);
-            } else {
+                break;
+            }
+        }
+        for (int i = 0; i < data.length(); i++) {
+            String organizationId = data.getJSONObject(i).optString("organizationId");
+
+            if (!organizationId.equals("")) {
+                JSONArray queryIds = data.getJSONObject(i).getJSONArray("queryIds");
+                JSONArray records = data.getJSONObject(i).getJSONArray("records");
                 OrganizationDb organizationDb = getOrCreateOrgDb(organizationId);
                 organizationDb.deleteQueries(queryIds);
                 organizationDb.updateRecords(records);

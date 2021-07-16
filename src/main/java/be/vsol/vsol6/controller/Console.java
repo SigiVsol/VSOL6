@@ -173,6 +173,14 @@ public class Console implements Runnable {
                     System.out.println("Queries: " + queries);
                 }
             }
+            case "change" -> {
+                OrganizationDb animalsolutions = ctrl.getDb().getOrganizationDb("animalsolutions");
+                Client gandalf = animalsolutions.getClients().getById("Gandalf 1");
+                gandalf.setLastName("Gandalf the grey");
+                Vector<DbQuery> queries = ctrl.getDb().getOrganizationDb("animalsolutions").getClients().save(gandalf);
+
+                queries.forEach(dbQuery -> animalsolutions.getQueries().save(dbQuery));
+            }
         }
     }
 
