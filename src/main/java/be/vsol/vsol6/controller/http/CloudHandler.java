@@ -58,9 +58,8 @@ public class CloudHandler implements RequestHandler {
             //Check meta updates for all organizations on computer
             JSONObject metaResponse = new JSONObject();
             metaResponse.put("organizationId", (String) null);
-            HashMap<String, String> updateRecords = new HashMap<>();
-            Vector<String> syncIds = metaDb.getMetaUpdates();
-            metaResponse.put("queryIds", metaDb.syncQueries(ge,meta.getJSONArray("queries")));
+
+            metaResponse.put("queryIds", metaDb.saveQueries(meta.getJSONArray("queries")));
             metaDb.addUpdatesToJson(computerId,metaResponse);
 
             //Check organizations updates
@@ -71,9 +70,8 @@ public class CloudHandler implements RequestHandler {
                 organizationResponse.put("id", network.getOrganizationId());
                 if (network.isInitialized()) {
                     JSONObject organization = getFromJsonData(data, network.getOrganizationId());
-                    syncIds = metaDb.getUpdateOnOrganisation(computerId, network.getOrganizationId());
-                    updateRecords = new HashMap<>();
-                    organizationResponse.put("queryIds", organizationDb.syncQueries(syncIds, organization.getJSONArray("queries"),updateRecords));
+
+                    organizationResponse.put("queryIds", organizationDb.saveQueries(organization.getJSONArray("queries")));
                     organizationDb.addUpdatesToJson(computerId, organizationResponse);
                 }else{
                     metaDb.addAllToJson(computerId, network.getOrganizationId(), metaResponse.getJSONArray("records"));

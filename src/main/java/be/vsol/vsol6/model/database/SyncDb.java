@@ -46,8 +46,9 @@ public abstract class SyncDb extends Database {
         }
     }
 
-    public Vector<String> syncQueries(Vector<String> computerIds, JSONArray jsonQueries, HashMap updateRecords) {
+    public Vector<String> saveQueries(JSONArray jsonQueries) {
         Vector<String> queryIds = new Vector<>();
+        Set<String> recordIds = new HashSet<>();
         //save incoming UPDATE queries; if INSERT query, execute (once) instantly
         for (int i = 0; i < jsonQueries.length(); i++) {
             DbQuery query = Json.get(jsonQueries.getJSONObject(i), DbQuery::new);
@@ -57,13 +58,18 @@ public abstract class SyncDb extends Database {
             } else {
                 update(query.getQuery());
             }
-            updateRecords.put(query.getRecordId(), query.getTableName());
+            recordIds.add(query.getRecordId());
             queryIds.add(query.getId());
+
+        }
+
+        for(String recordId: recordIds) {
+            executeInvolvedQueries(recordId);
         }
 
         //execute all (saved) queries involved and add updates
 //        tableRecords.forEach((recordId, tableName) -> {
-//            executeInvolvedQueries(recordId);
+//
 //            addUpdate(computerIds, tableName, recordId);
 //        });
 
