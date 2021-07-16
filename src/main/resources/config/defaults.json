@@ -59,5 +59,10 @@
 		"active": false,
 		"host": "192.168.1.180",
 		"port": 8101
+	},
+	"sync":{
+		"active": true,
+		"interval": 10,
+		"unit": "seconds"
 	}
 }

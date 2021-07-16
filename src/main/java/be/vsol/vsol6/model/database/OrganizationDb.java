@@ -33,27 +33,15 @@ public class OrganizationDb extends SyncDb {
         settings =  new DbTable<>(this, "settings", Setting::new);
     }
 
-    @Override public void updateRecords(JSONArray updates) {
-        for (int i = 0; i < updates.length(); i++) {
-            String tableName = updates.getJSONObject(i).getString("tableName");
-            JSONObject record = updates.getJSONObject(i).getJSONObject("record");
+    @Override public void updateRecords(JSONArray records) {
+        for (int i = 0; i < records.length(); i++) {
+            String tableName = records.getJSONObject(i).getString("tableName");
+            JSONObject record = records.getJSONObject(i).getJSONObject("record");
             switch (tableName) {
-                case "clients" -> {
-                    Client client = Json.get(record, Client::new);
-                    this.getClients().save(client);
-                }
-                case "patients" -> {
-                    Patient patient = Json.get(record, Patient::new);
-                    this.getPatients().save(patient);
-                }
-                case "studies" -> {
-                    Study study = Json.get(record, Study::new);
-                    this.getStudies().save(study);
-                }
-                case "settings" -> {
-                    Setting setting = Json.get(record, Setting::new);
-                    this.getSettings().save(setting);
-                }
+                case "clients" -> clients.save(Json.get(record, Client::new));
+                case "patients" -> patients.save(Json.get(record, Patient::new));
+                case "studies" -> studies.save(Json.get(record, Study::new));
+                case "settings" -> settings.save(Json.get(record, Setting::new));
             }
         }
     }

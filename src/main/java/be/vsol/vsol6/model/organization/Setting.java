@@ -6,20 +6,20 @@ import be.vsol.vsol6.model.Record;
 
 public class Setting extends Record {
 
-    @json @db private String settingName, value;
+    @json @db private String name, value;
 
     // Constructor
 
     public Setting() { }
 
-    public Setting(String settingName, String value) {
-        this.settingName = settingName;
+    public Setting(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
     // Getters
 
-    public String getSettingName() { return settingName; }
+    public String getName() { return name; }
 
     public String getValue() { return value; }
 }
