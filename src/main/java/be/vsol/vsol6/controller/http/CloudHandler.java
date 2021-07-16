@@ -58,7 +58,7 @@ public class CloudHandler implements RequestHandler {
 
             //Check meta updates for all organizations on computer
             JSONObject metaResponse = new JSONObject();
-            metaResponse.put("organizationId", (String) null);
+            metaResponse.put("organizationId", JSONObject.NULL);
 
             HashMap<String,String> recordTableMap = metaDb.saveQueries(meta.getJSONArray("queries"), metaResponse);
             metaDb.handleUpdates(computerId,recordTableMap);
@@ -69,11 +69,11 @@ public class CloudHandler implements RequestHandler {
             for (Network network : networks) {
                 OrganizationDb organizationDb = database.getOrganizationDb(network.getOrganizationId());
                 JSONObject organizationResponse = new JSONObject();
-                organizationResponse.put("id", network.getOrganizationId());
+                organizationResponse.put("organizationId", network.getOrganizationId());
 
                 if (network.isInitialized()) {
                     JSONObject organization = getFromJsonData(data, network.getOrganizationId());
-                    recordTableMap = organizationDb.saveQueries(organization.getJSONArray("queries"), organizationResponse);
+                    recordTableMap = organizationDb.saveQueries(organization.  getJSONArray("queries"), organizationResponse);
                     organizationDb.handleUpdates(metaDb.getUpdateOnOrganisation(computerId, network.getOrganizationId()),recordTableMap);
                     organizationDb.addUpdatesToJson(computerId, organizationResponse);
                 }else{
@@ -81,9 +81,9 @@ public class CloudHandler implements RequestHandler {
                     organizationDb.addAllToJson(organizationResponse);
                 }
 
-                jsonResponse.append("organizations", organizationResponse);
+                jsonResponse.append("data", organizationResponse);
             }
-            jsonResponse.append("organizations", metaResponse);
+            jsonResponse.append("data", metaResponse);
             System.out.println("RESPONSE" + jsonResponse);
             return new HttpResponse(jsonResponse);
         } catch (Exception e) {
@@ -105,17 +105,17 @@ public class CloudHandler implements RequestHandler {
 
             for(int i = 0; i < data.length(); i++) {
                 JSONObject organization = data.getJSONObject(i);
-                String organizationId = organization.getString("organizationId");
+                String organizationId = organization.optString("organizationId");
                 JSONArray updates = organization.getJSONArray("updateIds");
                 SyncDb syncDb;
                 //select correct database
-                if(organizationId == null) {
+                if(organizationId.equals("")) {
                     syncDb = metaDb;
                 }else{
                     syncDb = database.getOrganizationDb(organizationId);
                     Network network = metaDb.getNetworks().get("computerId='" + computerId + "' AND organizationId='" + organizationId + "'", null);
                     if(!network.isInitialized()) {
-                        network.setInitialized();
+                        network.setInitialized(true);
                         metaDb.getNetworks().save(network);
                     }
                 }
@@ -143,7 +143,7 @@ public class CloudHandler implements RequestHandler {
 
         for(int i = 0; i < organizations.length();i++) {
             JSONObject organization = organizations.getJSONObject(i);
-            if(organization.getString("id").equals(organizationId)) {
+            if(organization.get("organizationId").equals(organizationId)) {
                 selected = organization;
                 break;
             }

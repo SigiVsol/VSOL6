@@ -173,6 +173,22 @@ public class Console implements Runnable {
                     System.out.println("Queries: " + queries);
                 }
             }
+
+            case "uninit" -> {
+                var networkTable = ctrl.getDb().getMetaDb().getNetworks();
+                Network network = networkTable.getById("network4");
+                network.setInitialized(false);
+                networkTable.save(network);
+                System.out.println("Network uninit");
+            }
+
+            case "change" -> {
+                var clientTable = ctrl.getDb().getOrganizationDb("animalsolutions").getClients();
+                Client client = clientTable.getById("Gandalf 1");
+                client.setFirstName("Gandalf");
+                client.setLastName("the Grey");
+                clientTable.save(client);
+            }
         }
     }
 
