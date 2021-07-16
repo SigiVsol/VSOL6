@@ -123,7 +123,7 @@ public class MetaDb extends SyncDb {
         Vector<String> ids = new Vector<>();
         Vector<Network> records = networks.getAll("organizationId='" + organizationId + "'", null);
         for(Network network: records) {
-            if(computerId.equals(network.getComputerId())) {
+            if(!computerId.equals(network.getComputerId())) {
                 ids.add(network.getComputerId());
             }
         }

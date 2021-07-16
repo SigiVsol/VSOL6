@@ -191,11 +191,14 @@ public class Console implements Runnable {
             }
 
             case "change" -> {
-                var clientTable = ctrl.getDb().getOrganizationDb("animalsolutions").getClients();
+                OrganizationDb animalsolutions = ctrl.getDb().getOrganizationDb("animalsolutions");
+                var clientTable = animalsolutions.getClients();
                 Client client = clientTable.getById("Gandalf 1");
                 client.setFirstName("Gandalf");
                 client.setLastName("the Grey");
-                clientTable.save(client);
+                Vector<DbQuery> queries = clientTable.save(client);
+
+                queries.forEach(dbQuery -> animalsolutions.getQueries().save(dbQuery));
             }
         }
     }
