@@ -60,7 +60,8 @@ public class CloudHandler implements RequestHandler {
             JSONObject metaResponse = new JSONObject();
             metaResponse.put("organizationId", (String) null);
 
-            metaResponse.put("queryIds", metaDb.saveQueries(meta.getJSONArray("queries")));
+            HashMap<String,String> recordTableMap = metaDb.saveQueries(meta.getJSONArray("queries"), metaResponse);
+            metaDb.handleUpdates(computerId,recordTableMap);
             metaDb.addUpdatesToJson(computerId,metaResponse);
 
             //Check organizations updates
@@ -69,15 +70,17 @@ public class CloudHandler implements RequestHandler {
                 OrganizationDb organizationDb = database.getOrganizationDb(network.getOrganizationId());
                 JSONObject organizationResponse = new JSONObject();
                 organizationResponse.put("id", network.getOrganizationId());
+
                 if (network.isInitialized()) {
                     JSONObject organization = getFromJsonData(data, network.getOrganizationId());
-
-                    organizationResponse.put("queryIds", organizationDb.saveQueries(organization.getJSONArray("queries")));
+                    recordTableMap = organizationDb.saveQueries(organization.getJSONArray("queries"), organizationResponse);
+                    organizationDb.handleUpdates(metaDb.getUpdateOnOrganisation(computerId, network.getOrganizationId()),recordTableMap);
                     organizationDb.addUpdatesToJson(computerId, organizationResponse);
                 }else{
                     metaDb.addAllToJson(computerId, network.getOrganizationId(), metaResponse.getJSONArray("records"));
                     organizationDb.addAllToJson(organizationResponse);
                 }
+
                 jsonResponse.append("organizations", organizationResponse);
             }
             jsonResponse.append("organizations", metaResponse);
@@ -116,12 +119,7 @@ public class CloudHandler implements RequestHandler {
                         metaDb.getNetworks().save(network);
                     }
                 }
-                //save updates
-                for(int j = 0; i < updates.length(); j++) {
-                    Update update = syncDb.getUpdates().get("id=" +  "'" + updates.getString(j) + "'");
-                    update.setDeleted(true);
-                    metaDb.getUpdates().save(update);
-                }
+                syncDb.deleteUpdates(updates);
             }
 
             System.out.println("RESPONSE:" + "OK");
@@ -134,32 +132,12 @@ public class CloudHandler implements RequestHandler {
         return HttpResponse.get400("Excepting a JSON with updateIds");
     }
 
-    private Vector<String> handleQueries(JSONArray jsonQueries, SyncDb syncDb, String computerId, String organizationId) {
-
-        Vector<String> queryIds = new Vector<>();
-        HashMap<String,String> recordTableMap = new HashMap<>();
-
-        for (int i = 0; i < jsonQueries.length(); i++) {
-
-            DbQuery query = syncDb.saveQuery(jsonQueries.getJSONObject(i));
-            queryIds.add(query.getId());
-            recordTableMap.put(query.getRecordId(), query.getTableName());
-        }
-
-
-        if(organizationId != null) {
-            OrganizationDb orgDb = (OrganizationDb) syncDb;
-            orgDb.handleUpdates(database.getMetaDb().getUpdateOnOrganisation(computerId,organizationId),recordTableMap);
-        }else{
-            MetaDb metaDb = (MetaDb) syncDb;
-            metaDb.handleUpdates(computerId,recordTableMap);
-        }
-
-
-
-        return queryIds;
-    }
-
+    /**
+     * Function to retrieve the JSONObject (with updates) of an organization in a JSONArray by Id
+     * @param organizations     the JSONArray containing the organization object
+     * @param organizationId    the id of the organization
+     * @return the JSONObject of the organization, empty object if no organization was found with the given id
+     */
     private JSONObject getFromJsonData(JSONArray organizations, String organizationId) {
         JSONObject selected = new JSONObject();
 

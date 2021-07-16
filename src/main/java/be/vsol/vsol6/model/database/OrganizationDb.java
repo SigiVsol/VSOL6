@@ -68,6 +68,23 @@ public class OrganizationDb extends SyncDb {
 
     public DbTable<Setting> getSettings() { return settings; }
 
+    @Override public JSONObject getObjectByRecordId(String tableName, String recordId) {
+        JSONObject object = new JSONObject();
+        object.put("tableName", tableName);
+
+        switch (tableName) {
+            case "clients" -> object.put("record", Json.get(clients.getById(recordId)));
+            case "patients" -> object.put("record", Json.get(patients.getById(recordId)));
+            case "studies" -> object.put("record", Json.get(studies.getById(recordId)));
+            case "setting" -> object.put("record", Json.get(settings.getById(recordId)));
+        }
+        return object;
+    }
+
+    /**
+     * Function to add all records in this DB to a JSONObject
+     * @param organization  the JSONObject
+     */
     public void addAllToJson(JSONObject organization) {
         JSONArray orgObjects = new JSONArray();
 
@@ -100,16 +117,5 @@ public class OrganizationDb extends SyncDb {
         });
     }
 
-    @Override public JSONObject getObjectByRecordId(String tableName, String recordId) {
-        JSONObject object = new JSONObject();
-        object.put("tableName", tableName);
 
-        switch (tableName) {
-            case "clients" -> object.put("record", Json.get(clients.getById(recordId)));
-            case "patients" -> object.put("record", Json.get(patients.getById(recordId)));
-            case "studies" -> object.put("record", Json.get(studies.getById(recordId)));
-            case "setting" -> object.put("record", Json.get(settings.getById(recordId)));
-        }
-        return object;
-    }
 }

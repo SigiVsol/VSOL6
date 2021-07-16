@@ -87,6 +87,22 @@ public class MetaDb extends SyncDb {
 
     public DbTable<ComputerSetting> getComputerSettings() { return computerSettings; }
 
+    @Override public JSONObject getObjectByRecordId(String tableName, String recordId) {
+        JSONObject object = new JSONObject();
+        object.put("tableName", tableName);
+
+        switch (tableName) {
+            case "organizations" -> object.put("record", Json.get(organizations.getById(recordId)));
+            case "computer" -> object.put("record", Json.get(computers.getById(recordId)));
+            case "computerSettings" -> object.put("record", Json.get(computers.getById(recordId)));
+            case "roles" -> object.put("record", Json.get(roles.getById(recordId)));
+            case "users" -> object.put("record", Json.get(users.getById(recordId)));
+            case "userSettings" -> object.put("record", Json.get(userSettings.getById(recordId)));
+            case "networks" -> object.put("record", Json.get(networks.getById(recordId)));
+        }
+        return object;
+    }
+
     public void handleUpdates(String computerId, HashMap<String,String> recordTableMap) {
         recordTableMap.forEach((recordId, tableName) -> {
             executeInvolvedQueries(recordId);
@@ -94,23 +110,36 @@ public class MetaDb extends SyncDb {
         });
     }
 
+    /**
+     * Function to retrieve all computerIds that need an update if something changes
+     * @param computerId    the id of the computer
+     * @param tableName     the table name that changed
+     * @param recordId      the id of the record that changed
+     * @return a list of computerIds that needs an update
+     */
     public Vector<String> getMetaUpdates(String computerId, String tableName, String recordId) {
         Vector<String> ids = new Vector<>();
         switch (tableName) {
             case "organizations" -> ids = getUpdateOnOrganisation(computerId, recordId);
-            case "users" -> ids = getUpdateOnUser(computerId, recordId, tableName, recordId);
+            case "users" -> ids = getUpdateOnUser(computerId, recordId);
             case "userSettings" -> {
                 String userId = getUserSettings().getById(recordId).getUserId();
-                ids = getUpdateOnUser(computerId, userId, tableName, recordId);
+                ids = getUpdateOnUser(computerId, userId);
             }
             case "roles" -> {
                 String organizationId = getRoles().getById(recordId).getOrganizationId();
-                ids = getUpdateOnUser(computerId, organizationId, tableName, recordId);
+                ids = getUpdateOnUser(computerId, organizationId);
             }
         }
         return ids;
     }
 
+    /**
+     * Function to retrieve all computerIds that need an update if something of the organization changes
+     * @param computerId        the id of the computer
+     * @param organizationId    the id of the organization
+     * @return a list of computerIds that needs an update
+     */
     public Vector<String> getUpdateOnOrganisation(String computerId, String organizationId) {
         Vector<String> ids = new Vector<>();
         Vector<Network> records = networks.getAll("organizationId='" + organizationId + "'", null);
@@ -122,7 +151,13 @@ public class MetaDb extends SyncDb {
         return ids;
     }
 
-    private Vector<String> getUpdateOnUser(String computerId, String userId, String tableName, String recordId) {
+    /**
+     * Function to retrieve all computerIds that need an update if something of the user changes
+     * @param computerId    the id of the computer where the changes are made
+     * @param userId        the id of the user
+     * @return a list of computerIds that needs an update
+     */
+    private Vector<String> getUpdateOnUser(String computerId, String userId) {
         Vector<String> ids = new Vector<>();
         Vector<Role> records = roles.getAll("userId='" + userId + "'", null);
         for(Role role: records) {
@@ -131,6 +166,12 @@ public class MetaDb extends SyncDb {
         return ids;
     }
 
+    /**
+     * Function to add all records in this DB of the computer/organization to a JSONObject
+     * @param computerId        the id of the computer
+     * @param organizationId    the id of the organization
+     * @param updates           the JSONObject
+     */
     public void addAllToJson(String computerId, String organizationId, JSONArray updates) {
         for(Organization organization: organizations.getAll("id=" +  "'" + organizationId + "'",null)) {
             updates.put(getObjectinJson("organizations", organization));
@@ -157,23 +198,4 @@ public class MetaDb extends SyncDb {
 
         //TODO: Networks doesn't have to be shared with the computers?
     }
-
-    @Override public JSONObject getObjectByRecordId(String tableName, String recordId) {
-        JSONObject object = new JSONObject();
-        object.put("tableName", tableName);
-
-        switch (tableName) {
-            case "organizations" -> object.put("record", Json.get(organizations.getById(recordId)));
-            case "computer" -> object.put("record", Json.get(computers.getById(recordId)));
-            case "computerSettings" -> object.put("record", Json.get(computers.getById(recordId)));
-            case "roles" -> object.put("record", Json.get(roles.getById(recordId)));
-            case "users" -> object.put("record", Json.get(users.getById(recordId)));
-            case "userSettings" -> object.put("record", Json.get(userSettings.getById(recordId)));
-            case "networks" -> object.put("record", Json.get(networks.getById(recordId)));
-        }
-        return object;
-    }
-
-
-
 }
