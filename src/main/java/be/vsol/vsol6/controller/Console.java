@@ -148,8 +148,6 @@ public class Console implements Runnable {
             }
             case "addMeta" -> {
                 // Save new record & get queries
-//                Organization organization = new Organization("VSOL");
-//                Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
                 User user = new User("user1", null, null, "user1@vsol.test");
                 Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getUsers().save(user);
                 System.out.println("Queries: " + queries);
@@ -170,13 +168,12 @@ public class Console implements Runnable {
                     for (DbQuery query : queries) {
                         organizationDb.getQueries().save(query);
                     }
-                    System.out.println("Queries: " + queries);
                 }
             }
             case "update" -> {
                 OrganizationDb animalsolutions = ctrl.getDb().getOrganizationDb("animalsolutions");
                 Client gandalf = animalsolutions.getClients().getById("Gandalf 1");
-                gandalf.setLastName("Gandalf the grey");
+                gandalf.setLastName("Saruman 1");
                 Vector<DbQuery> queries = ctrl.getDb().getOrganizationDb("animalsolutions").getClients().save(gandalf);
 
                 queries.forEach(dbQuery -> animalsolutions.getQueries().save(dbQuery));

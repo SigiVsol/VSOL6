@@ -3,8 +3,8 @@ package be.vsol.vsol6.controller;
 import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
-import be.vsol.util.Json;
 import be.vsol.vsol6.model.database.OrganizationDb;
+import be.vsol.vsol6.model.database.SyncDb;
 import be.vsol.vsol6.model.meta.Organization;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,17 +61,17 @@ public class Sync {
 
     private JSONArray getQueries() {
         JSONArray data = new JSONArray();
-
+        // meta
         JSONObject syncMeta = new JSONObject();
         syncMeta.put("organizationId", JSONObject.NULL);
         syncMeta.put("queries", ctrl.getDb().getMetaDb().getQueries().getAll());
         data.put(syncMeta);
-
+        // org
         for (Organization organization : ctrl.getDb().getMetaDb().getOrganizations().getAll()) {
             String organizationId = organization.getId();
             JSONObject syncOrg = new JSONObject();
             syncOrg.put("organizationId", organizationId);
-            syncOrg.put("queries", getOrCreateOrgDb(organizationId).getQueries().getAll());
+            syncOrg.put("queries", ctrl.getDb().getOrganizationDb(organizationId).getQueries().getAll());
             data.put(syncOrg);
         }
 
@@ -84,28 +84,31 @@ public class Sync {
     }
 
     private void updateDbs(JSONArray data) {
+        // meta
         for (int i = 0; i < data.length(); i++) {
-            String organizationId = data.getJSONObject(i).optString("organizationId");
-
+            JSONObject updateData = data.getJSONObject(i);
+            String organizationId = updateData.optString("organizationId");
             if (organizationId.equals("")) {
-                JSONArray queryIds = data.getJSONObject(i).getJSONArray("queryIds");
-                JSONArray records = data.getJSONObject(i).getJSONArray("records");
-                ctrl.getDb().getMetaDb().deleteQueries(queryIds);
-                ctrl.getDb().getMetaDb().updateRecords(records);
+                updateSyncDb(ctrl.getDb().getMetaDb(), updateData);
                 break;
             }
         }
+        // org
         for (int i = 0; i < data.length(); i++) {
-            String organizationId = data.getJSONObject(i).optString("organizationId");
-
+            JSONObject updateData = data.getJSONObject(i);
+            String organizationId = updateData.optString("organizationId");
             if (!organizationId.equals("")) {
-                JSONArray queryIds = data.getJSONObject(i).getJSONArray("queryIds");
-                JSONArray records = data.getJSONObject(i).getJSONArray("records");
                 OrganizationDb organizationDb = getOrCreateOrgDb(organizationId);
-                organizationDb.deleteQueries(queryIds);
-                organizationDb.updateRecords(records);
+                updateSyncDb(organizationDb, updateData);
             }
         }
+    }
+
+    private void updateSyncDb(SyncDb syncDb, JSONObject updateData) {
+        JSONArray queryIds = updateData.getJSONArray("queryIds");
+        JSONArray records = updateData.getJSONArray("records");
+        syncDb.deleteQueries(queryIds);
+        syncDb.updateRecords(records);
     }
 
     private OrganizationDb getOrCreateOrgDb(String organizationId) {
