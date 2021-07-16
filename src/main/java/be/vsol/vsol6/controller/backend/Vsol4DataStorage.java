@@ -175,7 +175,7 @@ public class Vsol4DataStorage extends DataStorage {
         if (patientId == null) {
             vsol4Studies = ctrl.getVsol4().getAll(organizationId, filter, Vsol4Study::new);
         } else {
-            vsol4Studies = ctrl.getVsol4().getAll(organizationId, "patients/" + patientId + "/studies", filter, Vsol4Study::new);
+            vsol4Studies = ctrl.getVsol4().getAll(organizationId, "patients/" + patientId + "/entries", filter, Vsol4Study::new);
         }
 
         Vector<Study> studies = new Vector<>();

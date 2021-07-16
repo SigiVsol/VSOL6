@@ -1,35 +1,7 @@
 @import "../variables/colors";
 
 table {
-  width: 100%;
 
-  thead {
-    position: sticky;
-    background-color: @background;
-    top: 0;
-  }
-
-  tbody {
-
-    > :nth-child(odd) {
-      background-color: @table-odd-rows;
-    }
-
-    > :nth-child(even) {
-      background-color: @table-even-rows;
-    }
-
-    tr {
-      height: 55px;
-      //font-weight: bold;
-
-      td {
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-    }
-
-  }
 }
 
 ::-webkit-scrollbar {
@@ -40,7 +12,7 @@ table {
 ::-webkit-scrollbar-track {
   background-color: #555;
   //border-radius: 5px;
-  margin-top: 50px;
+  //margin-top: 50px;
   //margin-bottom: 1px;
 }
 
@@ -61,10 +33,22 @@ table {
   background-color: @clients;
 }
 
-.patients-scrollbar ::-webkit-scrollbar-thumb{
+.patients-scrollbar ::-webkit-scrollbar-thumb {
   background-color: @patients;
 }
 
-.entries-scrollbar ::-webkit-scrollbar-thumb{
+.entries-scrollbar ::-webkit-scrollbar-thumb {
   background-color: @entries;
+}
+
+.clients-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
+}
+
+.patients-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
+}
+
+.entries-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
 }

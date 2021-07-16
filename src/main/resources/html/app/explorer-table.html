@@ -1,5 +1,13 @@
-<table class="explorer-table table-clients">
-  <thead>
+<div class="div-filter-zone">
+  <span class="span-num-rows dummy">(<b class="lbl-num-rows">0</b>)</span> <!-- dummy to keep it centered -->
+  <label><input class="txt-filter" type="text" placeholder="filter"></label>
+  <img class="img-clear" src="icon/cancel/16">
+  <span class="span-num-rows">(<b class="lbl-num-rows">0</b>)</span>
+</div>
+
+<div class="div-table-zone">
+  <table class="explorer-table table-clients">
+    <thead>
     <tr>
       <th class="th-checkbox"><label><input type="checkbox"></label></th>
       <th class="pointer th-clients-name">%{name}</th>
@@ -7,34 +15,36 @@
       <th class="pointer th-clients-address">%{address}</th>
       <th class="th-action-buttons"></th>
     </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-<table class="explorer-table table-patients">
-  <thead>
+  <table class="explorer-table table-patients">
+    <thead>
     <tr>
       <th class="th-checkbox"><label><input type="checkbox"></label></th>
       <th class="pointer th-patients-name">%{name}</th>
+      <th class="pointer th-patients-client">%{client}</th>
       <th class="pointer th-patients-origin">%{origin}</th>
       <th class="pointer th-patients-reference">%{reference}</th>
       <th class="th-action-buttons"></th>
     </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-<table class="explorer-table table-studies">
-  <thead>
+  <table class="explorer-table table-studies">
+    <thead>
     <tr>
       <th class="th-checkbox"><label><input type="checkbox"></label></th>
-      <th>%{client}</th>
-      <th>%{patient}</th>
+      <th class="pointer th-studies-client">%{client}</th>
+      <th class="pointer th-studies-patient">%{patient}</th>
       <th>%{date}</th>
       <th>%{description}</th>
       <th>#</th>
       <th class="th-action-buttons"></th>
     </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>

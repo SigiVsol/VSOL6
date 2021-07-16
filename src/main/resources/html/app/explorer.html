@@ -1,32 +1,29 @@
-<div class="div-explorer-above-table">
+<div class="div-explorer-top-zone">
     <div class="div-explorer-main-toggle-bar">
-        <button class="tgl-clients">%{Client|2}</button><!--
-        --><button class="tgl-patients">%{Patient|2}</button><!--
-        --><button class="tgl-studies">%{Study|2}</button>
+        <button class="tgl-clients">%{Client|2}</button><!-- avoid space
+     --><button class="tgl-patients">%{Patient|2}</button><!-- avoid space
+     --><button class="tgl-studies">%{Study|2}</button>
     </div>
-
     <div class="div-explorer-nav-bar">
-        <div class="div-explorer-breadcrumb-bar">
+        <div class="div-explorer-breadcrumb-bar"> <!-- left -->
             <button class="btn-home"><img src="icon/home/16"></button>
             <button class="clients"><img src="icon/forward/16"> <span class="span-client"></span></button>
             <button class="patients"><img src="icon/forward/16"> <span class="span-patient"></span></button>
         </div>
-        <div class="div-explorer-add-bar">
+        <div class="div-explorer-add-bar"> <!-- right -->
             <button class="btn-add-client ok"><img src="icon/add/16"> %{Client}</button>
             <button class="btn-add-patient ok"><img src="icon/add/16"> %{Patient}</button>
             <button class="btn-add-study ok"><img src="icon/add/16"> %{Study}</button>
         </div>
     </div>
-
-    <div id="divExplorerFiche">@{app/explorer-fiche.html}</div> <!-- has own HTML, CSS and JS -->
-
-    <div class="div-filter-zone">
-        <button class="btn-clear"><img src="icon/cancel/16"></button>
-        <label><input class="txt-filter" type="text" placeholder="filter"></label>
-        <button class="btn-search"><img src="icon/zoom/16"></button>
-        <span><b class="lbl-num-rows">0</b> result(s)</span>
-    </div>
 </div>
 
-<div id="divExplorerTable">@{app/explorer-table.html}</div> <!-- has own HTML, CSS and JS -->
+<div class="div-explorer-bottom-zone">
+    <div class="div-explorer-fiche-zone">
+        <div id="divExplorerFiche">@{app/explorer-fiche.html}</div>
+    </div><!-- avoid space
+ --><div class="div-explorer-table-zone">
+        <div id="divExplorerTable">@{app/explorer-table.html}</div>
+    </div>
+</div>
 

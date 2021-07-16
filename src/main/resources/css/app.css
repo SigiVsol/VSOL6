@@ -34,7 +34,7 @@ button {
   cursor: pointer;
 }
 button:hover {
-  background-color: #029ddf;
+  background-color: #444444;
 }
 button:disabled {
   cursor: default;
@@ -177,27 +177,6 @@ input:checked + span.switch:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-table {
-  width: 100%;
-}
-table thead {
-  position: sticky;
-  background-color: #282828;
-  top: 0;
-}
-table tbody > :nth-child(odd) {
-  background-color: #323232;
-}
-table tbody > :nth-child(even) {
-  background-color: #393939;
-}
-table tbody tr {
-  height: 55px;
-}
-table tbody tr td {
-  padding-left: 5px;
-  padding-right: 5px;
-}
 ::-webkit-scrollbar {
   width: 10px;
   /* for vertical scrollbars */
@@ -206,7 +185,6 @@ table tbody tr td {
 }
 ::-webkit-scrollbar-track {
   background-color: #555;
-  margin-top: 50px;
 }
 ::-webkit-scrollbar-track:disabled {
   background-color: #282828;
@@ -222,6 +200,15 @@ table tbody tr td {
 }
 .entries-scrollbar ::-webkit-scrollbar-thumb {
   background-color: #73937e;
+}
+.clients-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
+}
+.patients-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
+}
+.entries-scrollbar ::-webkit-scrollbar-track {
+  margin-top: 50px;
 }
 #divBaseLayer {
   position: fixed;
@@ -296,88 +283,182 @@ table tbody tr td {
 #divBaseLayer #divMain #divContent .div-base-content {
   display: none;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar {
   text-align: center;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar button {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar button {
   font-size: medium;
   width: 150px;
   border-width: 0 1px 1px 1px;
   border-color: gray;
   border-style: solid;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar button:disabled {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar button:disabled {
   opacity: 1;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-clients {
   border-radius: 0 0 0 5px;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients:hover,
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-clients:disabled {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-clients:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-clients:disabled {
   background-color: #335c81;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-patients {
   border-radius: 0;
   border-width: 0 0 1px 0;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients:hover,
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-patients:disabled {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-patients:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-patients:disabled {
   background-color: #406869;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-studies {
   border-radius: 0 0 5px 0;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies:hover,
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-main-toggle-bar .tgl-studies:disabled {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-studies:hover,
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-main-toggle-bar .tgl-studies:disabled {
   background-color: #73937e;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar {
-  padding: 5px;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar {
+  padding: 5px 5px 5px 0;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-breadcrumb-bar {
   display: inline-block;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar button {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-breadcrumb-bar button {
   font-size: medium;
-  border-radius: 10px 0 10px 0;
+  border-radius: 0 10px 10px 0;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-breadcrumb-bar .btn-home {
-  background-color: gray;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-breadcrumb-bar .btn-home {
+  background-color: #444444;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-add-bar {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-breadcrumb-bar .btn-home:hover {
+  background-color: #888888;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-add-bar {
   display: inline-block;
   float: right;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-explorer-nav-bar .div-explorer-add-bar button {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-top-zone .div-explorer-nav-bar .div-explorer-add-bar button {
   font-size: medium;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table .div-filter-zone {
-  text-align: center;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone {
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
 }
-#divBaseLayer #divMain #divContent #divExplorer .div-explorer-above-table #divExplorerFiche {
-  margin: 20px;
-  border: solid thin white;
-  border-radius: 5px;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche {
+  padding-top: 5px;
+  padding-right: 10px;
+  cursor: pointer;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche {
+  border-width: 2px 2px 2px 0;
+  border-style: solid;
+  border-radius: 0 5px 5px 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche .div-fiche-title {
+  padding: 10px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche .div-fiche-title span {
+  font-weight: bold;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche .div-fiche-title img {
+  float: right;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche table {
+  padding: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche table td.fiche-key {
+  vertical-align: top;
+  color: #888888;
+  padding-right: 5px;
+  text-align: right;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-explorer-fiche .div-fiche table td.fiche-value {
+  word-wrap: anywhere;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-client-fiche .div-fiche {
+  border-color: #335c81;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-client-fiche .div-fiche .div-fiche-title {
+  background-color: #335c81;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-client-fiche .div-fiche .div-extra-info {
+  padding: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-patient-fiche .div-fiche {
+  border-color: #406869;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-fiche-zone #divExplorerFiche .div-patient-fiche .div-fiche .div-fiche-title {
+  background-color: #406869;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone {
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable {
   width: 100%;
-  height: 0;
+  height: 100%;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-filter-zone {
+  text-align: center;
+  padding-bottom: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-filter-zone input {
+  background-image: url("../icon/zoom/16");
+  background-repeat: no-repeat;
+  background-position: left;
+  background-position-x: 10px;
+  padding-left: 35px;
+  width: 300px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-filter-zone .img-clear {
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  transform: translateY(3px);
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-filter-zone .span-num-rows {
+  font-size: small;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-filter-zone .dummy {
+  visibility: hidden;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone {
+  height: 400px;
   overflow-y: auto;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table {
   width: 100%;
   border-spacing: 0;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table th {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table thead {
+  height: 50px;
+  position: sticky;
+  background-color: #282828;
+  top: 0;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table thead th {
   text-align: left;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table thead {
-  height: 50px;
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table tbody > :nth-child(odd) {
+  background-color: #323232;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table .th-action-buttons {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table tbody > :nth-child(even) {
+  background-color: #393939;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table tbody tr {
+  height: 55px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table tbody tr td {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table .th-action-buttons {
   width: 1px;
 }
-#divBaseLayer #divMain #divContent #divExplorer #divExplorerTable table .th-checkbox {
+#divBaseLayer #divMain #divContent #divExplorer .div-explorer-bottom-zone .div-explorer-table-zone #divExplorerTable .div-table-zone table .th-checkbox {
   text-align: center;
   width: 1px;
 }

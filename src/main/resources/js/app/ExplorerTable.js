@@ -37,8 +37,10 @@ export class ExplorerTable {
         }
     }
     resize() {
-        let height = this.app.getHeight() - $(".div-explorer-above-table").height();
-        $("#divExplorerTable").css("height", height + "px");
+        let height = $("#divExplorerTable").height() - $("#divExplorerTable .div-filter-zone").height();
+        let width = $("#divExplorer").width() - $("#divExplorer .div-explorer-fiche-zone").width();
+        $("#divExplorerTable .div-table-zone").height(height);
+        $("#divExplorer .div-explorer-table-zone").width(width);
     }
     setSort(field) {
         if (this.sortField == field) {
@@ -59,6 +61,7 @@ export class ExplorerTable {
         $("#divExplorerTable .explorer-table").css("display", "none");
         $(".btn-add-client").css("display", "inline-block");
         $(".tgl-clients").prop("disabled", true);
+        $("html").removeClass("patients-scrollbar").removeClass("entries-scrollbar").addClass('clients-scrollbar');
         let tbody = $("<tbody></tbody>");
         API.getJson(this.url("clients"), json => {
             this.explorer.setNumRows(json.availableRows);
@@ -79,7 +82,9 @@ export class ExplorerTable {
         $("#divExplorerTable .explorer-table").css("display", "none");
         if (this.app.getClient() != null)
             $(".btn-add-patient").css("display", "inline-block");
-        $(".tgl-patients").prop("disabled", true);
+        $(".tgl-patients").prop("disabled", this.app.getClient() == null);
+        $("html").removeClass("clients-scrollbar").removeClass("entries-scrollbar").addClass('patients-scrollbar');
+        $("#divExplorerTable .table-patients th.th-patients-client").css("display", this.app.getClient() == null ? "table-cell" : "none");
         let tbody = $("<tbody></tbody>");
         let request = this.app.getClient() == null ? "patients" : "clients/" + this.app.getClient().getId() + "/patients";
         API.getJson(this.url(request), json => {
@@ -88,6 +93,9 @@ export class ExplorerTable {
                 let tr = $("<tr></tr>");
                 tr.append(this.tdCheckbox());
                 tr.append(this.tdText(patient.getName(), () => this.explorer.openPatient(patient)));
+                if (this.app.getClient() == null) { // all patients
+                    tr.append(this.tdText(patient.getClient().getName(), () => this.explorer.openClient(patient.getClient())));
+                }
                 tr.append(this.tdText(patient.getOrigin()));
                 tr.append(this.tdText(patient.getReference()));
                 tr.append(this.tdPatientsActionButtons(patient));
@@ -101,15 +109,21 @@ export class ExplorerTable {
         $("#divExplorerTable .explorer-table").css("display", "none");
         if (this.app.getPatient() != null)
             $(".btn-add-study").css("display", "inline-block");
-        $(".tgl-studies").prop("disabled", true);
+        $(".tgl-studies").prop("disabled", this.app.getPatient() == null);
+        $("html").removeClass("clients-scrollbar").removeClass("patients-scrollbar").addClass('entries-scrollbar');
+        $("#divExplorerTable .table-studies th.th-studies-client").css("display", this.app.getPatient() == null ? "table-cell" : "none");
+        $("#divExplorerTable .table-studies th.th-studies-patient").css("display", this.app.getPatient() == null ? "table-cell" : "none");
         let tbody = $("<tbody></tbody>");
-        API.getJson(this.url("studies"), json => {
+        let request = this.app.getPatient() == null ? "studies" : "patients/" + this.app.getPatient().getId() + "/studies";
+        API.getJson(this.url(request), json => {
             this.explorer.setNumRows(json.availableRows);
             for (let study of Study.fromRows(json.rows)) {
                 let tr = $("<tr></tr>");
                 tr.append(this.tdCheckbox());
-                tr.append(this.tdText(study.getClient().getName()));
-                tr.append(this.tdText(study.getPatient().getName()));
+                if (this.app.getPatient() == null) { // all studies
+                    tr.append(this.tdText(study.getClient().getName(), () => this.explorer.openClient(study.getClient())));
+                    tr.append(this.tdText(study.getPatient().getName(), () => this.explorer.openPatient(study.getPatient())));
+                }
                 tr.append(this.tdText(String(study.getDateTime())));
                 tr.append(this.tdText(study.getDescription()));
                 tr.append(this.tdText(String(study.getSeriesCount())));
@@ -138,9 +152,9 @@ export class ExplorerTable {
     tdClientActionButtons(client) {
         let td = $("<td></td>");
         let div = $("<div class='nowrap'></div>");
-        div.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openClient(client)));
+        div.append($("<button class='ok'><img src='icon/open/16'></button>").click(() => this.explorer.openClient(client)));
         div.append("&nbsp;");
-        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        div.append($("<button class='cancel'><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete client " + client.getName()); // TODO
             });
@@ -151,9 +165,9 @@ export class ExplorerTable {
     tdPatientsActionButtons(patient) {
         let td = $("<td></td>");
         let div = $("<div class='nowrap'></div>");
-        div.append($("<button><img src='icon/open/16'></button>").click(() => this.explorer.openPatient(patient)));
+        div.append($("<button class='ok'><img src='icon/open/16'></button>").click(() => this.explorer.openPatient(patient)));
         div.append("&nbsp;");
-        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        div.append($("<button class='cancel'><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete patient " + patient.getName()); // TODO
             });
@@ -164,9 +178,9 @@ export class ExplorerTable {
     tdStudiesActionButtons(study) {
         let td = $("<td></td>");
         let div = $("<div class='nowrap'></div>");
-        div.append($("<button><img src='icon/eye/16'></button>").click(() => this.explorer.openStudy(study)));
+        div.append($("<button class='ok'><img src='icon/eye/16'></button>").click(() => this.explorer.openStudy(study)));
         div.append("&nbsp;");
-        div.append($("<button><img src='icon/delete/16'></button>").click(() => {
+        div.append($("<button class='cancel'><img src='icon/delete/16'></button>").click(() => {
             Dialog.confirm("Are you sure?", () => {
                 console.log("delete study " + study.getDescription()); // TODO
             });

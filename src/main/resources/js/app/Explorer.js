@@ -11,8 +11,7 @@ export class Explorer extends Content {
         $("#divExplorer .tgl-clients").click(() => this.setTab(null));
         $("#divExplorer .tgl-patients").click(() => this.setTab("patients"));
         $("#divExplorer .tgl-studies").click(() => this.setTab("studies"));
-        $("#divExplorer .btn-search").click(() => this.fill());
-        $("#divExplorer .btn-clear").click(() => this.clearFilter());
+        $("#divExplorer .img-clear").click(() => this.clearFilter());
         $("#divExplorer .txt-filter").on("keyup", event => {
             if (event.key == "Enter")
                 this.fill();
@@ -31,7 +30,7 @@ export class Explorer extends Content {
     fill() {
         clearTimeout(this.filterDelay);
         super.show();
-        $("#divExplorer .div-explorer-main-toggle-bar").css("display", this.app.getClient() == null && this.app.getPatient() == null ? "block" : "none");
+        // $("#divExplorer .div-explorer-main-toggle-bar").css("display", this.app.getClient() == null && this.app.getPatient() == null ? "block" : "none");
         $("#divExplorer .div-explorer-add-bar button").css("display", "none");
         $("#divExplorer .div-explorer-main-toggle-bar button").prop("disabled", false);
         $("#divExplorer .div-explorer-breadcrumb-bar .clients").css("display", this.app.getClient() == null ? "none" : "inline-block");
@@ -44,6 +43,8 @@ export class Explorer extends Content {
         this.table.fill();
     }
     resize() {
+        let height = this.app.getHeight() - $("#divExplorer .div-explorer-top-zone").height();
+        $("#divExplorer .div-explorer-bottom-zone").height(height + "px");
         this.fiche.resize();
         this.table.resize();
     }

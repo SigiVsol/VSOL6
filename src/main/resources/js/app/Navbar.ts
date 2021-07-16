@@ -36,6 +36,7 @@ export class Navbar {
 
     private home() {
         this.app.setPage("explorer");
+        this.app.setTab(null);
         this.app.setClient(null);
         this.app.setPatient(null);
         this.app.pushHistory();

@@ -1,8 +1,64 @@
 @import "../variables/colors";
 
 #divExplorerFiche {
-  margin: 20px;
-  border: solid thin white;
-  border-radius: 5px;
+
+  .div-explorer-fiche {
+    padding-top: 5px;
+    padding-right: 10px;
+    cursor: pointer;
+
+    .div-fiche {
+      border-width: 2px 2px 2px 0;
+      border-style: solid;
+      border-radius: 0 5px 5px 0;
+
+      .div-fiche-title {
+        padding: 10px;
+
+        span {
+          font-weight: bold;
+        }
+
+        img {
+          float: right;
+        }
+      }
+
+      table {
+        padding: 5px;
+        td.fiche-key {
+          vertical-align: top;
+          color: @light-gray;
+          padding-right: 5px;
+          text-align: right;
+        }
+        td.fiche-value {
+          word-wrap: anywhere;
+        }
+      }
+    }
+  }
+
+  .div-client-fiche {
+    .div-fiche {
+      border-color: @clients;
+      .div-fiche-title {
+        background-color: @clients;
+      }
+      .div-extra-info {
+        padding: 5px;
+      }
+    }
+  }
+
+  .div-patient-fiche {
+    .div-fiche {
+      border-color: @patients;
+      .div-fiche-title {
+        background-color: @patients;
+      }
+    }
+  }
+
 
 }

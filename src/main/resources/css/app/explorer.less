@@ -1,7 +1,7 @@
 @import "../variables/colors";
 
 #divExplorer {
-  .div-explorer-above-table {
+  .div-explorer-top-zone {
     .div-explorer-main-toggle-bar {
       text-align: center;
 
@@ -40,15 +40,18 @@
     }
 
     .div-explorer-nav-bar {
-      padding: 5px;
+      padding: 5px 5px 5px 0;
       .div-explorer-breadcrumb-bar {
         display: inline-block;
         button {
           font-size: medium;
-          border-radius: 10px 0 10px 0;
+          border-radius: 0 10px 10px 0;
         }
         .btn-home {
-          background-color: gray;
+          background-color: @dark-gray;
+        }
+        .btn-home:hover {
+          background-color: @light-gray;
         }
       }
       .div-explorer-add-bar {
@@ -59,14 +62,27 @@
         }
       }
     }
-
-    .div-filter-zone {
-      text-align: center;
-    }
-
-    @import "explorer-fiche";
   }
 
-  @import "explorer-table";
+  .div-explorer-bottom-zone {
+    .div-explorer-fiche-zone {
+      display: inline-block;
+      height: 100%;
+      vertical-align: top;
+
+      //min-width: 250px;
+      //width: 30%;
+
+      @import "explorer-fiche";
+    }
+
+    .div-explorer-table-zone {
+      display: inline-block;
+      height: 100%;
+      vertical-align: top;
+
+      @import "explorer-table";
+    }
+  }
 
 }
