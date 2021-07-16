@@ -37,5 +37,6 @@ public class Network extends DbRecord {
         return initialized;
     }
 
-    public void setInitialized() { initialized = true;}
+    public void setInitialized(boolean value) { initialized = value;}
+
 }
