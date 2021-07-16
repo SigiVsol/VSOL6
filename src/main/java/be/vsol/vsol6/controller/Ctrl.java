@@ -44,6 +44,7 @@ public class Ctrl {
     private final HttpServer server;
     private final DataStorage dataStorage;
     private final DicomStorage dicomStorage;
+    private final Sync sync;
 
     private Session systemSession, localSession;
 
@@ -61,13 +62,14 @@ public class Ctrl {
         Log.init(new File(appConfig.app.home, "logs"), sig.getAppTitle(), appConfig.app.debug);
         Log.out("Starting " + sig + ".");
 
-        this.console = new Console(this, appConfig);
+        this.console = new Console(this);
         this.gui = primaryStage == null ? null : new Gui(this, primaryStage);
         this.db = new Db(appConfig);
         this.server = new HttpServer(sig.getAppTitle());
         this.vsol4 = new Vsol4();
         this.orthanc = new Orthanc();
         this.cloud = new HttpServer("VSOL Cloud Server");
+        this.sync = new Sync(this);
 
         this.dataStorage = switch (appConfig.app.dataStorage) {
             case vsol4 -> new Vsol4DataStorage(this);
@@ -92,6 +94,7 @@ public class Ctrl {
         if (appConfig.orthanc.active) startOrthanc(systemSession.getConfig());
         if (gui != null && appConfig.gui.active) startGui(systemSession.getConfig());
         if (cloud != null && appConfig.cloud.active) startCloud(systemSession.getConfig());
+        if (sync != null && appConfig.sync.active && !appConfig.cloud.active) startSync(systemSession.getConfig());
     }
 
     private void startConsole() {
@@ -116,6 +119,10 @@ public class Ctrl {
 
     private void startCloud(Config config) {
         cloud.start(config.cloud.port, new CloudHandler(db.getMetaDb(), db.getOrganizationDbs()));
+    }
+
+    private void startSync(Config config) {
+        sync.start(config.cloud.host, config.cloud.port, config.sync.interval, config.sync.unit);
     }
 
     private void startFujiDR() {
@@ -175,6 +182,8 @@ public class Ctrl {
     public DataStorage getDataStorage() { return dataStorage; }
 
     public DicomStorage getDicomStorage() { return dicomStorage; }
+
+    public Sync getSync() { return sync; }
 
     // Setters
 

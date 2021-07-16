@@ -6,7 +6,7 @@ import be.vsol.tools.json;
 
 public class UserSetting extends DbRecord {
 
-    @json @db private String userId, settingName, value;
+    @json @db private String userId, name, value;
 
     // Constructor
 
@@ -17,7 +17,7 @@ public class UserSetting extends DbRecord {
 
     public String getUserId() { return userId; }
 
-    public String getSettingName() { return settingName; }
+    public String getName() { return name; }
 
     public String getValue() { return value; }
 }

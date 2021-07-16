@@ -23,13 +23,13 @@ public abstract class SyncDb extends Database {
     public void deleteQueries(JSONArray queryIds) {
         for (int i = 0; i < queryIds.length(); i++) {
             String id =  queryIds.getString(i);
-            DbQuery dbQuery = this.getQueries().getById(id);
+            DbQuery dbQuery = queries.getById(id);
             dbQuery.setDeleted(true);
-            this.getQueries().save(dbQuery);
+            queries.save(dbQuery);
         }
     }
 
-    public abstract void updateRecords(JSONArray updates);
+    public abstract void updateRecords(JSONArray records);
 
     // Getters
 

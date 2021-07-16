@@ -22,47 +22,26 @@ public class MetaDb extends SyncDb {
         super(driver, "metadb");
 
         organizations = new DbTable<>(this, "organizations", Organization::new);
-        computers = new DbTable<>(this, "computers", Computer::new);
-        networks = new DbTable<>(this, "networks", Network::new);
         users = new DbTable<>(this, "users", User::new);
         roles = new DbTable<>(this, "roles", Role::new);
+        computers = new DbTable<>(this, "computers", Computer::new);
+        networks = new DbTable<>(this, "networks", Network::new);
         userSettings = new DbTable<>(this, "user_settings", UserSetting::new);
         computerSettings = new DbTable<>(this, "computer_settings", ComputerSetting::new);
     }
 
-    public void updateRecords(JSONArray updates) {
-        for (int i = 0; i < updates.length(); i++) {
-            String tableName = updates.getJSONObject(i).getString("tableName");
-            JSONObject record = updates.getJSONObject(i).getJSONObject("record");
+    public void updateRecords(JSONArray records) {
+        for (int i = 0; i < records.length(); i++) {
+            String tableName = records.getJSONObject(i).getString("tableName");
+            JSONObject record = records.getJSONObject(i).getJSONObject("record");
             switch (tableName) {
-                case "organizations" -> {
-                    Organization organization = Json.get(record, Organization::new);
-                    this.getOrganizations().save(organization);
-                }
-                case "users" -> {
-                    User user = Json.get(record, User::new);
-                    this.getUsers().save(user);
-                }
-                case "roles" -> {
-                    Role role = Json.get(record, Role::new);
-                    this.getRoles().save(role);
-                }
-                case "computers" -> {
-                    Computer computer = Json.get(record, Computer::new);
-                    this.getComputers().save(computer);
-                }
-                case "networks" -> {
-                    Network network = Json.get(record, Network::new);
-                    this.getNetworks().save(network);
-                }
-                case "user_settings" -> {
-                    UserSetting userSetting = Json.get(record, UserSetting::new);
-                    this.getUserSettings().save(userSetting);
-                }
-                case "computer_settings" -> {
-                    ComputerSetting computerSetting = Json.get(record, ComputerSetting::new);
-                    this.getComputerSettings().save(computerSetting);
-                }
+                case "organizations" -> organizations.save(Json.get(record, Organization::new));
+                case "users" -> users.save(Json.get(record, User::new));
+                case "roles" -> roles.save(Json.get(record, Role::new));
+                case "computers" -> computers.save(Json.get(record, Computer::new));
+                case "networks" -> networks.save(Json.get(record, Network::new));
+                case "user_settings" -> userSettings.save(Json.get(record, UserSetting::new));
+                case "computer_settings" -> computerSettings.save(Json.get(record, ComputerSetting::new));
             }
         }
     }

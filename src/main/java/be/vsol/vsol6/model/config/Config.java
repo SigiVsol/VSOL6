@@ -19,6 +19,7 @@ public class Config {
     @json public db db = new db();
     @json public bridge bridge = new bridge();
     @json public cloud cloud = new cloud();
+    @json public sync sync = new sync();
 
     /**
      * Constructor
@@ -117,10 +118,10 @@ public class Config {
         @json public int port;
     }
 
-
-
-
-
-
+    public static class sync {
+        @json public boolean active;
+        @json public int interval;
+        @json public String unit;
+    }
 
 }

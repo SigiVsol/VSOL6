@@ -22,4 +22,9 @@ public class Task {
         jobs.put(name, new Job(delay, callback));
     }
 
+    public static void run(String name, long delay, long schedule, Callback callback) {
+        Job job = jobs.get(name);
+        if (job != null) job.stop();
+        jobs.put(name, new Job(delay, schedule, callback));
+    }
 }

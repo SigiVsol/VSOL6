@@ -5,18 +5,17 @@ import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
 import be.vsol.util.Bytes;
-import be.vsol.util.Json;
 import be.vsol.util.Log;
 import be.vsol.vsol6.model.User;
 import be.vsol.vsol6.model.config.Config;
 import be.vsol.vsol6.model.database.MetaDb;
 import be.vsol.vsol6.model.database.OrganizationDb;
-import be.vsol.vsol6.model.database.SyncDb;
-import be.vsol.vsol6.model.meta.*;
+import be.vsol.vsol6.model.meta.Computer;
+import be.vsol.vsol6.model.meta.Network;
+import be.vsol.vsol6.model.meta.Organization;
+import be.vsol.vsol6.model.meta.Role;
 import be.vsol.vsol6.model.organization.Client;
 import be.vsol.vsol6.model.organization.Patient;
-import be.vsol.vsol6.model.organization.Setting;
-import be.vsol.vsol6.model.organization.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,11 +25,9 @@ import java.util.Vector;
 public class Console implements Runnable {
 
     private final Ctrl ctrl;
-    private final Config config;
 
-    public Console(Ctrl ctrl, Config config) {
+    public Console(Ctrl ctrl) {
         this.ctrl = ctrl;
-        this.config = config;
     }
 
     public void start() {
@@ -146,114 +143,15 @@ public class Console implements Runnable {
                 }
             }
 
-
-//            case "fillMetaDb" -> {
-//                for (int i = 1; i <= 2; i++) {
-//                    Organization organization = new Organization("org" + i);
-//                    ctrl.getDb().getMetaDb().getOrganizations().save(organization);
-//                    for (int j = 1; j <= 2; j++) {
-//                        String userName = "user" + i * 100 + j;
-//                        User user = new User(userName, null, null, userName + "@org" + i + ".test");
-//                        ctrl.getDb().getMetaDb().getUsers().save(user);
-//                        Role role = new Role(organization.getId(), user.getId(), j == 1 ? Role.Type.ADMIN : Role.Type.USER);
-//                        ctrl.getDb().getMetaDb().getRoles().save(role);
-//                    }
-//                    for (int k = 1; k <= 2; k++) {
-//                        String computerCode = "org" + i * 100 + k;
-//                        Computer computer = new Computer(computerCode, "alias_" + computerCode);
-//                        ctrl.getDb().getMetaDb().getComputers().save(computer);
-//                        Network network = new Network(organization.getId(), computer.getId());
-//                        ctrl.getDb().getMetaDb().getNetworks().save(network);
-//                    }
-//                }
-//            }
-//            case "fillOrgDb" -> {
-//                ctrl.getDb().start();
-//                for (int i = 1; i <= 2; i++) {
-//                    Client client = new Client();
-//                    client.setLastName("client" + i);
-//                    ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getClients().save(client));
-//                    for (int j = 1; j <= 2; j++) {
-//                        Patient patient = new Patient();
-//                        patient.setName("patient" + j + "_client" + i);
-//                        ctrl.getDb().getOrganizationDbs().forEach(organizationDb -> organizationDb.getPatients().save(patient));
-//                    }
-//                }
-//            }
-
             case "sync" -> {
-                // Request (queries)
-                JSONObject syncRequest = new JSONObject();
-                syncRequest.put("computerId", "comp3");
-                syncRequest.put("queries", new JSONArray(ctrl.getDb().getMetaDb().getQueries().getAll()));
-                JSONArray syncOrganizations = new JSONArray();
-                for (OrganizationDb organizationDb : ctrl.getDb().getOrganizationDbs()) {
-                    JSONObject syncOrg = new JSONObject();
-                    syncOrg.put("id", organizationDb.getName().substring(3).replace("_", "-"));
-                    syncOrg.put("queries", organizationDb.getQueries().getAll());
-                    syncOrganizations.put(syncOrg);
-                }
-                syncRequest.put("organizations", syncOrganizations);
-                System.out.println("Request: " + syncRequest);
-                HttpRequest httpRequest = new HttpRequest(HttpRequest.Method.POST, "/sync", syncRequest);
-                HttpResponse httpResponse = Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, httpRequest);
-
-                // Response
-                JSONObject response = httpResponse.getBodyAsJSONObject();
-                System.out.println("Response: " + response);
-                JSONArray queryIds = response.getJSONArray("queryIds");
-                JSONArray updates = response.getJSONArray("updates");
-                JSONArray updateIds = response.getJSONArray("updateIds");
-                JSONArray organizations = response.getJSONArray("organizations");
-
-                // Delete meta queries
-                ctrl.getDb().getMetaDb().deleteQueries(queryIds);
-
-                // Update meta records
-                ctrl.getDb().getMetaDb().updateRecords(updates);
-
-                // Org
-                for (int i = 0; i < organizations.length(); i++) {
-                    JSONObject org = organizations.getJSONObject(i);
-                    String organizationId = org.getString("id");
-                    JSONArray orgQueryIds = org.getJSONArray("queryIds");
-                    JSONArray orgUpdates = org.getJSONArray("updates");
-                    JSONArray orgUpdateIds = org.getJSONArray("updateIds");
-
-                    OrganizationDb organizationDb = ctrl.getDb().getOrganizationDb(organizationId);
-                    if (organizationDb == null) {
-                        Organization organization = ctrl.getDb().getMetaDb().getOrganizations().getById(organizationId);
-                        ctrl.getDb().addOrganizationDb(organization);
-                        organizationDb = ctrl.getDb().getOrganizationDb(organizationId);
-                    }
-
-                    // Delete org queries
-                    organizationDb.deleteQueries(orgQueryIds);
-
-                    // Update org records
-                    organizationDb.updateRecords(orgUpdates);
-                }
-
-                // Send Ack
-                JSONObject ack = new JSONObject();
-                ack.put("computerId", "comp3");
-                ack.put("updateIds", updateIds);
-                for (int i = 0; i < organizations.length(); i++) {
-                    JSONObject orgAck = organizations.getJSONObject(i);
-                    orgAck.remove("queryIds");
-                    orgAck.remove("updates");
-                }
-                ack.put("organizations", organizations);
-                System.out.println("ack: " + ack);
-                HttpRequest requestAck = new HttpRequest(HttpRequest.Method.POST, "/ack", ack);
-                Curl.get(this.config.cloud.host, this.config.cloud.port, 1000, requestAck);
+                ctrl.getSync().sync();
             }
             case "addMeta" -> {
                 // Save new record & get queries
 //                Organization organization = new Organization("VSOL");
-//                Vector<DbQuery> queries = (ctrl.getDb().getMetaDb().getOrganizations().save(organization));
+//                Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getOrganizations().save(organization);
                 User user = new User("user1", null, null, "user1@vsol.test");
-                Vector<DbQuery> queries = (ctrl.getDb().getMetaDb().getUsers().save(user));
+                Vector<DbQuery> queries = ctrl.getDb().getMetaDb().getUsers().save(user);
                 System.out.println("Queries: " + queries);
 
                 // Save queries
