@@ -3,11 +3,10 @@ package be.vsol.vsol6.controller;
 import be.vsol.http.Curl;
 import be.vsol.http.HttpRequest;
 import be.vsol.http.HttpResponse;
-import be.vsol.util.Task;
-import be.vsol.util.Time;
 import be.vsol.vsol6.model.database.OrganizationDb;
 import be.vsol.vsol6.model.meta.Organization;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Sync {
@@ -29,23 +28,27 @@ public class Sync {
     }
 
     public void sync() {
-        // /sync
-        JSONObject syncRequest = getRequestJson(getQueries());
-        System.out.println("Request: " + syncRequest);
-        HttpResponse httpResponse = send("/sync", syncRequest);
+        try {
+            // /sync
+            JSONObject syncRequest = getRequestJson(getQueries());
+            System.out.println("Request: " + syncRequest);
+            HttpResponse httpResponse = send("/sync", syncRequest);
 
-        // response
-        JSONObject response = httpResponse.getBodyAsJSONObject();
-        System.out.println("Response: " + response);
-        JSONArray data = response.getJSONArray("data");
+            // response
+            JSONObject response = httpResponse.getBodyAsJSONObject();
+            System.out.println("Response: " + response);
+            JSONArray data = response.getJSONArray("data");
 
-        updateDbs(data);
+            updateDbs(data);
 
-        // /ack
-        JSONArray updateIds = getUpdateIds(data);
-        JSONObject ackRequest = getRequestJson(updateIds);
-        System.out.println("Ack: " + ackRequest);
-        send("/ack", ackRequest);
+            // /ack
+            JSONArray updateIds = getUpdateIds(data);
+            JSONObject ackRequest = getRequestJson(updateIds);
+            System.out.println("Ack: " + ackRequest);
+            send("/ack", ackRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private JSONObject getRequestJson(JSONArray data) {
@@ -63,10 +66,11 @@ public class Sync {
         syncMeta.put("queries", ctrl.getDb().getMetaDb().getQueries().getAll());
         data.put(syncMeta);
 
-        for (OrganizationDb organizationDb : ctrl.getDb().getOrganizationDbs()) {
+        for (Organization organization : ctrl.getDb().getMetaDb().getOrganizations().getAll()) {
+            String organizationId = organization.getId();
             JSONObject syncOrg = new JSONObject();
-            syncOrg.put("organizationId", organizationDb.getName().substring(3).replace("_", "-"));
-            syncOrg.put("queries", organizationDb.getQueries().getAll());
+            syncOrg.put("organizationId", organizationId);
+            syncOrg.put("queries", getOrCreateOrgDb(organizationId).getQueries().getAll());
             data.put(syncOrg);
         }
 
