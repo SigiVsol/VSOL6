@@ -173,7 +173,7 @@ public class Console implements Runnable {
                     System.out.println("Queries: " + queries);
                 }
             }
-            case "change" -> {
+            case "update" -> {
                 OrganizationDb animalsolutions = ctrl.getDb().getOrganizationDb("animalsolutions");
                 Client gandalf = animalsolutions.getClients().getById("Gandalf 1");
                 gandalf.setLastName("Gandalf the grey");
